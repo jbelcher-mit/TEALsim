@@ -61,7 +61,7 @@ public class Capacitor extends SimEM {
 
     final private int N = 12;
 
-    // Dimensions
+    // Dimensions //
     Vector3d plate1_position = new Vector3d(0., 5., 0.);
     Vector3d plate2_position = new Vector3d(0., -5., 0.);
     double plate_length = 25.;
