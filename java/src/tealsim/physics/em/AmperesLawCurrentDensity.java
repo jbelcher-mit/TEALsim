@@ -68,6 +68,7 @@ import teal.visualization.dlic.DLIC;
 public class AmperesLawCurrentDensity extends SimEM  {
 	/**
 	 * 
+	 * 
 	 */
 	private static final long serialVersionUID = 4893701636905167425L;
 	/** This is for serialized version, presently not used.  *\
