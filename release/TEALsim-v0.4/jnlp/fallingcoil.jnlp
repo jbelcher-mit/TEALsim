@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- JNLP File for TEALsim -->
-<jnlp spec="1.0+" codebase="http://web.mit.edu/viz/EM/simulations" href="fallingcoil.jnlp">
+<jnlp spec="1.0+" codebase="https://web.mit.edu/8.02t/www/TEALsim" href="fallingcoil.jnlp">
   <information>
     <title>Falling Coil</title>
     <vendor>TEAL/Studio Physics Project</vendor>

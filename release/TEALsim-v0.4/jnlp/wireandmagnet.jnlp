@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <!-- JNLP File for TEAL Simulation Application --> 
-<jnlp spec="1.0+" codebase="http://web.mit.edu/viz/EM/simulations" href="wireandmagnet.jnlp"> 
+<jnlp spec="1.0+" codebase="https://web.mit.edu/8.02t/www/TEALsim" href="wireandmagnet.jnlp"> 
   <information> 
     <title>The Magnetic Field of a Wire and Compass Needle</title> 
     <vendor>Studio Physics</vendor> 
