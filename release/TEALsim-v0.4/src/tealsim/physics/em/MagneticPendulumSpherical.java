@@ -403,7 +403,7 @@ for (int j = 0; j < numberFLA; j++) {
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
         MuSlider.addRoute(playerMagnet, "Mu");
-        MuSlider.setValue(0);
+        MuSlider.setValue(-40);
         //addElement(MuSlider);
         MuSlider.setVisible(true);
         label = new JLabel("Current Time:");
