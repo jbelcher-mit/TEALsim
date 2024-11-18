@@ -13,7 +13,7 @@
 	<property name="javadoc.dir" value="${build.dir}/doc/api" />
 
 	<property name="publish.project.home" value="www" />
-	<property name="publish.web.url" value="https://web.mit.edu/8.02t/www/TEALsim" />
+	<property name="publish.web.url" value="https://web.mit.edu/8.02t/www/TEALsim/simulations" />
 	<property name="publish.download.dir" value="lib" />
 	<property name="publish.local.dir" value="../TEALsim_jars" />
 	<property name="project.classes" value="bin" />
