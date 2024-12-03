@@ -150,7 +150,7 @@ public class MagneticPendulumSpherical extends SimEM {
 
         // Set charges
         double fixedMu = 55.;
-        double fixedRadius =3.;
+        double fixedRadius =2.;
         double MagnetRadius = 1.;
         double MagnetRadius1 = MagnetRadius-MagnetRadius;
 
@@ -170,7 +170,7 @@ public class MagneticPendulumSpherical extends SimEM {
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         magnet01.setCollisionController(sccx);
-//        addElement(magnet01);
+        addElement(magnet01);
         
         double delta_angle = 2.*Math.PI/6.;
         double angle = delta_angle;
@@ -190,7 +190,7 @@ public class MagneticPendulumSpherical extends SimEM {
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         magnet02.setCollisionController(sccx);
- //      addElement(magnet02);
+       addElement(magnet02);
        
        angle = angle+delta_angle;
        CylindricalBarMagnet magnet03 = new CylindricalBarMagnet();
@@ -209,7 +209,7 @@ public class MagneticPendulumSpherical extends SimEM {
        sccx.setTolerance(0.1);
        sccx.setMode(SphereCollisionController.WALL_SPHERE);
        magnet03.setCollisionController(sccx);
-//      addElement(magnet03);
+      addElement(magnet03);
       
       angle = angle+delta_angle;
       CylindricalBarMagnet magnet04 = new CylindricalBarMagnet();
@@ -228,7 +228,7 @@ public class MagneticPendulumSpherical extends SimEM {
       sccx.setTolerance(0.1);
       sccx.setMode(SphereCollisionController.WALL_SPHERE);
       magnet04.setCollisionController(sccx);
-//     addElement(magnet04);
+     addElement(magnet04);
      
      angle = angle+delta_angle;
      CylindricalBarMagnet magnet05 = new CylindricalBarMagnet();
@@ -247,13 +247,13 @@ public class MagneticPendulumSpherical extends SimEM {
      sccx.setTolerance(0.1);
      sccx.setMode(SphereCollisionController.WALL_SPHERE);
      magnet05.setCollisionController(sccx);
- //   addElement(magnet05);
+    addElement(magnet05);
     
     angle = angle+delta_angle;
     CylindricalBarMagnet magnet06 = new CylindricalBarMagnet();
     magnet06.setRadius(MagnetRadius);
     magnet06.setMass(1.0);
-    magnet06.setMu(-1.*fixedMu);
+    magnet06.setMu(fixedMu);
     magnet06.setID("magnet06");
     magnet06.setPickable(false);
     magnet06.setColliding(false);
@@ -329,7 +329,7 @@ public class MagneticPendulumSpherical extends SimEM {
             RelativeFLine fl = new RelativeFLine(magnet01, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-  //          fmanager.addFieldLine(fl);
+            fmanager.addFieldLine(fl);
         }
 
       // put field lines on stationary 02 magnet
@@ -339,7 +339,7 @@ for (int j = 0; j < numberFLA; j++) {
     RelativeFLine fl = new RelativeFLine(magnet02, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
     fl.setType(Field.B_FIELD);
     fl.setKMax(maxStep);
- //   fmanager.addFieldLine(fl);
+    fmanager.addFieldLine(fl);
 }
     
     numberFLA = 5;
@@ -347,7 +347,7 @@ for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet03, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-//        fmanager.addFieldLine(fl);
+        fmanager.addFieldLine(fl);
     }
         
     
@@ -356,7 +356,7 @@ for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet04, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-//        fmanager.addFieldLine(fl);
+        fmanager.addFieldLine(fl);
     }
         
     
@@ -365,7 +365,7 @@ for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet05, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-  //      fmanager.addFieldLine(fl);
+        fmanager.addFieldLine(fl);
     }
         
          maxStep=300;   
@@ -380,7 +380,7 @@ for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
- //       fmanager.addFieldLine(fl);
+        fmanager.addFieldLine(fl);
     }
     for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);

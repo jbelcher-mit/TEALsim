@@ -92,6 +92,8 @@ public class ElectrostaticPendulum extends SimEM {
     JLabel score;
     double minScore = 100000000.;
     PointCharge playerCharge;
+    PointCharge chargeNW;
+    Rendered nativeObject01;
     Watcher watch;
     double wallscale = 2.0;
     double wheight = 3.0;
@@ -101,6 +103,10 @@ public class ElectrostaticPendulum extends SimEM {
     
     protected FieldConvolution mDLIC = null;
     FieldLineManager fmanager = null;
+    
+    double lengthPendulum=20.;  // maximum of 23
+    
+    double heightSupport = 25.;
 
     public ElectrostaticPendulum() {
 
@@ -108,7 +114,7 @@ public class ElectrostaticPendulum extends SimEM {
         title = "Electrostatic Pendulum";
         
        
-        TDebug.setGlobalLevel(0);
+        TDebug.setGlobalLevel(1);
 
         // Building the world.
         theEngine.setDamping(0.0);
@@ -119,21 +125,21 @@ public class ElectrostaticPendulum extends SimEM {
         // is 1 Java3D unit = 1 Max inch
         
         /** A TEALsim native object (a red disk).  */
-        Rendered nativeObject01 = new Rendered();
+        nativeObject01 = new Rendered();
         /** A ShapeNode for the red disk.  */
         
         
         ShapeNode ShapeNodeNative01 = new ShapeNode();
         /** A TEALsim native object (a green sphere).  */
 
-        double lengthPendulum=20.;  // maximum of 23
+
         double heightSupport = 25.;
-        ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .2, lengthPendulum));
+        ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .1, lengthPendulum));
         nativeObject01.setNode3D(ShapeNodeNative01);
         nativeObject01.setColor(new Color(0, 0, 0));
         nativeObject01.setPosition(new Vector3d(0,heightSupport,0.));
         nativeObject01.setModelOffsetPosition(new Vector3d(0,-lengthPendulum/2,0.));
-        nativeObject01.setDirection(new Vector3d(1.,0,0.));
+        nativeObject01.setDirection(new Vector3d(1.,0.,0.));
         addElement(nativeObject01);
         
         
@@ -162,16 +168,16 @@ public class ElectrostaticPendulum extends SimEM {
         // Set charges
         double pointChargeRadius = 0.9;
 
-        PointCharge chargeNW = new PointCharge();
+        chargeNW = new PointCharge();
         chargeNW.setRadius(pointChargeRadius);
         //chargeNW.setPauliDistance(4.*pointChargeRadius);
         chargeNW.setMass(1.0);
-        chargeNW.setCharge(-10.0);
+        chargeNW.setCharge(100.0);
         chargeNW.setID("chargeNW");
         chargeNW.setPickable(false);
-        chargeNW.setColliding(false);
+        chargeNW.setColliding(true);
         chargeNW.setGeneratingP(true);
-        chargeNW.setPosition(new Vector3d(3., 0., 0.));
+        chargeNW.setPosition(new Vector3d(0., 0., 0.));
         chargeNW.setMoveable(false);
         SphereCollisionController sccx = new SphereCollisionController(chargeNW);
         sccx.setRadius(pointChargeRadius);
@@ -184,7 +190,7 @@ public class ElectrostaticPendulum extends SimEM {
         chargeNE.setRadius(pointChargeRadius);
         //chargeNE.setPauliDistance(4.*pointChargeRadius);
         chargeNE.setMass(1.0);
-        chargeNE.setCharge(-5.);
+        chargeNE.setCharge(-10.);
         chargeNE.setID("chargeNW");
         chargeNE.setPickable(false);
         chargeNE.setColliding(false);
@@ -196,13 +202,13 @@ public class ElectrostaticPendulum extends SimEM {
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         chargeNE.setCollisionController(sccx);
-       addElement(chargeNE);
+    //   addElement(chargeNE);
 
         playerCharge = new PointCharge();
         playerCharge.setRadius(pointChargeRadius);
         //playerCharge.setPauliDistance(4.*pointChargeRadius);
         playerCharge.setMass(1.0);
-        playerCharge.setCharge(1);
+        playerCharge.setCharge(6);
         playerCharge.setID("playerCharge");
         playerCharge.setPickable(false);
         playerCharge.setColliding(true);
@@ -227,8 +233,8 @@ public class ElectrostaticPendulum extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on player charge
-        int numberFLA = 12;
-        int numberFLP =12;
+        int numberFLA = 5;
+        int numberFLP =5;
         for (int k = 0; k < numberFLP+2; k++) {
         for (int j = 0; j < numberFLA; j++) {
 
@@ -240,14 +246,14 @@ public class ElectrostaticPendulum extends SimEM {
         }
         // put field lines on stationary NE charge
         
-        numberFLA =12;
-        numberFLP =12;
+        numberFLA =5;
+        numberFLP =5;
         for (int k = 0; k < numberFLP+2; k++) {
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(chargeNE, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
             fl.setType(Field.E_FIELD);
             fl.setKMax(maxStep);
-           fmanager.addFieldLine(fl);
+    //       fmanager.addFieldLine(fl);
         }
        }
         
@@ -270,8 +276,8 @@ public class ElectrostaticPendulum extends SimEM {
         // Building the GUI.
         PropertyDouble chargeSlider = new PropertyDouble();
         chargeSlider.setText("Player Charge:");
-        chargeSlider.setMinimum(-3.);
-        chargeSlider.setMaximum(3.);
+        chargeSlider.setMinimum(-6.);
+        chargeSlider.setMaximum(6.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(playerCharge, "charge");
@@ -413,9 +419,14 @@ public class ElectrostaticPendulum extends SimEM {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
-//                Vector3d cali = playerCharge.getPosition();
- //       		System.out.println("    ");
- //       		System.out.println("Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
+                Vector3d cali = playerCharge.getPosition();
+                Vector3d reference = new Vector3d(0.,heightSupport,0.);
+                reference.sub(cali);
+          		System.out.println("    ");
+        		System.out.println("Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
+         	    Vector3d hetti = chargeNW.getPosition();
+        		System.out.println("chargeNW   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
+                nativeObject01.setDirection(reference);
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
                     if (testBounds.intersect(new Point3d(playerCharge.getPosition()))) {

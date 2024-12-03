@@ -140,7 +140,7 @@ public class VandeGraff extends SimEM {
         pointCharge.setCharge(pcCharge);
         pointCharge.setPosition(pcPosition, true);
         pointCharge.setPickable(true);
-        pointCharge.setRadius(0.2);
+        pointCharge.setRadius(0.1);
         pointCharge.setMass(1.0);
         pointCharge.setDrawn(true);
         pointCharge.addPropertyChangeListener("position", this);

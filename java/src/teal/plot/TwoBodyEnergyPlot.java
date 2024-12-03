@@ -16,6 +16,7 @@ import javax.vecmath.Vector3d;
 import teal.sim.engine.TSimEngine;
 import teal.physics.physical.PhysicalObject;
 import teal.physics.em.HasCharge;
+import teal.util.TDebug;
 //import teal.sim.physical.*;
 
 /**
@@ -117,10 +118,10 @@ public class TwoBodyEnergyPlot implements PlotItem {
     	double kgpEnergy;
     	kEnergy = 0.5 * m1 * vel1.lengthSquared() * 1.;
     	gpEnergy = m1 * (0.04) * (pos1.y - 6.) *1.;
-    	kgpEnergy = kEnergy + gpEnergy;
+    	kgpEnergy = kEnergy + gpEnergy+eEnergy;
     	kgpEnergy = kgpEnergy/34.2775;
     	
-    	//TDebug.println(0, "kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + "kgpEnergy: " + kgpEnergy);
+    	TDebug.println(0, "kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + "kgpEnergy: " + kgpEnergy);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {

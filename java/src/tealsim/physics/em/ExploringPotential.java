@@ -148,7 +148,7 @@ public class ExploringPotential extends SimEM {
     public ExploringPotential() {
         super();
 
-        TDebug.setGlobalLevel(0);
+        TDebug.setGlobalLevel(1);
 
         title = "Exploring Potential";
         setMarkers();
@@ -338,7 +338,7 @@ public class ExploringPotential extends SimEM {
         VisualizationControl vizPanel = new VisualizationControl();     
         vizPanel.setFieldConvolution(mDLIC); 
 		vizPanel.setConvolutionModes(DLIC.DLIC_FLAG_EP);
-   //     addElement(vizPanel);
+        addElement(vizPanel);
 
         observer = new Rendered();
         observerNode = new Node3D();
