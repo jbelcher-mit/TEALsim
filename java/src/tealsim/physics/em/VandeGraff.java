@@ -185,7 +185,7 @@ public class VandeGraff extends SimEM {
         pointCharge.addAdheredObject(mWall);
 
         // ***************************************************************************
-        // Van de Graff chrage.
+        // Van de Graff charge.
         // ***************************************************************************
         vdgCharge = new PointCharge();
         vdgCharge.setID("vdgCharge");

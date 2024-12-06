@@ -27,7 +27,7 @@ import teal.util.TDebug;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-public class TwoBodyEnergyPlot implements PlotItem {
+public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
 	
 	PhysicalObject b1 = null;
     
@@ -44,7 +44,7 @@ public class TwoBodyEnergyPlot implements PlotItem {
     static final int eEnergyPlot = 0;
     static final int kgpEnergyPlot = 1;
     
-    public TwoBodyEnergyPlot() {
+    public ElectrostaticPendulumTwoBodyEnergyPlot() {
     
    
     plotValue = eEnergyPlot;
@@ -109,7 +109,7 @@ public class TwoBodyEnergyPlot implements PlotItem {
         
     	double eEnergy;
     	eEnergy = q1 * q2 * (1/(pos1.y)); // * a constant 8.897e8 * 
-    	eEnergy = eEnergy / 456.4;
+    	eEnergy = eEnergy /(456.4);
     	double t = indObj.getTime();
     	//TDebug.println(0, "eEnergy: " + eEnergy );
 
@@ -119,9 +119,9 @@ public class TwoBodyEnergyPlot implements PlotItem {
     	kEnergy = 0.5 * m1 * vel1.lengthSquared() * 1.;
     	gpEnergy = m1 * (0.04) * (pos1.y - 6.) *1.;
     	kgpEnergy = kEnergy + gpEnergy+eEnergy;
-    	kgpEnergy = kgpEnergy/34.2775;
+    	kgpEnergy = kgpEnergy/(5.*34.2775);
     	
-//    	TDebug.println(0, "kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + "kgpEnergy: " + kgpEnergy);
+    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " kgpEnergy: " + kgpEnergy);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {

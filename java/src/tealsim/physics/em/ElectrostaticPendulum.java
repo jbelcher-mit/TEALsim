@@ -6,8 +6,11 @@
  */
 
 package tealsim.physics.em;
+import teal.plot.ElectrostaticPendulumTwoBodyEnergyPlot;
+import teal.ui.swing.JTaskPaneGroup;
+import teal.plot.Graph;
+import teal.plot.TwoBodyEnergyPlot;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 
@@ -74,6 +77,8 @@ import teal.util.TDebug;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class ElectrostaticPendulum extends SimEM {
+    Graph graph;
+    ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
 
     private static final long serialVersionUID = 3256443586278208051L;
     
@@ -92,7 +97,7 @@ public class ElectrostaticPendulum extends SimEM {
     JLabel score;
     double minScore = 100000000.;
     PointCharge playerCharge;
-    PointCharge chargeNW;
+    PointCharge chargeStationary;
     Rendered nativeObject01;
     Watcher watch;
     double wallscale = 2.0;
@@ -168,41 +173,24 @@ public class ElectrostaticPendulum extends SimEM {
         // Set charges
         double pointChargeRadius = 0.9;
 
-        chargeNW = new PointCharge();
-        chargeNW.setRadius(pointChargeRadius);
-        //chargeNW.setPauliDistance(4.*pointChargeRadius);
-        chargeNW.setMass(1.0);
-        chargeNW.setCharge(100.0);
-        chargeNW.setID("chargeNW");
-        chargeNW.setPickable(false);
-        chargeNW.setColliding(true);
-        chargeNW.setGeneratingP(true);
-        chargeNW.setPosition(new Vector3d(0., 0., 0.));
-        chargeNW.setMoveable(false);
-        SphereCollisionController sccx = new SphereCollisionController(chargeNW);
+        chargeStationary = new PointCharge();
+        chargeStationary.setRadius(pointChargeRadius);
+        //chargeStationary.setPauliDistance(4.*pointChargeRadius);
+        chargeStationary.setMass(1.0);
+        chargeStationary.setCharge(100.0);
+        chargeStationary.setID("chargeStationary");
+        chargeStationary.setPickable(false);
+        chargeStationary.setColliding(true);
+        chargeStationary.setGeneratingP(true);
+        chargeStationary.setPosition(new Vector3d(0., 0., 0.));
+        chargeStationary.setMoveable(false);
+        SphereCollisionController sccx = new SphereCollisionController(chargeStationary);
         sccx.setRadius(pointChargeRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        chargeNW.setCollisionController(sccx);
-        addElement(chargeNW);
+        chargeStationary.setCollisionController(sccx);
+        addElement(chargeStationary);
 
-        PointCharge chargeNE = new PointCharge();
-        chargeNE.setRadius(pointChargeRadius);
-        //chargeNE.setPauliDistance(4.*pointChargeRadius);
-        chargeNE.setMass(1.0);
-        chargeNE.setCharge(-10.);
-        chargeNE.setID("chargeNW");
-        chargeNE.setPickable(false);
-        chargeNE.setColliding(false);
-        chargeNE.setGeneratingP(true);
-        chargeNE.setPosition(new Vector3d(-3., 0., 0.));
-        chargeNE.setMoveable(false);
-        sccx = new SphereCollisionController(chargeNE);
-        sccx.setRadius(pointChargeRadius);
-        sccx.setTolerance(0.1);
-        sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        chargeNE.setCollisionController(sccx);
-    //   addElement(chargeNE);
 
         playerCharge = new PointCharge();
         playerCharge.setRadius(pointChargeRadius);
@@ -220,9 +208,58 @@ public class ElectrostaticPendulum extends SimEM {
         sccx.setRadius(pointChargeRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        //playerCharge.addPropertyChangeListener("charge",this );
+        playerCharge.addPropertyChangeListener("charge",this );
+        playerCharge.addPropertyChangeListener("position", this);
         addElement(playerCharge);
-         
+        
+        // ***************************************************************************
+        // Graph
+        // ***************************************************************************
+        graph = new Graph();
+        //graph.setBounds(500, 68, 400, 360);
+        graph.setXRange(0., 125.);
+        graph.setYRange(-0.005, 0.02);
+        graph.setXLabel("Time");
+        graph.setYLabel("Energy");
+ 
+        JLabel label1 = new JLabel("Electric Energy");
+        label1.setForeground(Color.RED);
+        //label1.setBounds(660, 20, 200, 24);
+        label1.setFont(label1.getFont().deriveFont(Font.BOLD));
+        JLabel label2 = new JLabel("Kinetic + Gravitational Energy");
+        label2.setForeground(Color.BLUE);
+        //label2.setBounds(625, 44, 200, 24);
+        label2.setFont(label2.getFont().deriveFont(Font.BOLD));
+
+        eGraph = new ElectrostaticPendulumTwoBodyEnergyPlot();
+        eGraph.setPlotValue(0);
+        eGraph.setBodyOne(playerCharge);
+        eGraph.setBodyTwo(chargeStationary);
+        eGraph.setIndObj(theEngine);
+        graph.addPlotItem(eGraph);
+        VisualizationControl visControl;
+        JTaskPaneGroup params, graphs;
+        params = new JTaskPaneGroup();
+        params.setText("Parameters");
+//        params.add(slider);
+        graphs = new JTaskPaneGroup();
+        graphs.setText("Graph");
+        graphs.add(label1);
+        graphs.add(label2);
+        graphs.add(graph);
+        // Hack to get around not adding graph as element
+        theEngine.addSimElement(graph);
+        visControl = new VisualizationControl();
+        visControl.setConvolutionModes(DLIC.DLIC_FLAG_E|DLIC.DLIC_FLAG_EP);
+        visControl.setActionFlags(VisualizationControl.CHANGE_FL_COLORMODE);
+        visControl.setFieldConvolution(mDLIC);
+        visControl.setSymmetryCount(2);
+        visControl.setFieldLineManager(fmanager);
+        visControl.setColorPerVertex(false);
+        addElement(graphs);
+        addElement(params);
+        addElement(visControl);
+      
  		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
 		playerCharge.addConstraint(arc);
  		
@@ -244,26 +281,14 @@ public class ElectrostaticPendulum extends SimEM {
             fmanager.addFieldLine(fl);
         }
         }
-        // put field lines on stationary NE charge
+        // put field lines on stationary charge
         
         numberFLA =5;
         numberFLP =5;
+
         for (int k = 0; k < numberFLP+2; k++) {
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(chargeNE, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
-            fl.setType(Field.E_FIELD);
-            fl.setKMax(maxStep);
-    //       fmanager.addFieldLine(fl);
-        }
-       }
-        
-      // put field lines on stationary NW charge
-        
-//        numberFLA = 2;
-//        numberFLP =3;
-        for (int k = 0; k < numberFLP+2; k++) {
-        for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(chargeNW, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
+            RelativeFLine fl = new RelativeFLine(chargeStationary, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
             fl.setType(Field.E_FIELD);
             fl.setKMax(maxStep);
            fmanager.addFieldLine(fl);
@@ -296,12 +321,12 @@ public class ElectrostaticPendulum extends SimEM {
         addElement(watch);
 
         //JTaskPane tp = new JTaskPane();
-        ControlGroup params = new ControlGroup();
-        params.setText("Parameters");
-        params.add(chargeSlider);
-        params.add(label);
-        params.add(score);
-        addElement(params);
+        ControlGroup params1 = new ControlGroup();
+        params1.setText("Parameters");
+        params1.add(chargeSlider);
+        params1.add(label);
+        params1.add(score);
+        addElement(params1);
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
@@ -329,15 +354,7 @@ public class ElectrostaticPendulum extends SimEM {
         reset(heightSupport,lengthPendulum);
     }
 
-    private void addWall(Vector3d pos, Vector3d length, Vector3d height) {
-        Wall myWall = new Wall(pos, length, height);
-        myWall.setElasticity(wallElasticity);
-        myWall.setColor(Color.GREEN);
-        myWall.setPickable(false);
-        WallNode myNode = (WallNode) myWall.getNode3D();
-        myNode.setFillAppearance(myAppearance);
-        addElement(myWall);
-    }
+
 
     void addActions() {
 
@@ -423,9 +440,9 @@ public class ElectrostaticPendulum extends SimEM {
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
           		System.out.println("    ");
-        		System.out.println("Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
-         	    Vector3d hetti = chargeNW.getPosition();
-        		System.out.println("chargeNW   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
+            	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
+         	    Vector3d hetti = chargeStationary.getPosition();
+            	TDebug.println(0, "chargeStationary   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
                 nativeObject01.setDirection(reference);
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
