@@ -42,7 +42,9 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     boolean initialized = false;
     int plotValue;
     static final int eEnergyPlot = 0;
-    static final int kgpEnergyPlot = 1;
+    static final int kEnergyPlot = 1;
+    static final int gpEnergyPlot = 2;
+    static final int TotEnergyPlot = 3;
     
     public ElectrostaticPendulumTwoBodyEnergyPlot() {
     
@@ -106,32 +108,44 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
 		double m1 = b1.getMass();
 		Vector3d pos1 = b1.getPosition();
 		Vector3d vel1 = b1.getVelocity();
+		Vector3d pos2 = b2.getPosition();
+		Vector3d r = new Vector3d();
+		r.sub(pos1,pos2);
+		double rlength = r.length();
         
     	double eEnergy;
-    	eEnergy = q1 * q2 * (1/(pos1.y)); // * a constant 8.897e8 * 
-    	eEnergy = eEnergy /(456.4);
+    	eEnergy = q1 * q2 * (1/(rlength)); // * a constant 8.897e8 * 
+    	eEnergy = eEnergy /(4*456.4);
     	double t = indObj.getTime();
     	//TDebug.println(0, "eEnergy: " + eEnergy );
 
     	double kEnergy;
     	double gpEnergy;
-    	double kgpEnergy;
+    	double totEnergy;
     	kEnergy = 0.5 * m1 * vel1.lengthSquared() * 1.;
-    	gpEnergy = m1 * (0.04) * (pos1.y - 6.) *1.;
-    	kgpEnergy = kEnergy + gpEnergy+eEnergy;
-    	kgpEnergy = kgpEnergy/(5.*34.2775);
+    	kEnergy = kEnergy/500.;
+    	gpEnergy = m1 * (0.04) * (pos1.y-5.) *1.;
+    	gpEnergy = gpEnergy/50.;
+    	totEnergy = kEnergy + gpEnergy+eEnergy;
+    	totEnergy = totEnergy/(10.*34.2775);
+    	totEnergy = totEnergy*300.;
+
     	
-    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " kgpEnergy: " + kgpEnergy);
+    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {
 			graph.setXRange(xrange[1], xrange[1]+(xrange[1]-xrange[0]));
 			graph.clear(0);
 			graph.clear(1);
+			graph.clear(2);
+			graph.clear(3);
 		}
 	
     	graph.addPoint(0,t,eEnergy,connected);   
-    	graph.addPoint(1,t,kgpEnergy,connected);   
+    	graph.addPoint(1,t,kEnergy,connected);   
+    	graph.addPoint(2,t,gpEnergy,connected); 
+    	graph.addPoint(3,t,totEnergy,connected); 
 
     }
 }

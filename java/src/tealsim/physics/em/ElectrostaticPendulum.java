@@ -217,7 +217,7 @@ public class ElectrostaticPendulum extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
-        graph.setXRange(0., 125.);
+        graph.setXRange(0., 75.);
         graph.setYRange(-0.005, 0.02);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
@@ -226,10 +226,16 @@ public class ElectrostaticPendulum extends SimEM {
         label1.setForeground(Color.RED);
         //label1.setBounds(660, 20, 200, 24);
         label1.setFont(label1.getFont().deriveFont(Font.BOLD));
-        JLabel label2 = new JLabel("Kinetic + Gravitational Energy");
+        JLabel label2 = new JLabel("Kinetic Energy");
         label2.setForeground(Color.BLUE);
         //label2.setBounds(625, 44, 200, 24);
         label2.setFont(label2.getFont().deriveFont(Font.BOLD));
+        JLabel label3 = new JLabel("Gravitational Potential Energy");
+        label3.setForeground(Color.green);
+        label3.setFont(label3.getFont().deriveFont(Font.BOLD));
+        JLabel label4 = new JLabel("Total Energy");
+        label4.setForeground(Color.BLACK);
+        label4.setFont(label3.getFont().deriveFont(Font.BOLD));
 
         eGraph = new ElectrostaticPendulumTwoBodyEnergyPlot();
         eGraph.setPlotValue(0);
@@ -246,6 +252,8 @@ public class ElectrostaticPendulum extends SimEM {
         graphs.setText("Graph");
         graphs.add(label1);
         graphs.add(label2);
+        graphs.add(label3);
+        graphs.add(label4);
         graphs.add(graph);
         // Hack to get around not adding graph as element
         theEngine.addSimElement(graph);
@@ -442,7 +450,7 @@ public class ElectrostaticPendulum extends SimEM {
           		System.out.println("    ");
             	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
          	    Vector3d hetti = chargeStationary.getPosition();
-            	TDebug.println(0, "chargeStationary   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
+ //           	TDebug.println(0, "chargeStationary   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
                 nativeObject01.setDirection(reference);
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
