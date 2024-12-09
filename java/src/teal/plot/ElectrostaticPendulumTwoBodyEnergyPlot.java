@@ -130,8 +130,12 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	totEnergy = totEnergy/(10.*34.2775);
     	totEnergy = totEnergy*300.;
 
-    	
-    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
+    	kEnergy=3.44184*kEnergy/3;
+    	gpEnergy = 2.58145*gpEnergy/3;
+    	eEnergy=eEnergy/3;
+    	totEnergy = kEnergy + gpEnergy+eEnergy;
+//    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
+    	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {
