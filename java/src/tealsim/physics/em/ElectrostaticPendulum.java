@@ -79,7 +79,9 @@ import teal.util.TDebug;
 public class ElectrostaticPendulum extends SimEM {
     Graph graph;
     ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
-
+    
+	//  note I am declaring a serialVersionUID here although I have no idea what this means and it is
+	// the same id as in other applications, see the MagnetostaticPendulum  belcher 12/14/2024
     private static final long serialVersionUID = 3256443586278208051L;
     
     /** An imported 3DS object (a hemisphere).  */
@@ -109,7 +111,7 @@ public class ElectrostaticPendulum extends SimEM {
     protected FieldConvolution mDLIC = null;
     FieldLineManager fmanager = null;
     
-    double lengthPendulum=20.;  // maximum of 23
+    double lengthPendulum=20.; 
     
     double heightSupport = 25.;
 
@@ -124,24 +126,14 @@ public class ElectrostaticPendulum extends SimEM {
         // Building the world.
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., -.3,0.));
-        
-        // import two .3DS files objects using Loader3DS
-        // The conversion between max units and Java3D units 
-        // is 1 Java3D unit = 1 Max inch
-        
-        /** A TEALsim native object (a red disk).  */
+
         nativeObject01 = new Rendered();
-        /** A ShapeNode for the red disk.  */
-        
-        
+  
         ShapeNode ShapeNodeNative01 = new ShapeNode();
-        /** A TEALsim native object (a green sphere).  */
 
-
-        double heightSupport = 25.;
         ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .1, lengthPendulum));
         nativeObject01.setNode3D(ShapeNodeNative01);
-        nativeObject01.setColor(new Color(100, 100, 0));
+        nativeObject01.setColor(new Color(0, 0, 100));
         nativeObject01.setPosition(new Vector3d(0,heightSupport,0.));
         nativeObject01.setModelOffsetPosition(new Vector3d(0,-lengthPendulum/2,0.));
         nativeObject01.setDirection(new Vector3d(1.,0.,0.));
@@ -156,7 +148,7 @@ public class ElectrostaticPendulum extends SimEM {
          max.getBranchGroup("models/ArmBase.3DS",
          "models/");
         node01.setScale(scale3DS);
-      node01.addContents(bg01);
+        node01.addContents(bg01);
         
         importedObject01.setNode3D(node01);
         importedObject01.setPosition(new Vector3d(0., 0., 0.));

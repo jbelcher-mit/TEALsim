@@ -7,8 +7,8 @@
 
 package tealsim.physics.em;
 
-import java.awt.Color;
 import teal.plot.MagnetostaticPendulumTwoBodyEnergyPlot;
+import teal.plot.ElectrostaticPendulumTwoBodyEnergyPlot;
 import teal.plot.Graph;
 
 import java.awt.event.ActionEvent;
@@ -33,6 +33,7 @@ import teal.math.RectangularPlane;
 import teal.render.Rendered;
 import teal.render.j3d.loaders.Loader3DS;
 import teal.sim.collision.SphereCollisionController;
+import teal.sim.constraint.ArcConstraint;
 import teal.sim.constraint.SphericalArcConstraint;
 import teal.sim.control.VisualizationControl;
 import teal.sim.engine.EngineObj;
@@ -77,6 +78,9 @@ import teal.util.TDebug;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class MagnetostaticPendulum extends SimEM {
+	
+	//  note I am declaring a serialVersionUID here although I have no idea what this means and it is
+	// the same id as in other applications, see the ElectrostaticPendulum  belcher 12/14/2024
 
     private static final long serialVersionUID = 3256443586278208051L;
     Graph graph;
@@ -106,15 +110,19 @@ public class MagnetostaticPendulum extends SimEM {
     
     protected FieldConvolution mDLIC = null;
     FieldLineManager fmanager = null;
+    
+    double lengthPendulum=20.; 
+    
+    double heightSupport = 25.;
 
     public MagnetostaticPendulum() {
 
         super();
         title = "Magnetostatic Pendulum";
+        TDebug.setGlobalLevel(1);
         Graph graph;
         MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
        
-        TDebug.setGlobalLevel(0);
 
         // Building the world.
         theEngine.setDamping(0.0);
@@ -123,11 +131,9 @@ public class MagnetostaticPendulum extends SimEM {
         Rendered nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
 
-        double lengthPendulum= 20.;  // maximum of 23
-        double heightSupport = 25.;
-        ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .2, lengthPendulum));
+        ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .1, lengthPendulum));
         nativeObject01.setNode3D(ShapeNodeNative01);
-        nativeObject01.setColor(new Color(0, 0, 0));
+        nativeObject01.setColor(new Color(0, 0, 100));
         nativeObject01.setPosition(new Vector3d(0,heightSupport,0.));
         nativeObject01.setModelOffsetPosition(new Vector3d(0,-lengthPendulum/2,0.));
         nativeObject01.setDirection(new Vector3d(1.,0.,0.));
@@ -136,12 +142,12 @@ public class MagnetostaticPendulum extends SimEM {
         
         double scale3DS = 3.; // this is an overall scale factor for this .3DS object
         // Creating components.
-       Loader3DS max = new Loader3DS();
+        Loader3DS max = new Loader3DS();
         BranchGroup bg01 = 
          max.getBranchGroup("models/ArmBase.3DS",
          "models/");
         node01.setScale(scale3DS);
-      node01.addContents(bg01);    
+        node01.addContents(bg01);    
         importedObject01.setNode3D(node01);
         importedObject01.setPosition(new Vector3d(0., 0., 0.));
         addElement(importedObject01);
@@ -154,29 +160,29 @@ public class MagnetostaticPendulum extends SimEM {
         myAppearance = Node3D.makeAppearance(new Color3f(Color.GRAY), 0.5f, 0.5f, false);
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
-        // Set charges
+        // Set magnetic dipole characteristics
         double fixedMu = 55.;
-        double fixedRadius =2.;
+        double fixedRadius =0.;
         double MagnetRadius = 1.;
-        double MagnetRadius1 = MagnetRadius-MagnetRadius;
+        double MagnetRadius1 = 0.;
 
-        CylindricalBarMagnet magnet01 = new CylindricalBarMagnet();
-        magnet01.setRadius(MagnetRadius);
-        magnet01.setMass(.05);
-        magnet01.setMu(fixedMu);
-        magnet01.setID("magnet01");
-        magnet01.setPickable(false);
-        magnet01.setColliding(false);
-        magnet01.setGeneratingP(true);
-        magnet01.setPosition(new Vector3d(0., MagnetRadius1,fixedRadius));
-        magnet01.setMoveable(false);
-        magnet01.setRotable(false);
-        SphereCollisionController sccx = new SphereCollisionController(magnet01);
+        CylindricalBarMagnet stationaryMagnet = new CylindricalBarMagnet();
+        stationaryMagnet.setRadius(MagnetRadius);
+        stationaryMagnet.setMass(.05);
+        stationaryMagnet.setMu(fixedMu);
+        stationaryMagnet.setID("stationaryMagnet");
+        stationaryMagnet.setPickable(false);
+        stationaryMagnet.setColliding(false);
+        stationaryMagnet.setGeneratingP(true);
+        stationaryMagnet.setPosition(new Vector3d(0., MagnetRadius1,fixedRadius));
+        stationaryMagnet.setMoveable(false);
+        stationaryMagnet.setRotable(false);
+        SphereCollisionController sccx = new SphereCollisionController(stationaryMagnet);
         sccx.setRadius(MagnetRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        magnet01.setCollisionController(sccx);
-        addElement(magnet01);
+        stationaryMagnet.setCollisionController(sccx);
+        addElement(stationaryMagnet);
         
         double delta_angle = 2.*Math.PI/6.;
         double angle = delta_angle;
@@ -196,7 +202,7 @@ public class MagnetostaticPendulum extends SimEM {
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         magnet02.setCollisionController(sccx);
-       addElement(magnet02);
+//       addElement(magnet02);
        
        angle = angle+delta_angle;
        CylindricalBarMagnet magnet03 = new CylindricalBarMagnet();
@@ -215,7 +221,7 @@ public class MagnetostaticPendulum extends SimEM {
        sccx.setTolerance(0.1);
        sccx.setMode(SphereCollisionController.WALL_SPHERE);
        magnet03.setCollisionController(sccx);
-      addElement(magnet03);
+//      addElement(magnet03);
       
       angle = angle+delta_angle;
       CylindricalBarMagnet magnet04 = new CylindricalBarMagnet();
@@ -234,7 +240,7 @@ public class MagnetostaticPendulum extends SimEM {
       sccx.setTolerance(0.1);
       sccx.setMode(SphereCollisionController.WALL_SPHERE);
       magnet04.setCollisionController(sccx);
-     addElement(magnet04);
+//     addElement(magnet04);
      
      angle = angle+delta_angle;
      CylindricalBarMagnet magnet05 = new CylindricalBarMagnet();
@@ -252,8 +258,8 @@ public class MagnetostaticPendulum extends SimEM {
      sccx.setRadius(MagnetRadius);
      sccx.setTolerance(0.1);
      sccx.setMode(SphereCollisionController.WALL_SPHERE);
-     magnet05.setCollisionController(sccx);
-    addElement(magnet05);
+//     magnet05.setCollisionController(sccx);
+//    addElement(magnet05);
     
     angle = angle+delta_angle;
     CylindricalBarMagnet magnet06 = new CylindricalBarMagnet();
@@ -271,10 +277,8 @@ public class MagnetostaticPendulum extends SimEM {
     sccx.setRadius(MagnetRadius);
     sccx.setTolerance(0.1);
     sccx.setMode(SphereCollisionController.WALL_SPHERE);
-    magnet06.setCollisionController(sccx);
-   addElement(magnet06);
-   
-
+//    magnet06.setCollisionController(sccx);
+//   addElement(magnet06);
    
         playerMagnet = new CylindricalBarMagnet();
         playerMagnet.setRadius(MagnetRadius);
@@ -295,8 +299,63 @@ public class MagnetostaticPendulum extends SimEM {
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         //playerMagnet.addPropertyChangeListener("charge",this );
         addElement(playerMagnet);
-         
- 		SphericalArcConstraint arc = new SphericalArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
+        
+        // ***************************************************************************
+        // Graph
+        // ***************************************************************************
+        graph = new Graph();
+        //graph.setBounds(500, 68, 400, 360);
+        graph.setXRange(0., 75.);
+        graph.setYRange(-0.005, 0.02);
+        graph.setXLabel("Time");
+        graph.setYLabel("Energy");
+ 
+        JLabel label1 = new JLabel("Magnetic Energy");
+        label1.setForeground(Color.RED);
+        //label1.setBounds(660, 20, 200, 24);
+        label1.setFont(label1.getFont().deriveFont(Font.BOLD));
+        JLabel label2 = new JLabel("Kinetic Energy");
+        label2.setForeground(Color.BLUE);
+        //label2.setBounds(625, 44, 200, 24);
+        label2.setFont(label2.getFont().deriveFont(Font.BOLD));
+        JLabel label3 = new JLabel("Gravitational Potential Energy");
+        label3.setForeground(Color.green);
+        label3.setFont(label3.getFont().deriveFont(Font.BOLD));
+        JLabel label4 = new JLabel("Total Energy");
+        label4.setForeground(Color.BLACK);
+        label4.setFont(label3.getFont().deriveFont(Font.BOLD));
+
+        eGraph = new MagnetostaticPendulumTwoBodyEnergyPlot();
+        eGraph.setPlotValue(0);
+        eGraph.setBodyOne(playerMagnet);
+        eGraph.setBodyTwo(stationaryMagnet);
+        eGraph.setIndObj(theEngine);
+        graph.addPlotItem(eGraph);
+        VisualizationControl visControl;
+        JTaskPaneGroup params, graphs;
+        params = new JTaskPaneGroup();
+        params.setText("Parameters");
+//        params.add(slider);
+        graphs = new JTaskPaneGroup();
+        graphs.setText("Graph");
+        graphs.add(label1);
+        graphs.add(label2);
+        graphs.add(label3);
+        graphs.add(label4);
+        graphs.add(graph);
+        // Hack to get around not adding graph as element
+        theEngine.addSimElement(graph);
+        visControl = new VisualizationControl();
+        visControl.setConvolutionModes(DLIC.DLIC_FLAG_E|DLIC.DLIC_FLAG_EP);
+        visControl.setActionFlags(VisualizationControl.CHANGE_FL_COLORMODE);
+        visControl.setFieldConvolution(mDLIC);
+        visControl.setSymmetryCount(2);
+        visControl.setFieldLineManager(fmanager);
+        visControl.setColorPerVertex(false);
+        addElement(graphs);
+        addElement(params);
+        addElement(visControl);
+ 		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
 		playerMagnet.addConstraint(arc);
  		
         int maxStep = 25;
@@ -332,7 +391,7 @@ public class MagnetostaticPendulum extends SimEM {
         maxStep = 200;
         numberFLA = 5;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(magnet01, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+            RelativeFLine fl = new RelativeFLine(stationaryMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
@@ -345,7 +404,7 @@ for (int j = 0; j < numberFLA; j++) {
     RelativeFLine fl = new RelativeFLine(magnet02, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
     fl.setType(Field.B_FIELD);
     fl.setKMax(maxStep);
-    fmanager.addFieldLine(fl);
+//    fmanager.addFieldLine(fl);
 }
     
     numberFLA = 5;
@@ -353,7 +412,7 @@ for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet03, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-        fmanager.addFieldLine(fl);
+//        fmanager.addFieldLine(fl);
     }
         
     
@@ -362,7 +421,7 @@ for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet04, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-        fmanager.addFieldLine(fl);
+ //       fmanager.addFieldLine(fl);
     }
         
     
@@ -371,7 +430,7 @@ for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet05, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-        fmanager.addFieldLine(fl);
+//        fmanager.addFieldLine(fl);
     }
         
          maxStep=300;   
@@ -379,20 +438,20 @@ for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-        fmanager.addFieldLine(fl);
+ //       fmanager.addFieldLine(fl);
     }
     
     for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-        fmanager.addFieldLine(fl);
+//        fmanager.addFieldLine(fl);
     }
     for (int j = 0; j < numberFLA; j++) {
         RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
-        fmanager.addFieldLine(fl);
+//       fmanager.addFieldLine(fl);
     }
         
             
@@ -424,7 +483,7 @@ for (int j = 0; j < numberFLA; j++) {
         addElement(watch);
 
         //JTaskPane tp = new JTaskPane();
-        ControlGroup params = new ControlGroup();
+//        ControlGroup params = new ControlGroup();
         params.setText("Parameters");
         params.add(MuSlider);
         params.add(label);
