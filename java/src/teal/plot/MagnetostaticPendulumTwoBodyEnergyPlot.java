@@ -117,10 +117,10 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
         double y = r.y;
 //    	TDebug.println(0,  " x: " + x +"  y: " +y +"  z: "+z );
     	double eEnergy;
-    	eEnergy = -(2.*z*z-x*x)/Math.pow(z*z+x*x, 5./2.);
-    	eEnergy=eEnergy*5.;
+    	eEnergy = (2.*y*y-x*x)/Math.pow(y*y+x*x, 5./2.);
+    	eEnergy=eEnergy*3000./(4*456.4);
  //   	eEnergy = q1 * q2 * (1/(rlength)); // * a constant 8.897e8 * 
-    	eEnergy = eEnergy /(4*456.4);
+//    	eEnergy = eEnergy /(4*456.4);
     	double t = indObj.getTime();
     	//TDebug.println(0, "eEnergy: " + eEnergy );
 
@@ -139,8 +139,8 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	gpEnergy = 2.58145*gpEnergy/3;
     	eEnergy=eEnergy/3;
     	totEnergy = kEnergy + gpEnergy+eEnergy;
-    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
-//    	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
+//    	TDebug.println(0, " eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
+    	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {
