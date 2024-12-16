@@ -138,6 +138,14 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	kEnergy=3.44184*kEnergy/3;
     	gpEnergy = 2.58145*gpEnergy/3;
     	eEnergy=eEnergy/3;
+    	//
+    	//
+    	kEnergy=kEnergy*2.837417568;
+        gpEnergy = gpEnergy*2.834087781;
+        double common = 3.;
+    	eEnergy=eEnergy/common;
+    	kEnergy=kEnergy/common;
+        gpEnergy = gpEnergy/common;
     	totEnergy = kEnergy + gpEnergy+eEnergy;
 //    	TDebug.println(0, " eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
     	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
