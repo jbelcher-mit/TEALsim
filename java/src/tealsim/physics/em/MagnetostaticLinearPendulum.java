@@ -76,7 +76,7 @@ import teal.util.TDebug;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class ElectrostaticPendulum extends SimEM {
+public class MagnetostaticLinearPendulum extends SimEM {
     Graph graph;
     ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
     
@@ -115,10 +115,10 @@ public class ElectrostaticPendulum extends SimEM {
     
     double heightSupport = 25.;
 
-    public ElectrostaticPendulum() {
+    public MagnetostaticLinearPendulum() {
 
         super();
-        title = "Electrostatic Pendulum";
+        title = "Magnetostatic Pendulum";
         
        
         TDebug.setGlobalLevel(1);

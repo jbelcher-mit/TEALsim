@@ -91,7 +91,7 @@ public class MagneticPendulumSpherical extends SimEM {
     JLabel label;
     JLabel score;
     double minScore = 100000000.;
-    CylindricalBarMagnet playerMagnet;
+    CylindricalBarMagnet swingingMagnet;
     Watcher watch;
     double wallscale = 2.0;
     double wheight = 3.0;
@@ -270,28 +270,28 @@ public class MagneticPendulumSpherical extends SimEM {
    
 
    
-        playerMagnet = new CylindricalBarMagnet();
-        playerMagnet.setRadius(MagnetRadius);
-        //playerMagnet.setPauliDistance(4.*MagnetRadius);
-        playerMagnet.setMass(2.);
-        playerMagnet.setMu(1);
-        playerMagnet.setID("playerMagnet");
-        playerMagnet.setPickable(false);
-        playerMagnet.setColliding(true);
-        playerMagnet.setGeneratingP(true);
-        playerMagnet.setPosition(new Vector3d(0.,0., 0.));
-        playerMagnet.setMoveable(true);
-        playerMagnet.setRotable(false);
-        playerMagnet.setConstrained(true);
-        sccx = new SphereCollisionController(playerMagnet);
+        swingingMagnet = new CylindricalBarMagnet();
+        swingingMagnet.setRadius(MagnetRadius);
+        //swingingMagnet.setPauliDistance(4.*MagnetRadius);
+        swingingMagnet.setMass(2.);
+        swingingMagnet.setMu(1);
+        swingingMagnet.setID("swingingMagnet");
+        swingingMagnet.setPickable(false);
+        swingingMagnet.setColliding(true);
+        swingingMagnet.setGeneratingP(true);
+        swingingMagnet.setPosition(new Vector3d(0.,0., 0.));
+        swingingMagnet.setMoveable(true);
+        swingingMagnet.setRotable(false);
+        swingingMagnet.setConstrained(true);
+        sccx = new SphereCollisionController(swingingMagnet);
         sccx.setRadius(MagnetRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        //playerMagnet.addPropertyChangeListener("charge",this );
-        addElement(playerMagnet);
+        //swingingMagnet.addPropertyChangeListener("charge",this );
+        addElement(swingingMagnet);
          
  		SphericalArcConstraint arc = new SphericalArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
-		playerMagnet.addConstraint(arc);
+		swingingMagnet.addConstraint(arc);
  		
         int maxStep = 25;
 
@@ -303,20 +303,20 @@ public class MagneticPendulumSpherical extends SimEM {
         int numberFLA = 5;
         maxStep = 200;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(playerMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
+            RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
         }
         
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(playerMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
+            RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
      //       fmanager.addFieldLine(fl);
         }
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(playerMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
+            RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
@@ -402,7 +402,7 @@ for (int j = 0; j < numberFLA; j++) {
         MuSlider.setMaximum(500.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
-        MuSlider.addRoute(playerMagnet, "Mu");
+        MuSlider.addRoute(swingingMagnet, "Mu");
         MuSlider.setValue(-40);
         //addElement(MuSlider);
         MuSlider.setVisible(true);
@@ -501,8 +501,8 @@ for (int j = 0; j < numberFLA; j++) {
 
     private void resetCylindricalBarMagnet(double heightSupport, double lengthPendulum) {
 
-        playerMagnet.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
-        playerMagnet.setDirection(new Vector3d(0,1, 0));
+        swingingMagnet.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
+        swingingMagnet.setDirection(new Vector3d(0,1, 0));
     }
 
 
@@ -543,7 +543,7 @@ for (int j = 0; j < numberFLA; j++) {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
- //               Vector3d cali = playerMagnet.getPosition();
+ //               Vector3d cali = swingingMagnet.getPosition();
  //               Vector3d temp = new Vector3d(cali);
  //               Vector3d center = new Vector3d(0.,25.,0.);
 //               temp.sub(center);
@@ -553,7 +553,7 @@ for (int j = 0; j < numberFLA; j++) {
                  score.setText(String.valueOf(time));
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
-                    if (testBounds.intersect(new Point3d(playerMagnet.getPosition()))) {
+                    if (testBounds.intersect(new Point3d(swingingMagnet.getPosition()))) {
                         System.out.println("congratulations");
                         // Make this a one-shot
                         actionEnabled = false;

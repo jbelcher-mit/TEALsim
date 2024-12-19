@@ -100,7 +100,9 @@ public class MagnetostaticPendulum extends SimEM {
     JLabel label;
     JLabel score;
     double minScore = 100000000.;
-    CylindricalBarMagnet playerMagnet;
+    CylindricalBarMagnet swingingMagnet;
+    CylindricalBarMagnet stationaryMagnet;
+    Rendered nativeObject01;
     Watcher watch;
     double wallscale = 2.0;
     double wheight = 3.0;
@@ -184,121 +186,25 @@ public class MagnetostaticPendulum extends SimEM {
         stationaryMagnet.setCollisionController(sccx);
         addElement(stationaryMagnet);
         
-        double delta_angle = 2.*Math.PI/6.;
-        double angle = delta_angle;
-        CylindricalBarMagnet magnet02 = new CylindricalBarMagnet();
-        magnet02.setRadius(MagnetRadius);
-        magnet02.setMass(1.0);
-        magnet02.setMu(fixedMu);
-        magnet02.setID("magnet02");
-        magnet02.setPickable(false);
-        magnet02.setColliding(false);
-        magnet02.setGeneratingP(true);
-        magnet02.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
-        magnet02.setMoveable(false);
-        magnet02.setRotable(false);
-        sccx = new SphereCollisionController(magnet02);
+        swingingMagnet = new CylindricalBarMagnet();
+        swingingMagnet.setRadius(MagnetRadius);
+        //swingingMagnet.setPauliDistance(4.*MagnetRadius);
+        swingingMagnet.setMass(2.);
+        swingingMagnet.setMu(1);
+        swingingMagnet.setID("swingingMagnet");
+        swingingMagnet.setPickable(false);
+        swingingMagnet.setColliding(true);
+        swingingMagnet.setGeneratingP(true);
+        swingingMagnet.setPosition(new Vector3d(0.,0., 0.));
+        swingingMagnet.setMoveable(true);
+        swingingMagnet.setRotable(false);
+        swingingMagnet.setConstrained(true);
+        sccx = new SphereCollisionController(swingingMagnet);
         sccx.setRadius(MagnetRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        magnet02.setCollisionController(sccx);
-//       addElement(magnet02);
-       
-       angle = angle+delta_angle;
-       CylindricalBarMagnet magnet03 = new CylindricalBarMagnet();
-       magnet03.setRadius(MagnetRadius);
-       magnet03.setMass(1.0);
-       magnet03.setMu(fixedMu);
-       magnet03.setID("magnet03");
-       magnet03.setPickable(false);
-       magnet03.setColliding(false);
-       magnet03.setGeneratingP(true);
-       magnet03.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
-       magnet03.setMoveable(false);
-       magnet03.setRotable(false);
-       sccx = new SphereCollisionController(magnet03);
-       sccx.setRadius(MagnetRadius);
-       sccx.setTolerance(0.1);
-       sccx.setMode(SphereCollisionController.WALL_SPHERE);
-       magnet03.setCollisionController(sccx);
-//      addElement(magnet03);
-      
-      angle = angle+delta_angle;
-      CylindricalBarMagnet magnet04 = new CylindricalBarMagnet();
-      magnet04.setRadius(MagnetRadius);
-      magnet04.setMass(1.0);
-      magnet04.setMu(fixedMu);
-      magnet04.setID("magnet04");
-      magnet04.setPickable(false);
-      magnet04.setColliding(false);
-      magnet04.setGeneratingP(true);
-      magnet04.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
-      magnet04.setMoveable(false);
-      magnet04.setRotable(false);
-      sccx = new SphereCollisionController(magnet04);
-      sccx.setRadius(MagnetRadius);
-      sccx.setTolerance(0.1);
-      sccx.setMode(SphereCollisionController.WALL_SPHERE);
-      magnet04.setCollisionController(sccx);
-//     addElement(magnet04);
-     
-     angle = angle+delta_angle;
-     CylindricalBarMagnet magnet05 = new CylindricalBarMagnet();
-     magnet05.setRadius(MagnetRadius);
-     magnet05.setMass(1.0);
-     magnet05.setMu(fixedMu);
-     magnet05.setID("magnet05");
-     magnet05.setPickable(false);
-     magnet05.setColliding(false);
-     magnet05.setGeneratingP(true);
-     magnet05.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
-     magnet05.setMoveable(false);
-     magnet05.setRotable(false);
-     sccx = new SphereCollisionController(magnet05);
-     sccx.setRadius(MagnetRadius);
-     sccx.setTolerance(0.1);
-     sccx.setMode(SphereCollisionController.WALL_SPHERE);
-//     magnet05.setCollisionController(sccx);
-//    addElement(magnet05);
-    
-    angle = angle+delta_angle;
-    CylindricalBarMagnet magnet06 = new CylindricalBarMagnet();
-    magnet06.setRadius(MagnetRadius);
-    magnet06.setMass(1.0);
-    magnet06.setMu(fixedMu);
-    magnet06.setID("magnet06");
-    magnet06.setPickable(false);
-    magnet06.setColliding(false);
-    magnet06.setGeneratingP(true);
-    magnet06.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
-    magnet06.setMoveable(false);
-    magnet06.setRotable(false);
-    sccx = new SphereCollisionController(magnet06);
-    sccx.setRadius(MagnetRadius);
-    sccx.setTolerance(0.1);
-    sccx.setMode(SphereCollisionController.WALL_SPHERE);
-//    magnet06.setCollisionController(sccx);
-//   addElement(magnet06);
-   
-        playerMagnet = new CylindricalBarMagnet();
-        playerMagnet.setRadius(MagnetRadius);
-        //playerMagnet.setPauliDistance(4.*MagnetRadius);
-        playerMagnet.setMass(2.);
-        playerMagnet.setMu(1);
-        playerMagnet.setID("playerMagnet");
-        playerMagnet.setPickable(false);
-        playerMagnet.setColliding(true);
-        playerMagnet.setGeneratingP(true);
-        playerMagnet.setPosition(new Vector3d(0.,0., 0.));
-        playerMagnet.setMoveable(true);
-        playerMagnet.setRotable(false);
-        playerMagnet.setConstrained(true);
-        sccx = new SphereCollisionController(playerMagnet);
-        sccx.setRadius(MagnetRadius);
-        sccx.setTolerance(0.1);
-        sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        //playerMagnet.addPropertyChangeListener("charge",this );
-        addElement(playerMagnet);
+        //swingingMagnet.addPropertyChangeListener("charge",this );
+        addElement(swingingMagnet);
         
         // ***************************************************************************
         // Graph
@@ -327,7 +233,7 @@ public class MagnetostaticPendulum extends SimEM {
 
         eGraph = new MagnetostaticPendulumTwoBodyEnergyPlot();
         eGraph.setPlotValue(0);
-        eGraph.setBodyOne(playerMagnet);
+        eGraph.setBodyOne(swingingMagnet);
         eGraph.setBodyTwo(stationaryMagnet);
         eGraph.setIndObj(theEngine);
         graph.addPlotItem(eGraph);
@@ -356,7 +262,7 @@ public class MagnetostaticPendulum extends SimEM {
         addElement(params);
         addElement(visControl);
  		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
-		playerMagnet.addConstraint(arc);
+		swingingMagnet.addConstraint(arc);
  		
         int maxStep = 25;
 
@@ -364,30 +270,30 @@ public class MagnetostaticPendulum extends SimEM {
         fmanager = new FieldLineManager();
         fmanager.setElementManager(this);
         
-        // put field lines on player magnet
+        // put field lines on swinging magnet
         int numberFLA = 5;
         maxStep = 200;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(playerMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
+            RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
         }
         
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(playerMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
+            RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
      //       fmanager.addFieldLine(fl);
         }
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(playerMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
+            RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
         }
 //        }
-        // put field lines on stationary 01 magnet
+        // put field lines on stationary magnet
         maxStep = 200;
         numberFLA = 5;
         for (int j = 0; j < numberFLA; j++) {
@@ -397,66 +303,6 @@ public class MagnetostaticPendulum extends SimEM {
             fmanager.addFieldLine(fl);
         }
 
-      // put field lines on stationary 02 magnet
-              
-numberFLA = 5;
-for (int j = 0; j < numberFLA; j++) {
-    RelativeFLine fl = new RelativeFLine(magnet02, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
-    fl.setType(Field.B_FIELD);
-    fl.setKMax(maxStep);
-//    fmanager.addFieldLine(fl);
-}
-    
-    numberFLA = 5;
-    for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet03, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
-        fl.setType(Field.B_FIELD);
-        fl.setKMax(maxStep);
-//        fmanager.addFieldLine(fl);
-    }
-        
-    
-    numberFLA = 5;
-    for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet04, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
-        fl.setType(Field.B_FIELD);
-        fl.setKMax(maxStep);
- //       fmanager.addFieldLine(fl);
-    }
-        
-    
-    numberFLA = 5;
-    for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet05, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
-        fl.setType(Field.B_FIELD);
-        fl.setKMax(maxStep);
-//        fmanager.addFieldLine(fl);
-    }
-        
-         maxStep=300;   
-    for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
-        fl.setType(Field.B_FIELD);
-        fl.setKMax(maxStep);
- //       fmanager.addFieldLine(fl);
-    }
-    
-    for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
-        fl.setType(Field.B_FIELD);
-        fl.setKMax(maxStep);
-//        fmanager.addFieldLine(fl);
-    }
-    for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
-        fl.setType(Field.B_FIELD);
-        fl.setKMax(maxStep);
-//       fmanager.addFieldLine(fl);
-    }
-        
-            
-
-        
         fmanager.setSymmetryCount(2);
         theEngine.setBoundingArea(new BoundingSphere(new Point3d(), 12));
 
@@ -467,7 +313,7 @@ for (int j = 0; j < numberFLA; j++) {
         MuSlider.setMaximum(500.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
-        MuSlider.addRoute(playerMagnet, "Mu");
+        MuSlider.addRoute(swingingMagnet, "Mu");
         MuSlider.setValue(-40);
         //addElement(MuSlider);
         MuSlider.setVisible(true);
@@ -566,8 +412,8 @@ for (int j = 0; j < numberFLA; j++) {
 
     private void resetCylindricalBarMagnet(double heightSupport, double lengthPendulum) {
 
-        playerMagnet.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
-        playerMagnet.setDirection(new Vector3d(0,1, 0));
+        swingingMagnet.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
+        swingingMagnet.setDirection(new Vector3d(0,1, 0));
     }
 
 
@@ -608,17 +454,21 @@ for (int j = 0; j < numberFLA; j++) {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
- //               Vector3d cali = playerMagnet.getPosition();
+ //               Vector3d cali = swingingMagnet.getPosition();
  //               Vector3d temp = new Vector3d(cali);
  //               Vector3d center = new Vector3d(0.,25.,0.);
 //               temp.sub(center);
  //               double distance = temp.length();
-
+                Vector3d cali = swingingMagnet.getPosition();
+ //        	    Vector3d hetti = stationaryMagnet.getPosition();
+                Vector3d reference = new Vector3d(0.,heightSupport,0.);
+                reference.sub(cali);
+ //               nativeObject01.setDirection(reference);
  
                  score.setText(String.valueOf(time));
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
-                    if (testBounds.intersect(new Point3d(playerMagnet.getPosition()))) {
+                    if (testBounds.intersect(new Point3d(swingingMagnet.getPosition()))) {
                         System.out.println("congratulations");
                         // Make this a one-shot
                         actionEnabled = false;
