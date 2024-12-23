@@ -6,7 +6,7 @@
  */
 
 package tealsim.physics.em;
-import teal.plot.ElectrostaticPendulumTwoBodyEnergyPlot;
+import teal.plot.MagnetostaticPendulumTwoBodyEnergyPlot;
 import teal.ui.swing.JTaskPaneGroup;
 import teal.plot.Graph;
 import teal.plot.TwoBodyEnergyPlot;
@@ -40,7 +40,7 @@ import teal.sim.engine.TEngine;
 import teal.physics.em.SimEM;
 import teal.physics.em.EMEngine;
 import teal.physics.physical.Wall;
-import teal.physics.em.PointCharge;
+import teal.physics.em.MagneticDipole;
 import teal.sim.properties.IsSpatial;
 import teal.sim.simulation.SimWorld;
 import teal.sim.spatial.FieldConvolution;
@@ -78,7 +78,7 @@ import teal.util.TDebug;
  */
 public class MagnetostaticLinearPendulum extends SimEM {
     Graph graph;
-    ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
+    MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
     
 	//  note I am declaring a serialVersionUID here although I have no idea what this means and it is
 	// the same id as in other applications, see the MagnetostaticPendulum  belcher 12/14/2024
@@ -98,8 +98,8 @@ public class MagnetostaticLinearPendulum extends SimEM {
     JLabel label;
     JLabel score;
     double minScore = 100000000.;
-    PointCharge swingingCharge;
-    PointCharge stationaryCharge;
+    MagneticDipole swingingCharge;
+    MagneticDipole stationaryCharge;
     Rendered nativeObject01;
     Watcher watch;
     double wallscale = 2.0;
@@ -163,13 +163,17 @@ public class MagnetostaticLinearPendulum extends SimEM {
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
         // Set charges
-        double pointChargeRadius = 0.9;
-
-        stationaryCharge = new PointCharge();
-        stationaryCharge.setRadius(pointChargeRadius);
-        //stationaryCharge.setPauliDistance(4.*pointChargeRadius);
+        double MagneticDipoleRadius = 0.9;
+        // Set magnetic dipole characteristics
+        double fixedMu = 55.;
+        double fixedRadius =0.;
+        double MagnetRadius = 1.;
+        double MagnetRadius1 = 0.;
+        stationaryCharge = new MagneticDipole();
+        stationaryCharge.setRadius(MagneticDipoleRadius);
+        //stationaryCharge.setPauliDistance(4.*MagneticDipoleRadius);
         stationaryCharge.setMass(1.0);
-        stationaryCharge.setCharge(100.0);
+        stationaryCharge.setMu(fixedMu);
         stationaryCharge.setID("stationaryCharge");
         stationaryCharge.setPickable(false);
         stationaryCharge.setColliding(true);
@@ -177,18 +181,18 @@ public class MagnetostaticLinearPendulum extends SimEM {
         stationaryCharge.setPosition(new Vector3d(0., 0., 0.));
         stationaryCharge.setMoveable(false);
         SphereCollisionController sccx = new SphereCollisionController(stationaryCharge);
-        sccx.setRadius(pointChargeRadius);
+        sccx.setRadius(MagneticDipoleRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         stationaryCharge.setCollisionController(sccx);
         addElement(stationaryCharge);
 
 
-        swingingCharge = new PointCharge();
-        swingingCharge.setRadius(pointChargeRadius);
-        //swingingCharge.setPauliDistance(4.*pointChargeRadius);
+        swingingCharge = new MagneticDipole();
+        swingingCharge.setRadius(MagneticDipoleRadius);
+        //swingingCharge.setPauliDistance(4.*MagneticDipoleRadius);
         swingingCharge.setMass(1.0);
-        swingingCharge.setCharge(6);
+        swingingCharge.setMu(fixedMu);
         swingingCharge.setID("swingingCharge");
         swingingCharge.setPickable(false);
         swingingCharge.setColliding(true);
@@ -197,7 +201,7 @@ public class MagnetostaticLinearPendulum extends SimEM {
         swingingCharge.setMoveable(true);
         swingingCharge.setConstrained(true);
         sccx = new SphereCollisionController(swingingCharge);
-        sccx.setRadius(pointChargeRadius);
+        sccx.setRadius(MagneticDipoleRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         swingingCharge.addPropertyChangeListener("charge",this );
@@ -229,7 +233,7 @@ public class MagnetostaticLinearPendulum extends SimEM {
         label4.setForeground(Color.BLACK);
         label4.setFont(label3.getFont().deriveFont(Font.BOLD));
 
-        eGraph = new ElectrostaticPendulumTwoBodyEnergyPlot();
+        eGraph = new MagnetostaticPendulumTwoBodyEnergyPlot();
         eGraph.setPlotValue(0);
         eGraph.setBodyOne(swingingCharge);
         eGraph.setBodyTwo(stationaryCharge);
@@ -265,7 +269,7 @@ public class MagnetostaticLinearPendulum extends SimEM {
  		
         int maxStep = 200;
 
-        double startFL=pointChargeRadius/2.;
+        double startFL=MagneticDipoleRadius/2.;
         fmanager = new FieldLineManager();
         fmanager.setElementManager(this);
         
@@ -389,12 +393,12 @@ public class MagnetostaticLinearPendulum extends SimEM {
     public void reset(double heightSupport, double lengthPendulum) {
         mSEC.stop();
         mSEC.reset();
-        resetPointCharges(heightSupport,lengthPendulum);
+        resetMagneticDipoles(heightSupport,lengthPendulum);
         //theEngine.requestRefresh();
         watch.setActionEnabled(true);
     }
 
-    private void resetPointCharges(double heightSupport, double lengthPendulum) {
+    private void resetMagneticDipoles(double heightSupport, double lengthPendulum) {
 
         swingingCharge.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
     }
