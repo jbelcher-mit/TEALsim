@@ -27,6 +27,26 @@ import teal.util.*;
  * <a href="C:\Development\Projects\generalDoc\TEAL_Physics_Math.pdf"> 
  * TEAL Physics and Mathematics</a> documentation.  
  */
+/*
+ * Here is how I generated this class in like September of 2024
+ * First, I copied MagnetDipole into a new class, rename it CylindricalBarMagnet and change the field 
+ * generating code.
+ * 
+ * This is not what I want to do.  I would be better off using the RingOfCurrent as my model 
+ * instead of MagneticDipole.  A lot more complicated than I expected.  
+ * September 10, 2024 2:03 pm.  Here is what I have done:  
+ * I copied the MagneticDipole class into a new CylindricalBarMagnet class.  
+ * Then I lifted the public Vector3d getB(Vector3d pos, double t) and  public Vector3d getB(Vector3d point) 
+ * methods from RingOfCurrent and replaced those methods in CylindricalBarMagnet (formerly MagneticDipole) 
+ * class.  So now CylindricalBarMagnet generates the B field of a ring of current.  
+ * I needed to add the 
+ * lines:
+ *   protected double CEIaccuracy = 0.0002;  // default accuracy for elliptic Integral computation
+ *   protected transient double radius_d = Teal.CylindricalBarMagnetDefaultRadius;
+ *   into CylindricalBarMagnet to get the getB method from RingOfCurrent to work, and the line 
+ *   public static final double CylindricalBarMagnetDefaultRadius = 0.2;
+ *   to TEAL.java.  
+ */
 public class CylindricalBarMagnet extends Dipole {
 
     private static final long serialVersionUID = 3257290227361068337L;
