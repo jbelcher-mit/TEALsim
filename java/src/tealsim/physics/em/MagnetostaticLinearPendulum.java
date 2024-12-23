@@ -98,8 +98,8 @@ public class MagnetostaticLinearPendulum extends SimEM {
     JLabel label;
     JLabel score;
     double minScore = 100000000.;
-    MagneticDipole swingingCharge;
-    MagneticDipole stationaryCharge;
+    MagneticDipole swingingDipole;
+    MagneticDipole stationaryDipole;
     Rendered nativeObject01;
     Watcher watch;
     double wallscale = 2.0;
@@ -169,44 +169,46 @@ public class MagnetostaticLinearPendulum extends SimEM {
         double fixedRadius =0.;
         double MagnetRadius = 1.;
         double MagnetRadius1 = 0.;
-        stationaryCharge = new MagneticDipole();
-        stationaryCharge.setRadius(MagneticDipoleRadius);
-        //stationaryCharge.setPauliDistance(4.*MagneticDipoleRadius);
-        stationaryCharge.setMass(1.0);
-        stationaryCharge.setMu(fixedMu);
-        stationaryCharge.setID("stationaryCharge");
-        stationaryCharge.setPickable(false);
-        stationaryCharge.setColliding(true);
-        stationaryCharge.setGeneratingP(true);
-        stationaryCharge.setPosition(new Vector3d(0., 0., 0.));
-        stationaryCharge.setMoveable(false);
-        SphereCollisionController sccx = new SphereCollisionController(stationaryCharge);
+        stationaryDipole = new MagneticDipole();
+        stationaryDipole.setRadius(MagneticDipoleRadius);
+        //stationaryDipole.setPauliDistance(4.*MagneticDipoleRadius);
+        stationaryDipole.setMass(1.0);
+        stationaryDipole.setMu(fixedMu);
+        stationaryDipole.setID("stationaryDipole");
+        stationaryDipole.setPickable(false);
+        stationaryDipole.setColliding(true);
+        stationaryDipole.setGeneratingP(true);
+        stationaryDipole.setPosition(new Vector3d(0., 0., 0.));
+        stationaryDipole.setMoveable(false);
+        stationaryDipole.setRotable(false);
+        SphereCollisionController sccx = new SphereCollisionController(stationaryDipole);
         sccx.setRadius(MagneticDipoleRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        stationaryCharge.setCollisionController(sccx);
-        addElement(stationaryCharge);
+        stationaryDipole.setCollisionController(sccx);
+        addElement(stationaryDipole);
 
 
-        swingingCharge = new MagneticDipole();
-        swingingCharge.setRadius(MagneticDipoleRadius);
-        //swingingCharge.setPauliDistance(4.*MagneticDipoleRadius);
-        swingingCharge.setMass(1.0);
-        swingingCharge.setMu(fixedMu);
-        swingingCharge.setID("swingingCharge");
-        swingingCharge.setPickable(false);
-        swingingCharge.setColliding(true);
-        swingingCharge.setGeneratingP(true);
-        swingingCharge.setPosition(new Vector3d(0.,0., 0.));
-        swingingCharge.setMoveable(true);
-        swingingCharge.setConstrained(true);
-        sccx = new SphereCollisionController(swingingCharge);
+        swingingDipole = new MagneticDipole();
+        swingingDipole.setRadius(MagneticDipoleRadius);
+        //swingingDipole.setPauliDistance(4.*MagneticDipoleRadius);
+        swingingDipole.setMass(1.0);
+        swingingDipole.setMu(fixedMu);
+        swingingDipole.setRotable(false);
+        swingingDipole.setID("swingingDipole");
+        swingingDipole.setPickable(false);
+        swingingDipole.setColliding(true);
+        swingingDipole.setGeneratingP(true);
+        swingingDipole.setPosition(new Vector3d(0.,0., 0.));
+        swingingDipole.setMoveable(true);
+        swingingDipole.setConstrained(true);
+        sccx = new SphereCollisionController(swingingDipole);
         sccx.setRadius(MagneticDipoleRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        swingingCharge.addPropertyChangeListener("charge",this );
-        swingingCharge.addPropertyChangeListener("position", this);
-        addElement(swingingCharge);
+        swingingDipole.addPropertyChangeListener("charge",this );
+        swingingDipole.addPropertyChangeListener("position", this);
+        addElement(swingingDipole);
         
         // ***************************************************************************
         // Graph
@@ -218,7 +220,7 @@ public class MagnetostaticLinearPendulum extends SimEM {
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
  
-        JLabel label1 = new JLabel("Electric Energy");
+        JLabel label1 = new JLabel("Magnetic Energy");
         label1.setForeground(Color.RED);
         //label1.setBounds(660, 20, 200, 24);
         label1.setFont(label1.getFont().deriveFont(Font.BOLD));
@@ -235,8 +237,8 @@ public class MagnetostaticLinearPendulum extends SimEM {
 
         eGraph = new MagnetostaticPendulumTwoBodyEnergyPlot();
         eGraph.setPlotValue(0);
-        eGraph.setBodyOne(swingingCharge);
-        eGraph.setBodyTwo(stationaryCharge);
+        eGraph.setBodyOne(swingingDipole);
+        eGraph.setBodyTwo(stationaryDipole);
         eGraph.setIndObj(theEngine);
         graph.addPlotItem(eGraph);
         VisualizationControl visControl;
@@ -265,7 +267,7 @@ public class MagnetostaticLinearPendulum extends SimEM {
         addElement(visControl);
       
  		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
-		swingingCharge.addConstraint(arc);
+		swingingDipole.addConstraint(arc);
  		
         int maxStep = 200;
 
@@ -279,8 +281,8 @@ public class MagnetostaticLinearPendulum extends SimEM {
         for (int k = 0; k < numberFLP+2; k++) {
         for (int j = 0; j < numberFLA; j++) {
 
-            RelativeFLine fl = new RelativeFLine(swingingCharge, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
-            fl.setType(Field.E_FIELD);
+            RelativeFLine fl = new RelativeFLine(swingingDipole, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
+            fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
         }
@@ -292,8 +294,8 @@ public class MagnetostaticLinearPendulum extends SimEM {
 
         for (int k = 0; k < numberFLP+2; k++) {
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(stationaryCharge, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
-            fl.setType(Field.E_FIELD);
+            RelativeFLine fl = new RelativeFLine(stationaryDipole, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
+            fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
            fmanager.addFieldLine(fl);
         }
@@ -309,7 +311,7 @@ public class MagnetostaticLinearPendulum extends SimEM {
         chargeSlider.setMaximum(6.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
-        chargeSlider.addRoute(swingingCharge, "charge");
+        chargeSlider.addRoute(swingingDipole, "charge");
         chargeSlider.setValue(1);
         //addElement(chargeSlider);
         chargeSlider.setVisible(true);
@@ -337,7 +339,7 @@ public class MagnetostaticLinearPendulum extends SimEM {
         mDLIC = new FieldConvolution();
         mDLIC.setComputePlane(new RectangularPlane(theEngine.getBoundingArea()));
         vis.setFieldConvolution(mDLIC);
-        vis.setConvolutionModes(DLIC.DLIC_FLAG_E | DLIC.DLIC_FLAG_EP);
+        vis.setConvolutionModes(DLIC.DLIC_FLAG_B | DLIC.DLIC_FLAG_BP);
         vis.setSymmetryCount(1);
         vis.setColorPerVertex(true);
         vis.setFieldLineManager(fmanager);
@@ -400,7 +402,7 @@ public class MagnetostaticLinearPendulum extends SimEM {
 
     private void resetMagneticDipoles(double heightSupport, double lengthPendulum) {
 
-        swingingCharge.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
+        swingingDipole.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
     }
 
     public void resetCamera() {
@@ -440,17 +442,17 @@ public class MagnetostaticLinearPendulum extends SimEM {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
-                Vector3d cali = swingingCharge.getPosition();
+                Vector3d cali = swingingDipole.getPosition();
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
           		System.out.println("    ");
  //           	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
-         	    Vector3d hetti = stationaryCharge.getPosition();
-//            	TDebug.println(0, "stationaryCharge   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
+         	    Vector3d hetti = stationaryDipole.getPosition();
+//            	TDebug.println(0, "stationaryDipole   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
                 nativeObject01.setDirection(reference);
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
-                    if (testBounds.intersect(new Point3d(swingingCharge.getPosition()))) {
+                    if (testBounds.intersect(new Point3d(swingingDipole.getPosition()))) {
                         System.out.println("congratulations");
                         // Make this a one-shot
                         actionEnabled = false;
