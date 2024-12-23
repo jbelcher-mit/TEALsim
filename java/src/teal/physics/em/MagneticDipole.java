@@ -26,7 +26,7 @@ import teal.util.*;
  * <a href="C:\Development\Projects\generalDoc\TEAL_Physics_Math.pdf"> 
  * TEAL Physics and Mathematics</a> documentation.  
  */
-public class MagneticDipole extends Dipole {
+public class MagneticDipole extends Dipole implements HasMu {
 
     private static final long serialVersionUID = 3257290227361068337L;
     

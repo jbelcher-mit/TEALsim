@@ -15,7 +15,7 @@ import javax.vecmath.Vector3d;
 
 import teal.sim.engine.TSimEngine;
 import teal.physics.physical.PhysicalObject;
-import teal.physics.em.HasCharge;
+import teal.physics.em.HasMu;
 import teal.util.TDebug;
 //import teal.sim.physical.*;
 
@@ -41,7 +41,7 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     boolean connected = true;
     boolean initialized = false;
     int plotValue;
-    static final int eEnergyPlot = 0;
+    static final int mEnergyPlot = 0;
     static final int kEnergyPlot = 1;
     static final int gpEnergyPlot = 2;
     static final int TotEnergyPlot = 3;
@@ -49,7 +49,7 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     public MagnetostaticPendulumTwoBodyEnergyPlot() {
     
    
-    plotValue = eEnergyPlot;
+    plotValue = mEnergyPlot;
     
     };
     
@@ -103,9 +103,9 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
 //        Vector3d pos1 = (Vector3d) b1.getProperty(b1Pos);
 //        Vector3d vel1 = (Vector3d) b1.getProperty(b1Vel);
         
-//		double q1 = ((HasCharge)b1).getCharge();
-//		double q2 = ((HasCharge)b2).getCharge();
-		double m1 = b1.getMass();
+		double m1 = ((HasMu)b1).getMu();
+		double m2 = ((HasMu)b2).getMu();
+		double mass1 = b1.getMass();
 		Vector3d pos1 = b1.getPosition();
 		Vector3d vel1 = b1.getVelocity();
 		Vector3d pos2 = b2.getPosition();
@@ -116,39 +116,39 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
         double x = r.x;
         double y = r.y;
 //    	TDebug.println(0,  " x: " + x +"  y: " +y +"  z: "+z );
-    	double eEnergy;
-    	eEnergy = (2.*y*y-x*x)/Math.pow(y*y+x*x, 5./2.);
-    	eEnergy=eEnergy*3000./(4*456.4);
- //   	eEnergy = q1 * q2 * (1/(rlength)); // * a constant 8.897e8 * 
-//    	eEnergy = eEnergy /(4*456.4);
+    	double mEnergy;
+    	mEnergy = m1*m2*(2.*y*y-x*x)/Math.pow(y*y+x*x, 5./2.);
+    	mEnergy=mEnergy*3000./(4*456.4);
+ //   	mEnergy = q1 * q2 * (1/(rlength)); // * a constant 8.897e8 * 
+//    	mEnergy = mEnergy /(4*456.4);
     	double t = indObj.getTime();
-    	//TDebug.println(0, "eEnergy: " + eEnergy );
+    	//TDebug.println(0, "mEnergy: " + mEnergy );
 
     	double kEnergy;
     	double gpEnergy;
     	double totEnergy;
-    	kEnergy = 0.5 * m1 * vel1.lengthSquared() * 1.;
+    	kEnergy = 0.5 * mass1 * vel1.lengthSquared() * 1.;
     	kEnergy = kEnergy/1000.;
     	gpEnergy = m1 * (0.04) * (pos1.y-5.) *1.;
     	gpEnergy = gpEnergy/100.;
-    	totEnergy = kEnergy + gpEnergy+eEnergy;
+    	totEnergy = kEnergy + gpEnergy+mEnergy;
     	totEnergy = totEnergy/(10.*34.2775);
     	totEnergy = totEnergy*300.;
 
     	kEnergy=3.44184*kEnergy/3;
     	gpEnergy = 2.58145*gpEnergy/3;
-    	eEnergy=eEnergy/3;
+    	mEnergy=mEnergy/3;
     	//
     	//
     	kEnergy=kEnergy*2.837417568;
         gpEnergy = gpEnergy*2.834087781;
         double common = 3.;
-    	eEnergy=eEnergy/common;
+    	mEnergy=mEnergy/common;
     	kEnergy=kEnergy/common;
         gpEnergy = gpEnergy/common;
-    	totEnergy = kEnergy + gpEnergy+eEnergy;
-//    	TDebug.println(0, " eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
-    	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
+    	totEnergy = kEnergy + gpEnergy+mEnergy;
+//    	TDebug.println(0, " mEnergy: " + mEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
+    	TDebug.println(0,  mEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {
@@ -159,7 +159,7 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
 			graph.clear(3);
 		}
 	
-    	graph.addPoint(0,t,eEnergy,connected);   
+    	graph.addPoint(0,t,mEnergy,connected);   
     	graph.addPoint(1,t,kEnergy,connected);   
     	graph.addPoint(2,t,gpEnergy,connected); 
     	graph.addPoint(3,t,totEnergy,connected); 
