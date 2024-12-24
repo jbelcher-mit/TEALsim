@@ -47,7 +47,7 @@ import teal.util.*;
  *   public static final double CylindricalBarMagnetDefaultRadius = 0.2;
  *   to TEAL.java.  
  */
-public class CylindricalBarMagnet extends Dipole {
+public class CylindricalBarMagnet extends Dipole implements HasMu {
 
     private static final long serialVersionUID = 3257290227361068337L;
     protected double CEIaccuracy = 0.0002;  // default accuracy for elliptic Integral computation
