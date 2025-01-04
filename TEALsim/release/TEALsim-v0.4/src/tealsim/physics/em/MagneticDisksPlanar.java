@@ -157,7 +157,7 @@ public class MagneticDisksPlanar extends SimEM {
         CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
         HelmholtzCoilLeft.setRadius(4.*MagnetRadius);
         HelmholtzCoilLeft.setMass(.05);
-        HelmholtzCoilLeft.setMu(fixedMu);
+        HelmholtzCoilLeft.setMu(-fixedMu);
         HelmholtzCoilLeft.setID("HelmholtzCoilLeft");
         HelmholtzCoilLeft.setPickable(false);
         HelmholtzCoilLeft.setColliding(false);

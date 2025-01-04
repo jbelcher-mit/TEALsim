@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <!-- JNLP File for TEAL Simulation Application --> 
-<jnlp spec="1.0+" codebase="https://web.mit.edu/8.02t/www/TEALsim/simulations" href="BarMagnetsPlanar"> 
+<jnlp spec="1.0+" codebase="https://web.mit.edu/8.02t/www/TEALsim/simulations" href="BarMagnetsPlanar.jnlp"> 
   <information> 
     <title>Bar Magnets in a Plane </title> 
     <vendor>Studio Physics</vendor> 

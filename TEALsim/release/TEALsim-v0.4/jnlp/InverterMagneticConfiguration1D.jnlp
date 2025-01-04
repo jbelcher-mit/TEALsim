@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <!-- JNLP File for TEAL Simulation Application --> 
-<jnlp spec="1.0+" codebase="https://web.mit.edu/8.02t/www/TEALsim/simulations" href="InverterMagneticConfiguration1D"> 
+<jnlp spec="1.0+" codebase="https://web.mit.edu/8.02t/www/TEALsim/simulations" href="InverterMagneticConfiguration1D.jnlp"> 
   <information> 
     <title>Inverter Magnetic Configuration 1D</title> 
     <vendor>Studio Physics</vendor> 

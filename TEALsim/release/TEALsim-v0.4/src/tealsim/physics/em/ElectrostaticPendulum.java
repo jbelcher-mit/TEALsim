@@ -300,13 +300,13 @@ public class ElectrostaticPendulum extends SimEM {
 
         // Building the GUI.
         PropertyDouble chargeSlider = new PropertyDouble();
-        chargeSlider.setText("Player Charge:");
-        chargeSlider.setMinimum(-6.);
+        chargeSlider.setText("Swinging Charge:");
+        chargeSlider.setMinimum(0.);
         chargeSlider.setMaximum(6.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(swingingCharge, "charge");
-        chargeSlider.setValue(1);
+        chargeSlider.setValue(0);
         //addElement(chargeSlider);
         chargeSlider.setVisible(true);
         label = new JLabel("Current Time:");
