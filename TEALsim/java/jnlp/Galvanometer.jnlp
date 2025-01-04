@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <!-- JNLP File for TEAL Simulation Application --> 
-<jnlp spec="1.0+" codebase="@WebURL@" href="Galvanometer"> 
+<jnlp spec="1.0+" codebase="@WebURL@" href="Galvanometer.jnlp"> 
   <information> 
     <title>Galvanometer </title> 
     <vendor>Studio Physics</vendor> 
