@@ -535,7 +535,7 @@ for (int j = 0; j < numberFLA; j++) {
 
 
     public void resetCamera() {
-    	mViewer.setLookAt(new Point3d(0.,.8,4.), new Point3d(0,0,0), new Vector3d(0,1,0));
+    	mViewer.setLookAt(new Point3d(0.,.8,1.5), new Point3d(0,0,0), new Vector3d(0,1,0));
 
     }
 

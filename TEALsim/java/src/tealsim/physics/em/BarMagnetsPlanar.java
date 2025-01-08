@@ -396,7 +396,7 @@ public class BarMagnetsPlanar extends SimEM {
 
 
     public void resetCamera() {
-    	mViewer.setLookAt(new Point3d(0.,.8,4.), new Point3d(0,0,0), new Vector3d(0,1,0));
+    	mViewer.setLookAt(new Point3d(0.,.8,2.), new Point3d(0,0,0), new Vector3d(0,1,0));
 
     }
 
