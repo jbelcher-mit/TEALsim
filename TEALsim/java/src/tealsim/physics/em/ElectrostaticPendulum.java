@@ -99,7 +99,7 @@ public class ElectrostaticPendulum extends SimEM {
     JLabel score;
     double minScore = 100000000.;
     PointCharge swingingCharge;
-    PointCharge stationaryCharge;
+    PointCharge fixedCharge;
     Rendered nativeObject01;
     Watcher watch;
     double wallscale = 2.0;
@@ -165,23 +165,23 @@ public class ElectrostaticPendulum extends SimEM {
         // Set charges
         double pointChargeRadius = 0.9;
 
-        stationaryCharge = new PointCharge();
-        stationaryCharge.setRadius(pointChargeRadius);
-        //stationaryCharge.setPauliDistance(4.*pointChargeRadius);
-        stationaryCharge.setMass(1.0);
-        stationaryCharge.setCharge(100.0);
-        stationaryCharge.setID("stationaryCharge");
-        stationaryCharge.setPickable(false);
-        stationaryCharge.setColliding(true);
-        stationaryCharge.setGeneratingP(true);
-        stationaryCharge.setPosition(new Vector3d(0., 0., 0.));
-        stationaryCharge.setMoveable(false);
-        SphereCollisionController sccx = new SphereCollisionController(stationaryCharge);
+        fixedCharge = new PointCharge();
+        fixedCharge.setRadius(pointChargeRadius);
+        //fixedCharge.setPauliDistance(4.*pointChargeRadius);
+        fixedCharge.setMass(1.0);
+        fixedCharge.setCharge(100.0);
+        fixedCharge.setID("fixedCharge");
+        fixedCharge.setPickable(false);
+        fixedCharge.setColliding(true);
+        fixedCharge.setGeneratingP(true);
+        fixedCharge.setPosition(new Vector3d(0., 0., 0.));
+        fixedCharge.setMoveable(false);
+        SphereCollisionController sccx = new SphereCollisionController(fixedCharge);
         sccx.setRadius(pointChargeRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        stationaryCharge.setCollisionController(sccx);
-        addElement(stationaryCharge);
+        fixedCharge.setCollisionController(sccx);
+        addElement(fixedCharge);
 
 
         swingingCharge = new PointCharge();
@@ -232,7 +232,7 @@ public class ElectrostaticPendulum extends SimEM {
         eGraph = new ElectrostaticPendulumTwoBodyEnergyPlot();
         eGraph.setPlotValue(0);
         eGraph.setBodyOne(swingingCharge);
-        eGraph.setBodyTwo(stationaryCharge);
+        eGraph.setBodyTwo(fixedCharge);
         eGraph.setIndObj(theEngine);
         graph.addPlotItem(eGraph);
         VisualizationControl visControl;
@@ -257,8 +257,8 @@ public class ElectrostaticPendulum extends SimEM {
         visControl.setFieldLineManager(fmanager);
         visControl.setColorPerVertex(false);
         addElement(graphs);
-        addElement(params);
-        addElement(visControl);
+//        addElement(params);
+//        addElement(visControl);
       
  		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
 		swingingCharge.addConstraint(arc);
@@ -288,7 +288,7 @@ public class ElectrostaticPendulum extends SimEM {
 
         for (int k = 0; k < numberFLP+2; k++) {
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(stationaryCharge, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
+            RelativeFLine fl = new RelativeFLine(fixedCharge, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
             fl.setType(Field.E_FIELD);
             fl.setKMax(maxStep);
            fmanager.addFieldLine(fl);
@@ -300,7 +300,7 @@ public class ElectrostaticPendulum extends SimEM {
 
         // Building the GUI.
         PropertyDouble chargeSlider = new PropertyDouble();
-        chargeSlider.setText("Swinging Charge:");
+        chargeSlider.setText("Swinging/Fixed Q:");
         chargeSlider.setMinimum(0.);
         chargeSlider.setMaximum(6.);
         chargeSlider.setBounds(40, 535, 415, 50);
@@ -441,8 +441,8 @@ public class ElectrostaticPendulum extends SimEM {
                 reference.sub(cali);
           		System.out.println("    ");
  //           	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
-         	    Vector3d hetti = stationaryCharge.getPosition();
-//            	TDebug.println(0, "stationaryCharge   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
+         	    Vector3d hetti = fixedCharge.getPosition();
+//            	TDebug.println(0, "fixedCharge   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
                 nativeObject01.setDirection(reference);
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {

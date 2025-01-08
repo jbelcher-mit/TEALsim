@@ -152,7 +152,7 @@ public class MagneticDisksPlanar extends SimEM {
         double fixedMu = -55.;
         double fixedRadius =2.7;
         double MagnetRadius = 1.;
-        double CoilSeperation = 14.;
+        double CoilSeperation = 2.;
         double MagnetRadius1 = 0.;
         CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
         HelmholtzCoilLeft.setRadius(4.*MagnetRadius);
@@ -162,7 +162,7 @@ public class MagneticDisksPlanar extends SimEM {
         HelmholtzCoilLeft.setPickable(false);
         HelmholtzCoilLeft.setColliding(false);
         HelmholtzCoilLeft.setGeneratingP(true);
-        HelmholtzCoilLeft.setPosition(new Vector3d(-CoilSeperation/3., 0.,0.));
+        HelmholtzCoilLeft.setPosition(new Vector3d(-2.*CoilSeperation, 0.,0.));
         HelmholtzCoilLeft.setMoveable(true);
         HelmholtzCoilLeft.setRotable(false);
         HelmholtzCoilLeft.setDirection(new Vector3d(0.,1.,0.));
@@ -181,7 +181,7 @@ public class MagneticDisksPlanar extends SimEM {
         HelmholtzCoilRight.setPickable(false);
         HelmholtzCoilRight.setColliding(false);
         HelmholtzCoilRight.setGeneratingP(true);
-        HelmholtzCoilRight.setPosition(new Vector3d(CoilSeperation/3., 0.,0.));
+        HelmholtzCoilRight.setPosition(new Vector3d(2.*CoilSeperation, 0.,0.));
         HelmholtzCoilRight.setMoveable(true);
         HelmholtzCoilRight.setRotable(false);
         SphereCollisionController sccx1 = new SphereCollisionController(HelmholtzCoilRight);
@@ -223,9 +223,9 @@ public class MagneticDisksPlanar extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on moving magnet
-        int numberFLA = 145;
-        maxStep = 600;
-        for (int j = 0; j < numberFLA; j++) {
+        int numberFLA = 75;
+        maxStep = 1200;
+        for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
@@ -248,7 +248,7 @@ public class MagneticDisksPlanar extends SimEM {
         
         // put field lines on HelmholtzCoilLeft
      
-        for (int j = 0; j < numberFLA; j++) {
+        for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
@@ -336,7 +336,7 @@ public class MagneticDisksPlanar extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(1);
+        theEngine.setDeltaTime(.3);
         mSEC.init();
 
         resetCamera();
