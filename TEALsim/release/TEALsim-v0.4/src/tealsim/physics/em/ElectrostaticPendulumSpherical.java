@@ -359,7 +359,7 @@ public class ElectrostaticPendulumSpherical extends SimEM {
             RelativeFLine fl = new RelativeFLine(charge01, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
             fl.setType(Field.E_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+//            fmanager.addFieldLine(fl);
         }
        }
         
@@ -372,7 +372,7 @@ public class ElectrostaticPendulumSpherical extends SimEM {
             RelativeFLine fl = new RelativeFLine(charge02, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
             fl.setType(Field.E_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+ //           fmanager.addFieldLine(fl);
         }       
         } 
             for (int k = 0; k < numberFLP+2; k++) {
@@ -380,7 +380,7 @@ public class ElectrostaticPendulumSpherical extends SimEM {
                     RelativeFLine fl = new RelativeFLine(charge03, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
                     fl.setType(Field.E_FIELD);
                     fl.setKMax(maxStep);
-                    fmanager.addFieldLine(fl);
+ //                   fmanager.addFieldLine(fl);
                 }
        }
         
@@ -388,8 +388,8 @@ public class ElectrostaticPendulumSpherical extends SimEM {
                 for (int j = 0; j < numberFLA; j++) {
                     RelativeFLine fl = new RelativeFLine(charge04, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
                     fl.setType(Field.E_FIELD);
-                    fl.setKMax(maxStep);
-                    fmanager.addFieldLine(fl);
+                  fl.setKMax(maxStep);
+//                    fmanager.addFieldLine(fl);
                 }
        }
             
@@ -398,7 +398,7 @@ public class ElectrostaticPendulumSpherical extends SimEM {
                     RelativeFLine fl = new RelativeFLine(charge05, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
                     fl.setType(Field.E_FIELD);
                     fl.setKMax(maxStep);
-                    fmanager.addFieldLine(fl);
+//                    fmanager.addFieldLine(fl);
                 }
        }
             
@@ -407,7 +407,7 @@ public class ElectrostaticPendulumSpherical extends SimEM {
                     RelativeFLine fl = new RelativeFLine(charge06, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
                     fl.setType(Field.E_FIELD);
                     fl.setKMax(maxStep);
-                    fmanager.addFieldLine(fl);
+ //                   fmanager.addFieldLine(fl);
                 }
        }
             
@@ -415,8 +415,8 @@ public class ElectrostaticPendulumSpherical extends SimEM {
                 for (int j = 0; j < numberFLA; j++) {
                     RelativeFLine fl = new RelativeFLine(charge07, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
                     fl.setType(Field.E_FIELD);
-                    fl.setKMax(maxStep);
-                    fmanager.addFieldLine(fl);
+                   fl.setKMax(maxStep);
+ //                   fmanager.addFieldLine(fl);
                 }
        }
             
@@ -424,8 +424,8 @@ public class ElectrostaticPendulumSpherical extends SimEM {
                 for (int j = 0; j < numberFLA; j++) {
                     RelativeFLine fl = new RelativeFLine(charge08, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
                     fl.setType(Field.E_FIELD);
-                    fl.setKMax(maxStep);
-                    fmanager.addFieldLine(fl);
+//                    fl.setKMax(maxStep);
+//                    fmanager.addFieldLine(fl);
                 }
        }
         fmanager.setSymmetryCount(2);

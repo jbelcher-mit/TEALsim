@@ -314,7 +314,7 @@ public class MagnetostaticPendulum extends SimEM {
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
         MuSlider.addRoute(swingingMagnet, "Mu");
-        MuSlider.setValue(-40);
+        MuSlider.setValue(0);
         //addElement(MuSlider);
         MuSlider.setVisible(true);
         label = new JLabel("Current Time:");
