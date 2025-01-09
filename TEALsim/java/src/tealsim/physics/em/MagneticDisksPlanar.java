@@ -152,7 +152,7 @@ public class MagneticDisksPlanar extends SimEM {
         double fixedMu = -55.;
         double fixedRadius =2.7;
         double MagnetRadius = 1.;
-        double CoilSeperation = 2.;
+        double CoilSeperation = 4.;
         double MagnetRadius1 = 0.;
         CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
         HelmholtzCoilLeft.setRadius(4.*MagnetRadius);
@@ -229,7 +229,7 @@ public class MagneticDisksPlanar extends SimEM {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+ //           fmanager.addFieldLine(fl);
         }
         
         for (int j = 0; j < numberFLA; j++) {
@@ -261,7 +261,7 @@ public class MagneticDisksPlanar extends SimEM {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
- //           fmanager.addFieldLine(fl);
+//            fmanager.addFieldLine(fl);
         }
 
         for (int j = 0; j < numberFLA; j++) {
@@ -272,17 +272,8 @@ public class MagneticDisksPlanar extends SimEM {
         }
 
 
-        
-    
-    numberFLA = 5;
-
-        
+    numberFLA = 5;     
          maxStep=300;   
-
-
-        
-            
-
         
         fmanager.setSymmetryCount(2);
         theEngine.setBoundingArea(new BoundingSphere(new Point3d(), 12));
