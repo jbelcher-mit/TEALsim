@@ -216,7 +216,7 @@ public class MagneticDisksPlanar extends SimEM {
  		PlanarConstraint arc = new PlanarConstraint(new Vector3d(0.,1.,0.));
 		rotatingCoil.addConstraint(arc);
  		
-        int maxStep = 25;
+        int maxStep = 2400;
 
         double startFL=2.*MagnetRadius;
         fmanager = new FieldLineManager();
@@ -224,7 +224,7 @@ public class MagneticDisksPlanar extends SimEM {
         
         // put field lines on moving magnet
         int numberFLA = 75;
-        maxStep = 1200;
+ //       maxStep = 1200;
         for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
@@ -273,7 +273,7 @@ public class MagneticDisksPlanar extends SimEM {
 
 
     numberFLA = 5;     
-         maxStep=300;   
+ //        maxStep=1200;   
         
         fmanager.setSymmetryCount(2);
         theEngine.setBoundingArea(new BoundingSphere(new Point3d(), 12));
