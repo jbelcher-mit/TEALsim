@@ -324,7 +324,7 @@ public class InverterMagneticConfiguration1D extends SimEM {
             RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+ //           fmanager.addFieldLine(fl);
         }
         
         for (int j = 0; j < numberFLA; j++) {
@@ -348,16 +348,16 @@ public class InverterMagneticConfiguration1D extends SimEM {
             RelativeFLine fl = new RelativeFLine(centralMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+//            fmanager.addFieldLine(fl);
         }
         // put field lines on stationary 01 magnet
-        maxStep = 200;
-        numberFLA = 5;
+        maxStep = 20;
+        numberFLA = 6;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(magnet01, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+            RelativeFLine fl = new RelativeFLine(magnet01, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-  //          fmanager.addFieldLine(fl);
+            fmanager.addFieldLine(fl);
         }
 
       // put field lines on stationary 02 magnet
@@ -529,7 +529,7 @@ for (int j = 0; j < numberFLA; j++) {
 
     private void resetCylindricalBarMagnet(double heightSupport, double lengthPendulum) {
 
-        movingMagnet.setPosition(new Vector3d(8., 0., 0.));
+        movingMagnet.setPosition(new Vector3d(8, 0., 0.));
         movingMagnet.setDirection(new Vector3d(0,1, 0));
     }
 

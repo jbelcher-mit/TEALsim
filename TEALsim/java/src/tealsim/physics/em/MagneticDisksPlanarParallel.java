@@ -165,7 +165,7 @@ public class MagneticDisksPlanarParallel extends SimEM {
         HelmholtzCoilLeft.setPosition(new Vector3d(-2.*CoilSeperation, 0.,0.));
         HelmholtzCoilLeft.setMoveable(true);
         HelmholtzCoilLeft.setRotable(false);
-        HelmholtzCoilLeft.setDirection(new Vector3d(0.,1.,0.));
+        HelmholtzCoilLeft.setDirection(new Vector3d(.1,.9,0.));
         SphereCollisionController sccx = new SphereCollisionController(HelmholtzCoilLeft);
         sccx.setRadius(MagnetRadius);
         sccx.setTolerance(0.1);
@@ -236,13 +236,13 @@ public class MagneticDisksPlanarParallel extends SimEM {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-  //          fmanager.addFieldLine(fl);
+            fmanager.addFieldLine(fl);
         }
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-//            fmanager.addFieldLine(fl);
+           fmanager.addFieldLine(fl);
         }
 //        }
         
@@ -261,14 +261,14 @@ public class MagneticDisksPlanarParallel extends SimEM {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
- //           fmanager.addFieldLine(fl);
+            fmanager.addFieldLine(fl);
         }
 
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-//            fmanager.addFieldLine(fl);
+            fmanager.addFieldLine(fl);
         }
 
  
