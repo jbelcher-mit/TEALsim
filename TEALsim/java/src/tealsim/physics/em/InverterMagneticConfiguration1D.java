@@ -318,26 +318,26 @@ public class InverterMagneticConfiguration1D extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on moving magnet
-        int numberFLA = 415;
-        maxStep = 400;
+        int numberFLA = 100;
+        maxStep = 150;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+            RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.7);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
- //           fmanager.addFieldLine(fl);
+            fmanager.addFieldLine(fl);
         }
         
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-     //       fmanager.addFieldLine(fl);
+  //          fmanager.addFieldLine(fl);
         }
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+ //           fmanager.addFieldLine(fl);
         }
 //        }
         
@@ -351,9 +351,9 @@ public class InverterMagneticConfiguration1D extends SimEM {
 //            fmanager.addFieldLine(fl);
         }
         // put field lines on stationary 01 magnet
-        double fract =.4;
-        maxStep = 20;
-        numberFLA = 6;
+        double fract =.2;
+        maxStep = 30;
+        numberFLA = 15;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(magnet01, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*fract);
             fl.setType(Field.B_FIELD);

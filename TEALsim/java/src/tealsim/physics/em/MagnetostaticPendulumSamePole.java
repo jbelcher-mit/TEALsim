@@ -77,7 +77,7 @@ import teal.util.TDebug;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class MagnetostaticPendulum extends SimEM {
+public class MagnetostaticPendulumSamePole extends SimEM {
 	
 	//  note I am declaring a serialVersionUID here although I have no idea what this means and it is
 	// the same id as in other applications, see the ElectrostaticPendulum  belcher 12/14/2024
@@ -117,7 +117,7 @@ public class MagnetostaticPendulum extends SimEM {
     
     double heightSupport = 25.;
 
-    public MagnetostaticPendulum() {
+    public MagnetostaticPendulumSamePole() {
 
         super();
         title = "Magnetostatic Pendulum";
