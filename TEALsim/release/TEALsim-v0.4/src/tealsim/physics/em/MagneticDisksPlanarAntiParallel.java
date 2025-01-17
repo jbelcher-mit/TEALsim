@@ -152,7 +152,7 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
         double fixedMu = -55.;
         double fixedRadius =2.7;
         double MagnetRadius = 1.;
-        double CoilSeperation = 18.;
+        double CoilSeperation = 8.;
         double MagnetRadius1 = 0.;
         CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
         HelmholtzCoilLeft.setRadius(4.*MagnetRadius);
@@ -222,9 +222,9 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
         fmanager = new FieldLineManager();
         fmanager.setElementManager(this);
         
-        // put field lines on moving magnet
-        int numberFLA = 75;
-        maxStep = 1200;
+        // put field lines on HelmholtzCoilRight
+        int numberFLA = 10;
+        maxStep = 500;
         for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);

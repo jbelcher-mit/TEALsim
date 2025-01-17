@@ -188,7 +188,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         swingingCharge.setRadius(pointChargeRadius);
         //swingingCharge.setPauliDistance(4.*pointChargeRadius);
         swingingCharge.setMass(1.0);
-        swingingCharge.setCharge(6);
+        swingingCharge.setCharge(0);
         swingingCharge.setID("swingingCharge");
         swingingCharge.setPickable(false);
         swingingCharge.setColliding(true);
@@ -210,7 +210,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 75.);
-        graph.setYRange(-0.005, 0.02);
+        graph.setYRange(-0.018, 0.028);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
  
@@ -301,12 +301,12 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         // Building the GUI.
         PropertyDouble chargeSlider = new PropertyDouble();
         chargeSlider.setText("Swinging/Fixed Q:");
-        chargeSlider.setMinimum(0.);
-        chargeSlider.setMaximum(6.);
+        chargeSlider.setMinimum(-6.);
+        chargeSlider.setMaximum(0.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(swingingCharge, "charge");
-        chargeSlider.setValue(0);
+        chargeSlider.setValue(0.);
         //addElement(chargeSlider);
         chargeSlider.setVisible(true);
         label = new JLabel("Current Time:");
