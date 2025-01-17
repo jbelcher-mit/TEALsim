@@ -1,13 +1,16 @@
 /*
- * Created on Oct September 11, 2024
+ * Created on Oct 6, 2003
  *
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 
 package tealsim.physics.em;
+import teal.plot.ElectrostaticPendulumTwoBodyEnergyPlot;
+import teal.ui.swing.JTaskPaneGroup;
+import teal.plot.Graph;
+import teal.plot.TwoBodyEnergyPlot;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 
@@ -30,14 +33,14 @@ import teal.math.RectangularPlane;
 import teal.render.Rendered;
 import teal.render.j3d.loaders.Loader3DS;
 import teal.sim.collision.SphereCollisionController;
-import teal.sim.constraint.PlanarConstraint;
+import teal.sim.constraint.ArcConstraint;
 import teal.sim.control.VisualizationControl;
 import teal.sim.engine.EngineObj;
 import teal.sim.engine.TEngine;
 import teal.physics.em.SimEM;
 import teal.physics.em.EMEngine;
 import teal.physics.physical.Wall;
-import teal.physics.em.CylindricalBarMagnet;
+import teal.physics.em.PointCharge;
 import teal.sim.properties.IsSpatial;
 import teal.sim.simulation.SimWorld;
 import teal.sim.spatial.FieldConvolution;
@@ -68,13 +71,17 @@ import teal.ui.control.*;
 import teal.util.TDebug;
 
 /**
- * @author belcher
+ * @author danziger
  *
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class MagneticDisksPlanar extends SimEM {
-
+public class ElectrostaticPendulumSameSign extends SimEM {
+    Graph graph;
+    ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
+    
+	//  note I am declaring a serialVersionUID here although I have no idea what this means and it is
+	// the same id as in other applications, see the MagnetostaticPendulum  belcher 12/14/2024
     private static final long serialVersionUID = 3256443586278208051L;
     
     /** An imported 3DS object (a hemisphere).  */
@@ -91,7 +98,9 @@ public class MagneticDisksPlanar extends SimEM {
     JLabel label;
     JLabel score;
     double minScore = 100000000.;
-    CylindricalBarMagnet rotatingCoil;
+    PointCharge swingingCharge;
+    PointCharge fixedCharge;
+    Rendered nativeObject01;
     Watcher watch;
     double wallscale = 2.0;
     double wheight = 3.0;
@@ -101,44 +110,49 @@ public class MagneticDisksPlanar extends SimEM {
     
     protected FieldConvolution mDLIC = null;
     FieldLineManager fmanager = null;
+    
+    double lengthPendulum=20.; 
+    
+    double heightSupport = 25.;
 
-    public MagneticDisksPlanar() {
+    public ElectrostaticPendulumSameSign() {
 
         super();
-        title = "Galvanometer";
+        title = "Electrostatic Pendulum";
         
        
-        TDebug.setGlobalLevel(0);
+        TDebug.setGlobalLevel(1);
 
         // Building the world.
         theEngine.setDamping(0.0);
-        theEngine.setGravity(new Vector3d(0., 0.,0.));
+        theEngine.setGravity(new Vector3d(0., -.3,0.));
 
-        Rendered nativeObject01 = new Rendered(); 
+        nativeObject01 = new Rendered();
+  
         ShapeNode ShapeNodeNative01 = new ShapeNode();
 
-        double lengthPendulum= 20.;  // maximum of 23
-        double heightSupport = 25.;
-        ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .2, lengthPendulum));
+        ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .1, lengthPendulum));
         nativeObject01.setNode3D(ShapeNodeNative01);
-        nativeObject01.setColor(new Color(0, 0, 0));
+        nativeObject01.setColor(new Color(0, 0, 100));
         nativeObject01.setPosition(new Vector3d(0,heightSupport,0.));
         nativeObject01.setModelOffsetPosition(new Vector3d(0,-lengthPendulum/2,0.));
         nativeObject01.setDirection(new Vector3d(1.,0.,0.));
-//        addElement(nativeObject01);
+        addElement(nativeObject01);
         
         
-        double scale3DS = 3.; // this is an overall scale factor for this .3DS object
+        double scale3DS = 3.; // this is an overall scale factor for these .3DS objects
         // Creating components.
        Loader3DS max = new Loader3DS();
+    	
         BranchGroup bg01 = 
          max.getBranchGroup("models/ArmBase.3DS",
          "models/");
         node01.setScale(scale3DS);
-      node01.addContents(bg01);    
+        node01.addContents(bg01);
+        
         importedObject01.setNode3D(node01);
         importedObject01.setPosition(new Vector3d(0., 0., 0.));
-//        addElement(importedObject01);
+        addElement(importedObject01);
         
 // change some features of the lighting, background color, etc., from the default values, if desired
         
@@ -149,146 +163,152 @@ public class MagneticDisksPlanar extends SimEM {
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
         // Set charges
-        double fixedMu = -55.;
-        double fixedRadius =2.7;
-        double MagnetRadius = 1.;
-        double CoilSeperation = 4.;
-        double MagnetRadius1 = 0.;
-        CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
-        HelmholtzCoilLeft.setRadius(4.*MagnetRadius);
-        HelmholtzCoilLeft.setMass(.05);
-        HelmholtzCoilLeft.setMu(fixedMu);
-        HelmholtzCoilLeft.setID("HelmholtzCoilLeft");
-        HelmholtzCoilLeft.setPickable(false);
-        HelmholtzCoilLeft.setColliding(false);
-        HelmholtzCoilLeft.setGeneratingP(true);
-        HelmholtzCoilLeft.setPosition(new Vector3d(-2.*CoilSeperation, 0.,0.));
-        HelmholtzCoilLeft.setMoveable(true);
-        HelmholtzCoilLeft.setRotable(false);
-        HelmholtzCoilLeft.setDirection(new Vector3d(0.,1.,0.));
-        SphereCollisionController sccx = new SphereCollisionController(HelmholtzCoilLeft);
-        sccx.setRadius(MagnetRadius);
+        double pointChargeRadius = 0.9;
+
+        fixedCharge = new PointCharge();
+        fixedCharge.setRadius(pointChargeRadius);
+        //fixedCharge.setPauliDistance(4.*pointChargeRadius);
+        fixedCharge.setMass(1.0);
+        fixedCharge.setCharge(100.0);
+        fixedCharge.setID("fixedCharge");
+        fixedCharge.setPickable(false);
+        fixedCharge.setColliding(true);
+        fixedCharge.setGeneratingP(true);
+        fixedCharge.setPosition(new Vector3d(0., 0., 0.));
+        fixedCharge.setMoveable(false);
+        SphereCollisionController sccx = new SphereCollisionController(fixedCharge);
+        sccx.setRadius(pointChargeRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        HelmholtzCoilLeft.setCollisionController(sccx);
-        addElement(HelmholtzCoilLeft);
+        fixedCharge.setCollisionController(sccx);
+        addElement(fixedCharge);
+
+
+        swingingCharge = new PointCharge();
+        swingingCharge.setRadius(pointChargeRadius);
+        //swingingCharge.setPauliDistance(4.*pointChargeRadius);
+        swingingCharge.setMass(1.0);
+        swingingCharge.setCharge(6);
+        swingingCharge.setID("swingingCharge");
+        swingingCharge.setPickable(false);
+        swingingCharge.setColliding(true);
+        swingingCharge.setGeneratingP(true);
+        swingingCharge.setPosition(new Vector3d(0.,0., 0.));
+        swingingCharge.setMoveable(true);
+        swingingCharge.setConstrained(true);
+        sccx = new SphereCollisionController(swingingCharge);
+        sccx.setRadius(pointChargeRadius);
+        sccx.setTolerance(0.1);
+        sccx.setMode(SphereCollisionController.WALL_SPHERE);
+        swingingCharge.addPropertyChangeListener("charge",this );
+        swingingCharge.addPropertyChangeListener("position", this);
+        addElement(swingingCharge);
         
-        CylindricalBarMagnet HelmholtzCoilRight = new CylindricalBarMagnet();
-        HelmholtzCoilRight.setRadius(4.*MagnetRadius);
-        HelmholtzCoilRight.setMass(.05);
-        HelmholtzCoilRight.setMu(fixedMu);
-        HelmholtzCoilRight.setID("HelmholtzCoilRight");
-        HelmholtzCoilRight.setPickable(false);
-        HelmholtzCoilRight.setColliding(false);
-        HelmholtzCoilRight.setGeneratingP(true);
-        HelmholtzCoilRight.setPosition(new Vector3d(2.*CoilSeperation, 0.,0.));
-        HelmholtzCoilRight.setMoveable(true);
-        HelmholtzCoilRight.setRotable(false);
-        SphereCollisionController sccx1 = new SphereCollisionController(HelmholtzCoilRight);
-        sccx1.setRadius(MagnetRadius/2.);
-        sccx1.setTolerance(0.1);
-        sccx1.setMode(SphereCollisionController.WALL_SPHERE);
-        HelmholtzCoilRight.setCollisionController(sccx1);
-        HelmholtzCoilRight.setDirection(new Vector3d(0,1.,0.));
-        addElement(HelmholtzCoilRight);
+        // ***************************************************************************
+        // Graph
+        // ***************************************************************************
+        graph = new Graph();
+        //graph.setBounds(500, 68, 400, 360);
+        graph.setXRange(0., 75.);
+        graph.setYRange(-0.005, 0.02);
+        graph.setXLabel("Time");
+        graph.setYLabel("Energy");
+ 
+        JLabel label1 = new JLabel("Electric Energy");
+        label1.setForeground(Color.RED);
+        //label1.setBounds(660, 20, 200, 24);
+        label1.setFont(label1.getFont().deriveFont(Font.BOLD));
+        JLabel label2 = new JLabel("Kinetic Energy");
+        label2.setForeground(Color.BLUE);
+        //label2.setBounds(625, 44, 200, 24);
+        label2.setFont(label2.getFont().deriveFont(Font.BOLD));
+        JLabel label3 = new JLabel("Gravitational Potential Energy");
+        label3.setForeground(Color.green);
+        label3.setFont(label3.getFont().deriveFont(Font.BOLD));
+        JLabel label4 = new JLabel("Total Energy");
+        label4.setForeground(Color.BLACK);
+        label4.setFont(label3.getFont().deriveFont(Font.BOLD));
 
-        rotatingCoil = new CylindricalBarMagnet();
-        rotatingCoil.setRadius(MagnetRadius);
-        //rotatingCoil.setPauliDistance(4.*MagnetRadius);
-        rotatingCoil.setMass(2.);
-        rotatingCoil.setMu(-.01);
-        rotatingCoil.setID("rotatingCoil");
-        rotatingCoil.setPickable(false);
-        rotatingCoil.setColliding(true);
-        rotatingCoil.setGeneratingP(true);
-        rotatingCoil.setPosition(new Vector3d(0.,0., 0.));
-        rotatingCoil.setMoveable(false);
-        rotatingCoil.setRotable(true);
-//        rotatingCoil.setConstrained(true);
-        sccx = new SphereCollisionController(rotatingCoil);
-        rotatingCoil.setDirection(new Vector3d(1.,0.,0.));
-        sccx.setRadius(MagnetRadius);
-        sccx.setTolerance(0.1);
-        sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        //rotatingCoil.addPropertyChangeListener("charge",this );
- //       addElement(rotatingCoil);
-         
- 		PlanarConstraint arc = new PlanarConstraint(new Vector3d(0.,1.,0.));
-		rotatingCoil.addConstraint(arc);
+        eGraph = new ElectrostaticPendulumTwoBodyEnergyPlot();
+        eGraph.setPlotValue(0);
+        eGraph.setBodyOne(swingingCharge);
+        eGraph.setBodyTwo(fixedCharge);
+        eGraph.setIndObj(theEngine);
+        graph.addPlotItem(eGraph);
+        VisualizationControl visControl;
+        JTaskPaneGroup params, graphs;
+        params = new JTaskPaneGroup();
+        params.setText("Parameters");
+//        params.add(slider);
+        graphs = new JTaskPaneGroup();
+        graphs.setText("Graph");
+        graphs.add(label1);
+        graphs.add(label2);
+        graphs.add(label3);
+        graphs.add(label4);
+        graphs.add(graph);
+        // Hack to get around not adding graph as element
+        theEngine.addSimElement(graph);
+        visControl = new VisualizationControl();
+        visControl.setConvolutionModes(DLIC.DLIC_FLAG_E|DLIC.DLIC_FLAG_EP);
+        visControl.setActionFlags(VisualizationControl.CHANGE_FL_COLORMODE);
+        visControl.setFieldConvolution(mDLIC);
+        visControl.setSymmetryCount(2);
+        visControl.setFieldLineManager(fmanager);
+        visControl.setColorPerVertex(false);
+        addElement(graphs);
+//        addElement(params);
+//        addElement(visControl);
+      
+ 		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
+		swingingCharge.addConstraint(arc);
  		
-        int maxStep = 2400;
+        int maxStep = 200;
 
-        double startFL=2.*MagnetRadius;
+        double startFL=pointChargeRadius/2.;
         fmanager = new FieldLineManager();
         fmanager.setElementManager(this);
         
-        // put field lines on moving magnet
-        int numberFLA = 75;
- //       maxStep = 1200;
-        for (int j = 0; j <= numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
-            fl.setType(Field.B_FIELD);
-            fl.setKMax(maxStep);
- //           fmanager.addFieldLine(fl);
-        }
-        
+        // put field lines on swinging charge
+        int numberFLA = 5;
+        int numberFLP =5;
+        for (int k = 0; k < numberFLP+2; k++) {
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
-            fl.setType(Field.B_FIELD);
-            fl.setKMax(maxStep);
-  //          fmanager.addFieldLine(fl);
-        }
-        for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
-            fl.setType(Field.B_FIELD);
-            fl.setKMax(maxStep);
-//            fmanager.addFieldLine(fl);
-        }
-//        }
-        
-        // put field lines on HelmholtzCoilLeft
-     
-        for (int j = 0; j <= numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
-            fl.setType(Field.B_FIELD);
+
+            RelativeFLine fl = new RelativeFLine(swingingCharge, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
+            fl.setType(Field.E_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
         }
-        // put field lines on stationary 01 magnet
-
-    
-        for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
-            fl.setType(Field.B_FIELD);
-            fl.setKMax(maxStep);
-//            fmanager.addFieldLine(fl);
         }
+        // put field lines on stationary charge
+        
+        numberFLA =5;
+        numberFLP =5;
 
+        for (int k = 0; k < numberFLP+2; k++) {
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
-            fl.setType(Field.B_FIELD);
+            RelativeFLine fl = new RelativeFLine(fixedCharge, ((j + 1) / (numberFLA*1.)) * Math.PI * 2.,((k ) / (numberFLP*1.+1.)) * Math.PI ,startFL);
+            fl.setType(Field.E_FIELD);
             fl.setKMax(maxStep);
-//            fmanager.addFieldLine(fl);
+           fmanager.addFieldLine(fl);
         }
-
-
-    numberFLA = 5;     
- //        maxStep=1200;   
+       }
         
         fmanager.setSymmetryCount(2);
         theEngine.setBoundingArea(new BoundingSphere(new Point3d(), 12));
 
         // Building the GUI.
-        PropertyDouble MuSlider = new PropertyDouble();
-        MuSlider.setText("Player Mu:");
-        MuSlider.setMinimum(-500.);
-        MuSlider.setMaximum(500.);
-        MuSlider.setBounds(40, 535, 415, 50);
-        MuSlider.setPaintTicks(true);
-        MuSlider.addRoute(rotatingCoil, "Mu");
-        MuSlider.setValue(-40);
-        //addElement(MuSlider);
-        MuSlider.setVisible(true);
+        PropertyDouble chargeSlider = new PropertyDouble();
+        chargeSlider.setText("Swinging/Fixed Q:");
+        chargeSlider.setMinimum(0.);
+        chargeSlider.setMaximum(6.);
+        chargeSlider.setBounds(40, 535, 415, 50);
+        chargeSlider.setPaintTicks(true);
+        chargeSlider.addRoute(swingingCharge, "charge");
+        chargeSlider.setValue(0);
+        //addElement(chargeSlider);
+        chargeSlider.setVisible(true);
         label = new JLabel("Current Time:");
         score = new JLabel();
         label.setBounds(40, 595, 140, 50);
@@ -301,19 +321,19 @@ public class MagneticDisksPlanar extends SimEM {
         addElement(watch);
 
         //JTaskPane tp = new JTaskPane();
-        ControlGroup params = new ControlGroup();
-        params.setText("Parameters");
-        params.add(MuSlider);
-        params.add(label);
-        params.add(score);
-        addElement(params);
+        ControlGroup params1 = new ControlGroup();
+        params1.setText("Parameters");
+        params1.add(chargeSlider);
+        params1.add(label);
+        params1.add(score);
+        addElement(params1);
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
         mDLIC = new FieldConvolution();
         mDLIC.setComputePlane(new RectangularPlane(theEngine.getBoundingArea()));
         vis.setFieldConvolution(mDLIC);
-        vis.setConvolutionModes(DLIC.DLIC_FLAG_B | DLIC.DLIC_FLAG_BP);
+        vis.setConvolutionModes(DLIC.DLIC_FLAG_E | DLIC.DLIC_FLAG_EP);
         vis.setSymmetryCount(1);
         vis.setColorPerVertex(true);
         vis.setFieldLineManager(fmanager);
@@ -327,26 +347,18 @@ public class MagneticDisksPlanar extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(.3);
+        theEngine.setDeltaTime(1.);
         mSEC.init();
 
         resetCamera();
         reset(heightSupport,lengthPendulum);
     }
 
-    private void addWall(Vector3d pos, Vector3d length, Vector3d height) {
-        Wall myWall = new Wall(pos, length, height);
-        myWall.setElasticity(wallElasticity);
-        myWall.setColor(Color.GREEN);
-        myWall.setPickable(false);
-        WallNode myNode = (WallNode) myWall.getNode3D();
-        myNode.setFillAppearance(myAppearance);
-        addElement(myWall);
-    }
+
 
     void addActions() {
 
-        TealAction ta = new TealAction("EM Video Game", this);
+        TealAction ta = new TealAction("Electrostatic Pendulum", this);
         addAction("Help", ta);
 
         ta = new TealAction("Level Complete", "Level Complete", this);
@@ -377,17 +389,15 @@ public class MagneticDisksPlanar extends SimEM {
     public void reset(double heightSupport, double lengthPendulum) {
         mSEC.stop();
         mSEC.reset();
-        resetCylindricalBarMagnet(heightSupport,lengthPendulum);
+        resetPointCharges(heightSupport,lengthPendulum);
         //theEngine.requestRefresh();
         watch.setActionEnabled(true);
     }
 
-    private void resetCylindricalBarMagnet(double heightSupport, double lengthPendulum) {
+    private void resetPointCharges(double heightSupport, double lengthPendulum) {
 
-        rotatingCoil.setPosition(new Vector3d(0., 0., 0.));
-        rotatingCoil.setDirection(new Vector3d(0,1, 0));
+        swingingCharge.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
     }
-
 
     public void resetCamera() {
     	mViewer.setLookAt(new Point3d(0.,.8,4.), new Point3d(0,0,0), new Vector3d(0,1,0));
@@ -426,17 +436,17 @@ public class MagneticDisksPlanar extends SimEM {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
- //               Vector3d cali = rotatingCoil.getPosition();
- //               Vector3d temp = new Vector3d(cali);
- //               Vector3d center = new Vector3d(0.,25.,0.);
-//               temp.sub(center);
- //               double distance = temp.length();
-
- 
-                 score.setText(String.valueOf(time));
+                Vector3d cali = swingingCharge.getPosition();
+                Vector3d reference = new Vector3d(0.,heightSupport,0.);
+                reference.sub(cali);
+          		System.out.println("    ");
+ //           	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
+         	    Vector3d hetti = fixedCharge.getPosition();
+//            	TDebug.println(0, "fixedCharge   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
+                nativeObject01.setDirection(reference);
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
-                    if (testBounds.intersect(new Point3d(rotatingCoil.getPosition()))) {
+                    if (testBounds.intersect(new Point3d(swingingCharge.getPosition()))) {
                         System.out.println("congratulations");
                         // Make this a one-shot
                         actionEnabled = false;

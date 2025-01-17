@@ -250,7 +250,7 @@ public class BarMagnetsPlanar extends SimEM {
         
         // put field lines on HelmholtzCoilLeft
         maxStep = 200;
-        numberFLA = 5;
+        numberFLA = 40;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);

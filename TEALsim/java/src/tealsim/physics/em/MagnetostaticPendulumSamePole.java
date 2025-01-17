@@ -212,7 +212,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 75.);
-        graph.setYRange(-0.005, 0.02);
+        graph.setYRange(-0.005, 0.015);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
  

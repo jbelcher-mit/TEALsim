@@ -190,7 +190,7 @@ public class MagnetostaticPendulum extends SimEM {
         swingingMagnet.setRadius(MagnetRadius);
         //swingingMagnet.setPauliDistance(4.*MagnetRadius);
         swingingMagnet.setMass(2.);
-        swingingMagnet.setMu(1);
+        swingingMagnet.setMu(0);
         swingingMagnet.setID("swingingMagnet");
         swingingMagnet.setPickable(false);
         swingingMagnet.setColliding(true);
@@ -310,7 +310,7 @@ public class MagnetostaticPendulum extends SimEM {
         PropertyDouble MuSlider = new PropertyDouble();
         MuSlider.setText("Player Mu:");
         MuSlider.setMinimum(-500.);
-        MuSlider.setMaximum(500.);
+        MuSlider.setMaximum(0.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
         MuSlider.addRoute(swingingMagnet, "Mu");

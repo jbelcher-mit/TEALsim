@@ -150,19 +150,21 @@ public class InverterMagneticConfiguration extends SimEM {
 
         // Set charges
         double fixedMu = -55.;
+        double fixedMuBig = 550;
         double fixedRadius =2.7;
-        double MagnetRadius = 1.;
-        double MagnetRadius1 = MagnetRadius-MagnetRadius;
+        double MagnetRadius = 2.;
+        double MagnetRadiusSmall=MagnetRadius/4;
+
 
         CylindricalBarMagnet centralMagnet = new CylindricalBarMagnet();
-        centralMagnet.setRadius(2.*MagnetRadius);
+        centralMagnet.setRadius(MagnetRadius);
         centralMagnet.setMass(.05);
-        centralMagnet.setMu(-10.*fixedMu);
+        centralMagnet.setMu(fixedMuBig);
         centralMagnet.setID("magnet01");
         centralMagnet.setPickable(false);
         centralMagnet.setColliding(false);
         centralMagnet.setGeneratingP(true);
-        centralMagnet.setPosition(new Vector3d(0., MagnetRadius1,0.));
+        centralMagnet.setPosition(new Vector3d(0., 0.,0.));
         centralMagnet.setMoveable(false);
         centralMagnet.setRotable(false);
         SphereCollisionController sccx = new SphereCollisionController(centralMagnet);
@@ -173,18 +175,18 @@ public class InverterMagneticConfiguration extends SimEM {
         addElement(centralMagnet);
         
         CylindricalBarMagnet magnet01 = new CylindricalBarMagnet();
-        magnet01.setRadius(MagnetRadius/2.);
+        magnet01.setRadius(MagnetRadiusSmall);
         magnet01.setMass(.05);
         magnet01.setMu(fixedMu);
         magnet01.setID("magnet01");
         magnet01.setPickable(false);
         magnet01.setColliding(false);
         magnet01.setGeneratingP(true);
-        magnet01.setPosition(new Vector3d(0., MagnetRadius1,fixedRadius));
+        magnet01.setPosition(new Vector3d(0., 0.,fixedRadius));
         magnet01.setMoveable(false);
         magnet01.setRotable(false);
         SphereCollisionController sccx1 = new SphereCollisionController(magnet01);
-        sccx1.setRadius(MagnetRadius/2.);
+        sccx1.setRadius(MagnetRadiusSmall);
         sccx1.setTolerance(0.1);
         sccx1.setMode(SphereCollisionController.WALL_SPHERE);
         magnet01.setCollisionController(sccx1);
@@ -193,18 +195,18 @@ public class InverterMagneticConfiguration extends SimEM {
         double delta_angle = 2.*Math.PI/6.;
         double angle = delta_angle;
         CylindricalBarMagnet magnet02 = new CylindricalBarMagnet();
-        magnet02.setRadius(MagnetRadius/2.);
+        magnet02.setRadius(MagnetRadiusSmall);
         magnet02.setMass(1.0);
         magnet02.setMu(fixedMu);
         magnet02.setID("magnet02");
         magnet02.setPickable(false);
         magnet02.setColliding(false);
         magnet02.setGeneratingP(true);
-        magnet02.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
+        magnet02.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
         magnet02.setMoveable(false);
         magnet02.setRotable(false);
         sccx = new SphereCollisionController(magnet02);
-        sccx.setRadius(MagnetRadius);
+        sccx.setRadius(MagnetRadiusSmall);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         magnet02.setCollisionController(sccx);
@@ -212,18 +214,18 @@ public class InverterMagneticConfiguration extends SimEM {
        
        angle = angle+delta_angle;
        CylindricalBarMagnet magnet03 = new CylindricalBarMagnet();
-       magnet03.setRadius(MagnetRadius/2.);
+       magnet03.setRadius(MagnetRadiusSmall);
        magnet03.setMass(1.0);
        magnet03.setMu(fixedMu);
        magnet03.setID("magnet03");
        magnet03.setPickable(false);
        magnet03.setColliding(false);
        magnet03.setGeneratingP(true);
-       magnet03.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
+       magnet03.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
        magnet03.setMoveable(false);
        magnet03.setRotable(false);
        sccx = new SphereCollisionController(magnet03);
-       sccx.setRadius(MagnetRadius/2.);
+       sccx.setRadius(MagnetRadiusSmall);
        sccx.setTolerance(0.1);
        sccx.setMode(SphereCollisionController.WALL_SPHERE);
        magnet03.setCollisionController(sccx);
@@ -231,18 +233,18 @@ public class InverterMagneticConfiguration extends SimEM {
       
       angle = angle+delta_angle;
       CylindricalBarMagnet magnet04 = new CylindricalBarMagnet();
-      magnet04.setRadius(MagnetRadius/2.);
+      magnet04.setRadius(MagnetRadiusSmall);
       magnet04.setMass(1.0);
       magnet04.setMu(fixedMu);
       magnet04.setID("magnet04");
       magnet04.setPickable(false);
       magnet04.setColliding(false);
       magnet04.setGeneratingP(true);
-      magnet04.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
+      magnet04.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
       magnet04.setMoveable(false);
       magnet04.setRotable(false);
       sccx = new SphereCollisionController(magnet04);
-      sccx.setRadius(MagnetRadius);
+      sccx.setRadius(MagnetRadiusSmall);
       sccx.setTolerance(0.1);
       sccx.setMode(SphereCollisionController.WALL_SPHERE);
       magnet04.setCollisionController(sccx);
@@ -250,18 +252,18 @@ public class InverterMagneticConfiguration extends SimEM {
      
      angle = angle+delta_angle;
      CylindricalBarMagnet magnet05 = new CylindricalBarMagnet();
-     magnet05.setRadius(MagnetRadius/2.);
+     magnet05.setRadius(MagnetRadiusSmall);
      magnet05.setMass(1.0);
      magnet05.setMu(fixedMu);
      magnet05.setID("magnet05");
      magnet05.setPickable(false);
      magnet05.setColliding(false);
      magnet05.setGeneratingP(true);
-     magnet05.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
+     magnet05.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
      magnet05.setMoveable(false);
      magnet05.setRotable(false);
      sccx = new SphereCollisionController(magnet05);
-     sccx.setRadius(MagnetRadius);
+     sccx.setRadius(MagnetRadiusSmall);
      sccx.setTolerance(0.1);
      sccx.setMode(SphereCollisionController.WALL_SPHERE);
      magnet05.setCollisionController(sccx);
@@ -269,18 +271,18 @@ public class InverterMagneticConfiguration extends SimEM {
     
     angle = angle+delta_angle;
     CylindricalBarMagnet magnet06 = new CylindricalBarMagnet();
-    magnet06.setRadius(MagnetRadius/2.);
+    magnet06.setRadius(MagnetRadiusSmall);
     magnet06.setMass(1.0);
     magnet06.setMu(fixedMu);
     magnet06.setID("magnet06");
     magnet06.setPickable(false);
     magnet06.setColliding(false);
     magnet06.setGeneratingP(true);
-    magnet06.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  MagnetRadius1, fixedRadius*Math.cos(angle)));
+    magnet06.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
     magnet06.setMoveable(false);
     magnet06.setRotable(false);
     sccx = new SphereCollisionController(magnet06);
-    sccx.setRadius(MagnetRadius);
+    sccx.setRadius(MagnetRadiusSmall);
     sccx.setTolerance(0.1);
     sccx.setMode(SphereCollisionController.WALL_SPHERE);
     magnet06.setCollisionController(sccx);
@@ -289,14 +291,15 @@ public class InverterMagneticConfiguration extends SimEM {
 
    
         movingMagnet = new CylindricalBarMagnet();
-        movingMagnet.setRadius(2.*MagnetRadius);
+        movingMagnet.setRadius(MagnetRadius);
         //movingMagnet.setPauliDistance(4.*MagnetRadius);
         movingMagnet.setMass(2.);
-        movingMagnet.setMu(-1);
+        movingMagnet.setMu(fixedMuBig);
         movingMagnet.setID("movingMagnet");
         movingMagnet.setPickable(false);
         movingMagnet.setColliding(true);
         movingMagnet.setGeneratingP(true);
+        // not really set here, see resetCylindricalBarMagnet
         movingMagnet.setPosition(new Vector3d(0.,0., 0.));
         movingMagnet.setMoveable(true);
         movingMagnet.setRotable(false);
@@ -318,43 +321,49 @@ public class InverterMagneticConfiguration extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on moving magnet
-        int numberFLA = 5;
+        int numberFLA = 35;
         maxStep = 200;
-        for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
-            fl.setType(Field.B_FIELD);
-            fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
-        }
-        
-        for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
-            fl.setType(Field.B_FIELD);
-            fl.setKMax(maxStep);
-     //       fmanager.addFieldLine(fl);
-        }
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+  //          fmanager.addFieldLine(fl);
         }
-//        }
         
-        // put field lines on centralMagnet
-        maxStep = 200;
-        numberFLA = 5;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(centralMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+            RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.5);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
         }
-        // put field lines on stationary 01 magnet
-        maxStep = 200;
-        numberFLA = 5;
+        
+        numberFLA = 25;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(magnet01, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+            RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*1.);
+            fl.setType(Field.B_FIELD);
+            fl.setKMax(maxStep);
+//            fmanager.addFieldLine(fl);
+        }
+//        }
+        
+        // put field lines on centralMagnet
+        maxStep = 20;
+        numberFLA = 15;
+        for (int j = 0; j < numberFLA; j++) {
+            RelativeFLine fl = new RelativeFLine(centralMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+            fl.setType(Field.B_FIELD);
+            fl.setKMax(maxStep);
+ //           fmanager.addFieldLine(fl);
+            
+
+        }
+        // put field lines on stationary 01 magnet
+        startFL=MagnetRadiusSmall;
+        maxStep = 20;
+        numberFLA =15;
+        double frac = .6;
+        for (int j = 0; j < numberFLA; j++) {
+            RelativeFLine fl = new RelativeFLine(magnet01, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*frac);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
@@ -362,56 +371,56 @@ public class InverterMagneticConfiguration extends SimEM {
 
       // put field lines on stationary 02 magnet
               
-numberFLA = 5;
+//numberFLA = 5;
 for (int j = 0; j < numberFLA; j++) {
-    RelativeFLine fl = new RelativeFLine(magnet02, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+    RelativeFLine fl = new RelativeFLine(magnet02, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*frac);
     fl.setType(Field.B_FIELD);
     fl.setKMax(maxStep);
     fmanager.addFieldLine(fl);
 }
     
-    numberFLA = 5;
+  //  numberFLA = 5;
     for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet03, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+        RelativeFLine fl = new RelativeFLine(magnet03, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*frac);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
         fmanager.addFieldLine(fl);
     }
         
     
-    numberFLA = 5;
+ //   numberFLA = 5;
     for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet04, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+        RelativeFLine fl = new RelativeFLine(magnet04, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*frac);
+        fl.setType(Field.B_FIELD);
+        fl.setKMax(maxStep);
+      fmanager.addFieldLine(fl);
+    }
+        
+    
+ //   numberFLA = 5;
+    for (int j = 0; j < numberFLA; j++) {
+        RelativeFLine fl = new RelativeFLine(magnet05, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*frac);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
         fmanager.addFieldLine(fl);
     }
         
-    
-    numberFLA = 5;
+//         maxStep=300;   
     for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet05, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
-        fl.setType(Field.B_FIELD);
-        fl.setKMax(maxStep);
-        fmanager.addFieldLine(fl);
-    }
-        
-         maxStep=300;   
-    for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
+        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*frac);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
         fmanager.addFieldLine(fl);
     }
     
     for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
+        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*frac);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
         fmanager.addFieldLine(fl);
     }
     for (int j = 0; j < numberFLA; j++) {
-        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
+        RelativeFLine fl = new RelativeFLine(magnet06, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*frac);
         fl.setType(Field.B_FIELD);
         fl.setKMax(maxStep);
         fmanager.addFieldLine(fl);
@@ -529,7 +538,7 @@ for (int j = 0; j < numberFLA; j++) {
 
     private void resetCylindricalBarMagnet(double heightSupport, double lengthPendulum) {
 
-        movingMagnet.setPosition(new Vector3d(lengthPendulum/2., 0., 3.));
+        movingMagnet.setPosition(new Vector3d(10., 0., 3.));
         movingMagnet.setDirection(new Vector3d(0,1, 0));
     }
 

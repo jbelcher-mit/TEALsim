@@ -152,7 +152,7 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
         double fixedMu = -55.;
         double fixedRadius =2.7;
         double MagnetRadius = 1.;
-        double CoilSeperation = 12.;
+        double CoilSeperation = 18.;
         double MagnetRadius1 = 0.;
         CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
         HelmholtzCoilLeft.setRadius(4.*MagnetRadius);
