@@ -210,7 +210,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-0.005, 0.8);
+        graph.setYRange(-0.005, 250.);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
  
