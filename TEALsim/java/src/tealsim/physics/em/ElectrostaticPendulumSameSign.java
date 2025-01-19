@@ -84,7 +84,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
 	// the same id as in other applications, see the MagnetostaticPendulum  belcher 12/14/2024
     private static final long serialVersionUID = 3256443586278208051L;
     
-    /** An imported 3DS object (a hemisphere).  */
+    /** An imported 3DS object (a hemisphere).      */ 
     Rendered importedObject01 = new Rendered();
     Node3D node01 = new Node3D();
     /** An imported 3DS object (a cone).  */
@@ -125,7 +125,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
 
         // Building the world.
         theEngine.setDamping(0.0);
-        theEngine.setGravity(new Vector3d(0., -.3,0.));
+        theEngine.setGravity(new Vector3d(0., -9.8,0.));
 
         nativeObject01 = new Rendered();
   
@@ -209,8 +209,8 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
-        graph.setXRange(0., 75.);
-        graph.setYRange(-0.005, 0.02);
+        graph.setXRange(0., 15.);
+        graph.setYRange(-0.005, 0.8);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
  
@@ -302,7 +302,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         PropertyDouble chargeSlider = new PropertyDouble();
         chargeSlider.setText("Swinging/Fixed Q:");
         chargeSlider.setMinimum(0.);
-        chargeSlider.setMaximum(6.);
+        chargeSlider.setMaximum(600.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(swingingCharge, "charge");
@@ -347,7 +347,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(1.);
+        theEngine.setDeltaTime(.02);
         mSEC.init();
 
         resetCamera();

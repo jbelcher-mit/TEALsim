@@ -120,7 +120,7 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
  //   	TDebug.println(0,  " m1: " + m1 +"  m2: " +m2 +"  mass1: "+mass1 );
     	double mEnergy;
     	mEnergy = -m1*m2*(2.*y*y-x*x)/Math.pow(y*y+x*x, 5./2.);
-    	mEnergy=mEnergy*3000./(400*456.4);
+//    	mEnergy=mEnergy*3000./(400*456.4);
  //   	mEnergy = q1 * q2 * (1/(rlength)); // * a constant 8.897e8 * 
 //    	mEnergy = mEnergy /(4*456.4);
     	double t = indObj.getTime();
@@ -130,30 +130,33 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	double gpEnergy;
     	double totEnergy;
     	kEnergy = 0.5 * mass1 * vel1.lengthSquared() * 1.;
-    	kEnergy = kEnergy/1000.;
-    	gpEnergy = mass1 * (0.04) * (pos1.y-5.) *1.;
-    	gpEnergy = gpEnergy/100.;
-    	totEnergy = kEnergy + gpEnergy+mEnergy;
-    	totEnergy = totEnergy/(10.*34.2775);
-    	totEnergy = totEnergy*300.;
+//    	kEnergy = kEnergy/1000.;
+    	gpEnergy = mass1 *(9.8)*(pos1.y-5.) *1.;
+//    	gpEnergy = gpEnergy/100.;
+ //   	totEnergy = kEnergy + gpEnergy+mEnergy;
+//    	totEnergy = totEnergy/(10.*34.2775);
+//    	totEnergy = totEnergy*300.;
 
-    	kEnergy=3.44184*kEnergy/3;
-    	gpEnergy = 2.58145*gpEnergy/3;
-    	mEnergy=mEnergy/30;
+  //  	kEnergy=3.44184*kEnergy/3;
+ //   	gpEnergy = 2.58145*gpEnergy/3;
+//    	mEnergy=mEnergy/30;
     	//
     	//
-    	kEnergy=kEnergy*2.837417568;
-        gpEnergy = gpEnergy*2.834087781;
+ //   	kEnergy=kEnergy*2.837417568;
+//        gpEnergy = gpEnergy*2.834087781;
  
-    	kEnergy = kEnergy*2.199842003;
-    	gpEnergy = gpEnergy*2.198209516;
-        double common = 7.;
-     	mEnergy=mEnergy/common;
-     	kEnergy=kEnergy/common;
-         gpEnergy = gpEnergy/common;
+ //   	kEnergy = kEnergy*2.199842003;
+//    	gpEnergy = gpEnergy*2.198209516;
+//        double common = 7.;
+     	kEnergy=kEnergy*0.001021375;
+     	mEnergy=mEnergy*7.82522E-05;
+        gpEnergy = gpEnergy*0.001021094;
+;
     	totEnergy = kEnergy + gpEnergy+mEnergy;
 //    	TDebug.println(0, " mEnergy: " + mEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
-//    	TDebug.println(0,  mEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
+ //   	TDebug.println(0,  mEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
+       	TDebug.println(0, kEnergy + ", " +gpEnergy + ", " + totEnergy);
+
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {
