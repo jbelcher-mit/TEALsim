@@ -133,8 +133,8 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
      	kEnergy=kEnergy;
      	mEnergy=mEnergy*.07661;
         gpEnergy = gpEnergy;
-;
     	totEnergy = kEnergy + gpEnergy+mEnergy;
+    	totEnergy =mass1 *(9.8)*(20.) *1.;
 //    	TDebug.println(0, " mEnergy: " + mEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
  //   	TDebug.println(0,  mEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
        	TDebug.println(0, kEnergy + ", " +gpEnergy + ", " + totEnergy);

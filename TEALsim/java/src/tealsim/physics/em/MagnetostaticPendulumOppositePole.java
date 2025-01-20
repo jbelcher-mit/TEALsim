@@ -120,17 +120,16 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
     public MagnetostaticPendulumOppositePole() {
 
         super();
-        title = "Magnetostatic Pendulum";
+        title = "Magnetostatic Pendulum Opposite Pole";
         TDebug.setGlobalLevel(1);
         Graph graph;
         MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
        
 
         // Building the world.
- //       theEngine.setDamping(0.0);
-        theEngine.setGravity(new Vector3d(0., -.3,0.));
-        double friction = 10000000.;
-        theEngine.setDamping(friction);  
+        theEngine.setDamping(0.0);
+        theEngine.setGravity(new Vector3d(0., -9.8,0.));
+
         Rendered nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
 
@@ -212,8 +211,8 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
-        graph.setXRange(0., 75.);
-        graph.setYRange(-0.022, 0.032);
+        graph.setXRange(0., 15.);
+        graph.setYRange(-600, 1000);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
  
@@ -233,8 +232,8 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         label4.setFont(label3.getFont().deriveFont(Font.BOLD));
 
         eGraph = new MagnetostaticPendulumTwoBodyEnergyPlot();
-        eGraph.setPlotValue(0);
-        eGraph.setBodyOne(swingingMagnet);
+        eGraph.setPlotValue(0);  
+        eGraph.setBodyOne(swingingMagnet);   
         eGraph.setBodyTwo(stationaryMagnet);
         eGraph.setIndObj(theEngine);
         graph.addPlotItem(eGraph);
@@ -311,11 +310,11 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         PropertyDouble MuSlider = new PropertyDouble();
         MuSlider.setText("Player Mu:");
         MuSlider.setMinimum(0.);
-        MuSlider.setMaximum(500.);
+        MuSlider.setMaximum(20000.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
         MuSlider.addRoute(swingingMagnet, "Mu");
-        MuSlider.setValue(0);
+        MuSlider.setValue(7000);
         //addElement(MuSlider);
         MuSlider.setVisible(true);
         label = new JLabel("Current Time:");
@@ -356,7 +355,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(.5);
+        theEngine.setDeltaTime(.04);
         mSEC.init();
 
         resetCamera();

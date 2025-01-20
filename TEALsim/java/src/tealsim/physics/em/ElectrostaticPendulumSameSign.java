@@ -118,7 +118,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
     public ElectrostaticPendulumSameSign() {
 
         super();
-        title = "Electrostatic Pendulum";
+        title = "Electrostatic Pendulum Same Sign";
         
        
         TDebug.setGlobalLevel(1);
@@ -209,7 +209,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
-        graph.setXRange(0., 15.);
+        graph.setXRange(0., 10.);
         graph.setYRange(-0.005, 400);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
@@ -300,13 +300,13 @@ public class ElectrostaticPendulumSameSign extends SimEM {
 
         // Building the GUI.
         PropertyDouble chargeSlider = new PropertyDouble();
-        chargeSlider.setText("Swinging/Fixed Q:");
+        chargeSlider.setText("Swinging Charge:");
         chargeSlider.setMinimum(0.);
         chargeSlider.setMaximum(600.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(swingingCharge, "charge");
-        chargeSlider.setValue(0);
+        chargeSlider.setValue(50);
         //addElement(chargeSlider);
         chargeSlider.setVisible(true);
         label = new JLabel("Current Time:");
