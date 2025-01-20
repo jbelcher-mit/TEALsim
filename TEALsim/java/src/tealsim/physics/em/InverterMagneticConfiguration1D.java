@@ -105,7 +105,7 @@ public class InverterMagneticConfiguration1D extends SimEM {
     public InverterMagneticConfiguration1D() {
 
         super();
-        title = "Inverter Magnet";
+        title = "Inverter Magnet 1D";
         
        
         TDebug.setGlobalLevel(0);
