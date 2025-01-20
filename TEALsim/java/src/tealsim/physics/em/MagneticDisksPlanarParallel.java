@@ -105,7 +105,7 @@ public class MagneticDisksPlanarParallel extends SimEM {
     public MagneticDisksPlanarParallel() {
 
         super();
-        title = "Galvanometer";
+        title = "Magnetic Disks Parallel";
         
        
         TDebug.setGlobalLevel(0);
@@ -152,7 +152,7 @@ public class MagneticDisksPlanarParallel extends SimEM {
         double fixedMu = -55.;
         double fixedRadius =2.7;
         double MagnetRadius = 1.;
-        double CoilSeperation = 2.;
+        double CoilSeperation = 2.3;
         double MagnetRadius1 = 0.;
         CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
         HelmholtzCoilLeft.setRadius(4.*MagnetRadius);
@@ -223,7 +223,7 @@ public class MagneticDisksPlanarParallel extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on HelmholtzCoilRight
-        int numberFLA = 5;
+        int numberFLA = 8;
         maxStep = 500;
         for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j) / (numberFLA*1.)) *2.* Math.PI ,.5 * Math.PI ,startFL*.4);
@@ -247,10 +247,10 @@ public class MagneticDisksPlanarParallel extends SimEM {
 //        }
         
         // put field lines on HelmholtzCoilLeft
-        numberFLA=5;
+//        numberFLA=16;
         maxStep = 500;
         for (int j = 0; j <= numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.+1.)) *2.* Math.PI ,.5 * Math.PI ,startFL*.4);
+            RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI ,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
        fmanager.addFieldLine(fl);

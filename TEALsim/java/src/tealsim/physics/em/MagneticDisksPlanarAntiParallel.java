@@ -105,7 +105,7 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
     public MagneticDisksPlanarAntiParallel() {
 
         super();
-        title = "Galvanometer";
+        title = "Magnetic Disks Anti-Parallel";
         
        
         TDebug.setGlobalLevel(0);
@@ -152,7 +152,7 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
         double fixedMu = -55.;
         double fixedRadius =2.7;
         double MagnetRadius = 1.;
-        double CoilSeperation = 2.;
+        double CoilSeperation = 6.;
         double MagnetRadius1 = 0.;
         CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
         HelmholtzCoilLeft.setRadius(4.*MagnetRadius);
@@ -176,7 +176,7 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
         CylindricalBarMagnet HelmholtzCoilRight = new CylindricalBarMagnet();
         HelmholtzCoilRight.setRadius(4.*MagnetRadius);
         HelmholtzCoilRight.setMass(.05);
-        HelmholtzCoilRight.setMu(fixedMu);
+        HelmholtzCoilRight.setMu(-fixedMu);
         HelmholtzCoilRight.setID("HelmholtzCoilRight");
         HelmholtzCoilRight.setPickable(false);
         HelmholtzCoilRight.setColliding(false);
@@ -223,7 +223,7 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on HelmholtzCoilRight
-        int numberFLA = 5;
+        int numberFLA = 8;
         maxStep = 500;
         for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j) / (numberFLA*1.)) *2.* Math.PI ,.5 * Math.PI ,startFL*.4);
@@ -247,7 +247,7 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
 //        }
         
         // put field lines on HelmholtzCoilLeft
-        numberFLA=5;
+//        numberFLA=16;
         maxStep = 500;
         for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI ,.5 * Math.PI ,startFL*.4);
