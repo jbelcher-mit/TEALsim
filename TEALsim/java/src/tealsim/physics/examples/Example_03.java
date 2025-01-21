@@ -41,12 +41,13 @@ public class Example_03 extends SimEM {
 	private static final long serialVersionUID = 3257008735204554035L;
     /** The friction slider. */
     PropertyDouble frictionSlider = new PropertyDouble();
+    /** The friction in the world. */
+    double friction;
     /** A graph which will contain the vertical position of the charge. */
 	Graph position_graph;
     /** The properties of the position plot.   */
 	PlotProperties position_plot;
-    /** The friction in the world. */
-    double friction;
+
     /** The falling charge.  */
     PointCharge floatingCharge;
     /** The vector position of the charge.  */
@@ -70,7 +71,7 @@ public class Example_03 extends SimEM {
         BoundingSphere bs = new BoundingSphere(new Point3d(0, 1.6, 0), 03.5);
         theEngine.setBoundingArea(bs);
         theEngine.setDeltaTime(0.01); // Was 0.005
-        theEngine.setDamping(0.);  
+        theEngine.setDamping(0.);
         mViewer.setBoundingArea(bs);
         
         
@@ -202,7 +203,7 @@ public class Example_03 extends SimEM {
         floatingCharge.setVelocity(new Vector3d(0.,0.,0.));
         position_graph.clear(0);
         theEngine.setDamping(0.);
-        frictionSlider.setValue(0.);
+        frictionSlider.setValue(1.);
 		theEngine.requestRefresh();
     }
 

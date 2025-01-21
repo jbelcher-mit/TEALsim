@@ -114,8 +114,7 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
 		double rlength = r.length();
         
     	double eEnergy;
-    	eEnergy = q1 * q2 * (1/(rlength)); // * a constant 8.897e8 * 
-    	eEnergy = eEnergy /(4*456.4);
+    	eEnergy = q1 * q2 * (1/(rlength)); 
     	double t = indObj.getTime();
     	//TDebug.println(0, "eEnergy: " + eEnergy );
 
@@ -123,16 +122,12 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	double gpEnergy;
     	double totEnergy;
     	kEnergy = 0.5 * m1 * vel1.lengthSquared() * 1.;
-    	kEnergy = kEnergy/500.;
-    	gpEnergy = m1 * (0.04) * (pos1.y-5.) *1.;
-    	gpEnergy = gpEnergy/50.;
-    	totEnergy = kEnergy + gpEnergy+eEnergy;
-    	totEnergy = totEnergy/(10.*34.2775);
-    	totEnergy = totEnergy*300.;
+    	gpEnergy = m1 * (9.8)* (pos1.y-5.) *1.;
 
-    	kEnergy=3.44184*kEnergy/3;
-    	gpEnergy = 2.58145*gpEnergy/3;
-    	eEnergy=eEnergy/3;
+    	kEnergy=kEnergy*1.;
+    	gpEnergy = gpEnergy*0.002294623/0.00229456;
+    	eEnergy=eEnergy*0.000182588/0.00229456;
+
     	totEnergy = kEnergy + gpEnergy+eEnergy;
 //    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
     	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);

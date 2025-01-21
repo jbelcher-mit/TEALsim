@@ -7,10 +7,13 @@ import javax.vecmath.*;
 import teal.framework.TFramework;
 import teal.framework.TealAction;
 import teal.sim.collision.SphereCollisionController;
+import teal.sim.engine.EngineObj;
+import teal.sim.properties.IsSpatial;
 import teal.physics.em.SimEM;
 import teal.physics.physical.Wall;
 import teal.physics.em.PointCharge;
 import teal.util.TDebug;
+import tealsim.physics.em.ElectrostaticPendulum.Watcher;
 
 /** A simulation of a charge falling under gravity and bouncing off of a floor.  
  * There are no other electromagnetic objects to interact with, 
@@ -31,12 +34,12 @@ public class Example_02 extends SimEM {
     /** The vector position of the floating charge.  */
     Vector3d floatingChargePos;
     /** The radius of the sphere representing the charge.  */
-    double chargeRad = 0.2;
+    double chargeRad = 0.1;
     /** The mass of charge. */
     double chargeMass = .035;
     /** The charge of the charge. */
     double charge = 1.;
-
+    boolean mNeedsSpatial = true;
     public Example_02() {
         super();
 
@@ -51,18 +54,16 @@ public class Example_02 extends SimEM {
        
         BoundingSphere bs = new BoundingSphere(new Point3d(0, 1.6, 0), 03.5);
         theEngine.setBoundingArea(bs);
-        theEngine.setDeltaTime(0.02); 
+        theEngine.setDeltaTime(0.005); 
         theEngine.setDamping(0.);  
         mViewer.setBoundingArea(bs);
-        
-        // halve the default value of gravity in the world, to show how it is done  
-        theEngine.setGravity(new Vector3d(0.,-0.5*9.8,0.));
-        
+        Watcher watch;
+         
         floatingCharge = new PointCharge();
         floatingCharge.setID("Charge");
         floatingCharge.setCharge(charge);
         floatingCharge.setDirection(new Vector3d(0., 1., 0.));
-        floatingChargePos = new Vector3d(0., 1.25, 0.);
+        floatingChargePos = new Vector3d(0., 1., 0.);
         floatingCharge.setPickable(true);
         floatingCharge.setRotable(true);
         floatingCharge.setMoveable(true);
@@ -92,7 +93,7 @@ public class Example_02 extends SimEM {
       
         // We create a "wall" that the floating coil will interact with
         
-        Wall wall = new Wall(new Vector3d(0., 0, 0.), 
+        Wall wall = new Wall(new Vector3d(0., -.1, 0.), 
         		new Vector3d(2., 0., 0.), new Vector3d(0., 0., 2.));
         wall.setElasticity(1.);
         addElement(wall);
@@ -104,7 +105,8 @@ public class Example_02 extends SimEM {
         mouseScale.y *= 0.05;
         mouseScale.z *= 0.5;
         mViewer.setVpTranslateScale(mouseScale);
-
+        watch = new Watcher();
+        addElement(watch);
         mSEC.init();
         resetCamera();
         // addAction for pulldown menus on TEALsim windows     
@@ -123,7 +125,7 @@ public class Example_02 extends SimEM {
     /** Set responses for when our two help menu items are chosen.  */
     
     public void actionPerformed(ActionEvent e) {
-        TDebug.println(1, " Action command: " + e.getActionCommand());
+        TDebug.println(0, " Action command: " + e.getActionCommand());
         if (e.getActionCommand().compareToIgnoreCase("Example_02") == 0) 
         {
         	if(mFramework instanceof TFramework) {
@@ -153,4 +155,30 @@ public class Example_02 extends SimEM {
         mViewer.setLookAt(new Point3d(0.0, 0.025, 0.4), 
         		new Point3d(0., 0.025, 0.), new Vector3d(0., 1., 0.));
     }   
+    
+    public class Watcher extends EngineObj implements IsSpatial {
+
+        private static final long serialVersionUID = 3761692286114804280L;
+        //Bounds testBounds = new BoundingSphere(new Point3d(11.4,11.4,0.),2.);
+        Bounds testBounds = new BoundingBox(new Point3d(8., -16., -1.5), new Point3d(12., -12., 1.5));
+        TealAction theAction = null;
+        boolean actionEnabled = false;
+        boolean mNeedsSpatial = false;
+
+        public void needsSpatial() {
+            mNeedsSpatial = true;
+        }
+    
+
+
+    public void nextSpatial() {
+        if (theEngine != null) {
+            double time = theEngine.getTime();
+            Vector3d cali = floatingCharge.getPosition();
+ //     		System.out.println("    ");
+//      		System.out.println("Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
+            System.out.println(" " + time + ", " + " " + cali.y );
+            }
+         }
+}
 }

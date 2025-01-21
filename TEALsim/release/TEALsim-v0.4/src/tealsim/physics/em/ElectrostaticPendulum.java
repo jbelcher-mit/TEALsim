@@ -440,7 +440,7 @@ public class ElectrostaticPendulum extends SimEM {
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
           		System.out.println("    ");
- //           	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
+            	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
          	    Vector3d hetti = fixedCharge.getPosition();
 //            	TDebug.println(0, "fixedCharge   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
                 nativeObject01.setDirection(reference);

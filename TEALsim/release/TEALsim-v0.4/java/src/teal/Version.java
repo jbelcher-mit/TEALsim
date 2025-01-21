@@ -1,5 +1,5 @@
 /* Created by JReleaseInfo AntTask from Open Source Competence Group */
-/* Creation date Fri Jan 17 11:10:44 EST 2025 */
+/* Creation date Mon Jan 20 13:34:27 EST 2025 */
 package teal;
 
 import java.util.Date;
@@ -12,11 +12,11 @@ import java.util.Date;
 public class Version {
 
 
-   /** buildDate (set during build process to 1737130244266L). */
-   private static Date buildDate = new Date(1737130244266L);
+   /** buildDate (set during build process to 1737398067498L). */
+   private static Date buildDate = new Date(1737398067498L);
 
    /**
-    * Get buildDate (set during build process to Fri Jan 17 11:10:44 EST 2025).
+    * Get buildDate (set during build process to Mon Jan 20 13:34:27 EST 2025).
     * @return Date buildDate
     */
    public static final Date getBuildDate() { return buildDate; }
@@ -52,11 +52,11 @@ public class Version {
    public static final String getVersion() { return version; }
 
 
-   /** buildTimestamp (set during build process to "01/17/2025 11:10 AM"). */
-   private static String buildTimestamp = new String("01/17/2025 11:10 AM");
+   /** buildTimestamp (set during build process to "01/20/2025 01:34 PM"). */
+   private static String buildTimestamp = new String("01/20/2025 01:34 PM");
 
    /**
-    * Get buildTimestamp (set during build process to "01/17/2025 11:10 AM").
+    * Get buildTimestamp (set during build process to "01/20/2025 01:34 PM").
     * @return String buildTimestamp
     */
    public static final String getBuildTimestamp() { return buildTimestamp; }

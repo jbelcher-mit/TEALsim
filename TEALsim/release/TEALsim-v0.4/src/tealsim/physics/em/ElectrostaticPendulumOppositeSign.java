@@ -84,7 +84,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
 	// the same id as in other applications, see the MagnetostaticPendulum  belcher 12/14/2024
     private static final long serialVersionUID = 3256443586278208051L;
     
-    /** An imported 3DS object (a hemisphere).  */
+    /** An imported 3DS object (a hemisphere).      */ 
     Rendered importedObject01 = new Rendered();
     Node3D node01 = new Node3D();
     /** An imported 3DS object (a cone).  */
@@ -118,14 +118,14 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
     public ElectrostaticPendulumOppositeSign() {
 
         super();
-        title = "Electrostatic Pendulum";
+        title = "Electrostatic Pendulum Opposite Sign";
         
        
         TDebug.setGlobalLevel(1);
 
         // Building the world.
         theEngine.setDamping(0.0);
-        theEngine.setGravity(new Vector3d(0., -.3,0.));
+        theEngine.setGravity(new Vector3d(0., -9.8,0.));
 
         nativeObject01 = new Rendered();
   
@@ -188,7 +188,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         swingingCharge.setRadius(pointChargeRadius);
         //swingingCharge.setPauliDistance(4.*pointChargeRadius);
         swingingCharge.setMass(1.0);
-        swingingCharge.setCharge(0);
+        swingingCharge.setCharge(6);
         swingingCharge.setID("swingingCharge");
         swingingCharge.setPickable(false);
         swingingCharge.setColliding(true);
@@ -209,8 +209,8 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
-        graph.setXRange(0., 75.);
-        graph.setYRange(-0.018, 0.028);
+        graph.setXRange(0., 10.);
+        graph.setYRange(-500, 600);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
  
@@ -300,13 +300,13 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
 
         // Building the GUI.
         PropertyDouble chargeSlider = new PropertyDouble();
-        chargeSlider.setText("Swinging/Fixed Q:");
-        chargeSlider.setMinimum(-6.);
+        chargeSlider.setText("Swinging Charge:");
+        chargeSlider.setMinimum(-300.);
         chargeSlider.setMaximum(0.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(swingingCharge, "charge");
-        chargeSlider.setValue(0.);
+        chargeSlider.setValue(-50);
         //addElement(chargeSlider);
         chargeSlider.setVisible(true);
         label = new JLabel("Current Time:");
@@ -347,7 +347,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(1.);
+        theEngine.setDeltaTime(.02);
         mSEC.init();
 
         resetCamera();

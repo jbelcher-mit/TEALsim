@@ -34,11 +34,11 @@ public class Example_04 extends SimEM {
     /** The fixed-in-space charge slider. */
     PropertyDouble chargeSlider = new PropertyDouble();
     /** The radius of the sphere representing the fixed-in-space charge. */
-    double fixedChargeRad = 0.2;
+    double fixedChargeRad = 0.1;
     /** The radius of the sphere representing the floating charge.  */
-    double floatingChargeRadius = 0.2;
+    double floatingChargeRadius = 0.1;
     /** The friction in the world. */
-    double friction = 1.;
+    double friction = .0;
     /** The floating charge.  */
     PointCharge floatingCharge;
     /** The fixed charge.  */
@@ -72,7 +72,7 @@ public class Example_04 extends SimEM {
               
         fixedCharge = new PointCharge();
         fixedCharge.setCharge(chargeFixed);
-        fixedCharge.setPosition(new Vector3d(0., -0.8, 0.));
+        fixedCharge.setPosition(new Vector3d(0., -1., 0.));
         fixedCharge.setDirection(new Vector3d(0, 1, 0));
         fixedCharge.setPickable(false);
         fixedCharge.setRotable(false);

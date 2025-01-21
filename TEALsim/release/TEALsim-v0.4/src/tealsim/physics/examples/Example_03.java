@@ -52,7 +52,7 @@ public class Example_03 extends SimEM {
     /** The vector position of the charge.  */
     Vector3d floatingChargePos;
     /** The radius of the sphere representing the charge.  */
-    double chargeRad = 0.2;
+    double chargeRad = 0.1;
     /** The mass of charge. */
     double chargeMass = 3.5;
     /** The charge of the charge. */
@@ -69,7 +69,7 @@ public class Example_03 extends SimEM {
        
         BoundingSphere bs = new BoundingSphere(new Point3d(0, 1.6, 0), 03.5);
         theEngine.setBoundingArea(bs);
-        theEngine.setDeltaTime(0.02); // Was 0.005
+        theEngine.setDeltaTime(0.01); // Was 0.005
         theEngine.setDamping(0.);  
         mViewer.setBoundingArea(bs);
         
@@ -78,7 +78,7 @@ public class Example_03 extends SimEM {
         floatingCharge.setID("Charge");
         floatingCharge.setCharge(charge);
         floatingCharge.setDirection(new Vector3d(0., 1., 0.));
-        floatingChargePos = new Vector3d(0., 1.25, 0.);
+        floatingChargePos = new Vector3d(0., 1.0, 0.);
         floatingCharge.setPickable(true);
         floatingCharge.setRotable(true);
         floatingCharge.setMoveable(true);
@@ -103,7 +103,7 @@ public class Example_03 extends SimEM {
         // We create a "wall" that the floating coil will interact with
         
 		// Wall constructor.  		
-        Wall wall = new Wall(new Vector3d(0., 0, 0.), 
+        Wall wall = new Wall(new Vector3d(0., -.1, 0.), 
         		new Vector3d(2., 0., 0.), new Vector3d(0., 0., 2.));
         wall.setElasticity(1.);
         addElement(wall);
@@ -131,8 +131,8 @@ public class Example_03 extends SimEM {
 		// Graph constructor.
 		position_graph = new Graph();		
 		position_graph.setSize(150, 400);		
-		position_graph.setXRange(0., 6.);		
-		position_graph.setYRange(0., 2.);
+		position_graph.setXRange(0., 3.);		
+		position_graph.setYRange(0., 1.2);
 		position_graph.setWrap(true);
 		position_graph.setClearOnWrap(true);
 		position_graph.setXLabel("Time");		

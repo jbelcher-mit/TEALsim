@@ -128,7 +128,7 @@ public class MagnetostaticPendulum extends SimEM {
 
         // Building the world.
         theEngine.setDamping(0.0);
-        theEngine.setGravity(new Vector3d(0., -.3,0.));
+        theEngine.setGravity(new Vector3d(0., -9.8,0.));
 
         Rendered nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
@@ -211,8 +211,8 @@ public class MagnetostaticPendulum extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
-        graph.setXRange(0., 75.);
-        graph.setYRange(-0.005, 0.02);
+        graph.setXRange(0., 15.);
+        graph.setYRange(-0.005, 400);
         graph.setXLabel("Time");
         graph.setYLabel("Energy");
  
@@ -232,8 +232,8 @@ public class MagnetostaticPendulum extends SimEM {
         label4.setFont(label3.getFont().deriveFont(Font.BOLD));
 
         eGraph = new MagnetostaticPendulumTwoBodyEnergyPlot();
-        eGraph.setPlotValue(0);
-        eGraph.setBodyOne(swingingMagnet);
+        eGraph.setPlotValue(0);  
+        eGraph.setBodyOne(swingingMagnet);   
         eGraph.setBodyTwo(stationaryMagnet);
         eGraph.setIndObj(theEngine);
         graph.addPlotItem(eGraph);
@@ -309,7 +309,7 @@ public class MagnetostaticPendulum extends SimEM {
         // Building the GUI.
         PropertyDouble MuSlider = new PropertyDouble();
         MuSlider.setText("Player Mu:");
-        MuSlider.setMinimum(-500.);
+        MuSlider.setMinimum(-20000.);
         MuSlider.setMaximum(0.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
@@ -355,7 +355,7 @@ public class MagnetostaticPendulum extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(.5);
+        theEngine.setDeltaTime(.04);
         mSEC.init();
 
         resetCamera();

@@ -130,7 +130,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., -9.8,0.));
 
-        Rendered nativeObject01 = new Rendered(); 
+        nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
 
         ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .1, lengthPendulum));
@@ -454,17 +454,10 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
- //               Vector3d cali = swingingMagnet.getPosition();
- //               Vector3d temp = new Vector3d(cali);
- //               Vector3d center = new Vector3d(0.,25.,0.);
-//               temp.sub(center);
- //               double distance = temp.length();
                 Vector3d cali = swingingMagnet.getPosition();
- //        	    Vector3d hetti = stationaryMagnet.getPosition();
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
- //               nativeObject01.setDirection(reference);
- 
+                nativeObject01.setDirection(reference);
                  score.setText(String.valueOf(time));
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
