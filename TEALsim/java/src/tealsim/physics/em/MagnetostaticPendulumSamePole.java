@@ -56,7 +56,7 @@ import teal.visualization.dlic.DLIC;
 // from Example_01
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
+
 import java.beans.PropertyChangeEvent;
 import javax.media.j3d.*;
 import javax.vecmath.*;
@@ -83,6 +83,10 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 	// the same id as in other applications, see the ElectrostaticPendulum  belcher 12/14/2024
 
     private static final long serialVersionUID = 3256443586278208051L;
+    /** The friction slider. */
+    PropertyDouble frictionSlider = new PropertyDouble();
+    /** The friction in the world. */
+    double friction;
     Graph graph;
     MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
     
@@ -130,6 +134,23 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         // Building the world.
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., -9.8,0.));
+        
+        // create the sliders to control the amount of friction in the model
+        frictionSlider.setText("Friction");
+        frictionSlider.setMinimum(0.);
+        frictionSlider.setMaximum(5.);
+        frictionSlider.setPaintTicks(true);
+        frictionSlider.addPropertyChangeListener("value", this);
+        frictionSlider.setValue(0.0);
+        frictionSlider.setVisible(true);
+
+        // add the slider to a control group and add this to the scene
+
+        ControlGroup controls = new ControlGroup();
+        controls.setText("Parameters");
+        controls.add(frictionSlider);
+        addElement(controls);
+
 
         nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
@@ -336,7 +357,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
         //addElement(MuSlider);
         MuSlider.setVisible(true);
-        label = new JLabel("Current Time:");
+        label = new JLabel("Current angle from vertical:");
         score = new JLabel();
         label.setBounds(40, 595, 140, 50);
         score.setBounds(220, 595, 40, 50);
@@ -417,9 +438,6 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         }
     }
 
-    public void propertyChange(PropertyChangeEvent pce) {
-        super.propertyChange(pce);
-    }
 
     public void reset(double heightSupport, double lengthPendulum) {
         mSEC.stop();
@@ -437,7 +455,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
 
     public void resetCamera() {
-    	mViewer.setLookAt(new Point3d(0.,.8,4.), new Point3d(0,0,0), new Vector3d(0,1,0));
+    	mViewer.setLookAt(new Point3d(0.,.6,3.), new Point3d(0,0,0), new Vector3d(0,1,0));
 
     }
 
@@ -475,14 +493,16 @@ public class MagnetostaticPendulumSamePole extends SimEM {
                 double time = theEngine.getTime();
                 double currentMu = dummyMagnet.getMu();
                 swingingMagnet.setMu(currentMu);
-                stationaryMagnet.setMu(-1.*currentMu);
+                stationaryMagnet.setMu(-2.*currentMu);
                 Vector3d cali = swingingMagnet.getPosition();
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
                 nativeObject01.setDirection(reference);
-
-                 score.setText(String.valueOf(time));
-                score.setText(String.valueOf(time));
+                double angle=-90.;
+                angle=(180./Math.PI)*Math.atan2(cali.x,heightSupport-cali.y);
+            	TDebug.println(0, " x " + cali.x + " y " + cali.y + " z " +cali.z + " angle " + angle);
+                 score.setText(String.valueOf(angle));
+                score.setText(String.valueOf(angle));
                 if (actionEnabled) {
                     if (testBounds.intersect(new Point3d(swingingMagnet.getPosition()))) {
                         System.out.println("congratulations");
@@ -500,6 +520,16 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         }
     }
 
-  
+    /** Define the action initiated by the slider (i.e., set theEngine damping). 
+     * @param pce The property change event when the friction slider is changed. */
+    public void propertyChange(PropertyChangeEvent pce) {
+        Object source = pce.getSource();
+        if (source == frictionSlider) {
+            friction = ((Double) pce.getNewValue()).doubleValue();
+            theEngine.setDamping(friction);
+        } else {
+            super.propertyChange(pce);
+        }
+    }   
 
 }
