@@ -113,7 +113,7 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
 		Vector3d r = new Vector3d();
 		r.sub(pos1,pos2);
 		double rlength = r.length();
-        double z =r.z;
+        double z = r.z;
         double x = r.x;
         double y = r.y;
 

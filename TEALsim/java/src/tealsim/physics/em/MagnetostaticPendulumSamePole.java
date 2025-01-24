@@ -101,6 +101,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
     JLabel score;
     double minScore = 100000000.;
     CylindricalBarMagnet swingingMagnet;
+    CylindricalBarMagnet dummyMagnet;
     CylindricalBarMagnet stationaryMagnet;
     Rendered nativeObject01;
     Watcher watch;
@@ -168,7 +169,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         double MagnetRadius = 1.;
         double MagnetRadius1 = 0.;
 
-        CylindricalBarMagnet stationaryMagnet = new CylindricalBarMagnet();
+        stationaryMagnet = new CylindricalBarMagnet();
         stationaryMagnet.setRadius(MagnetRadius);
         stationaryMagnet.setMass(2.);
         stationaryMagnet.setMu(fixedMu);
@@ -185,6 +186,23 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
         stationaryMagnet.setCollisionController(sccx);
         addElement(stationaryMagnet);
+        
+        dummyMagnet = new CylindricalBarMagnet();
+        dummyMagnet.setRadius(MagnetRadius);
+        dummyMagnet.setMass(2.);
+        dummyMagnet.setMu(fixedMu);
+        dummyMagnet.setID("dummyMagnet");
+        dummyMagnet.setPickable(false);
+        dummyMagnet.setColliding(false);
+        dummyMagnet.setGeneratingP(true);
+        dummyMagnet.setPosition(new Vector3d(0., MagnetRadius1,fixedRadius));
+        dummyMagnet.setMoveable(false);
+        dummyMagnet.setRotable(false);
+        SphereCollisionController sccx1 = new SphereCollisionController(dummyMagnet);
+        sccx.setRadius(MagnetRadius);
+        sccx.setTolerance(0.1);
+        sccx.setMode(SphereCollisionController.WALL_SPHERE);
+        dummyMagnet.setCollisionController(sccx);
         
         swingingMagnet = new CylindricalBarMagnet();
         swingingMagnet.setRadius(MagnetRadius);
@@ -308,12 +326,12 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
         // Building the GUI.
         MuSlider = new PropertyDouble();
-        MuSlider.setText("Player Mu:");
+        MuSlider.setText("Dipole Moment:");
         MuSlider.setMinimum(-1500.);
         MuSlider.setMaximum(0.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
-        MuSlider.addRoute(swingingMagnet, "Mu");
+        MuSlider.addRoute(dummyMagnet, "Mu");
         MuSlider.setValue(-785);
 
         //addElement(MuSlider);
@@ -455,10 +473,14 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
+                double currentMu = dummyMagnet.getMu();
+                swingingMagnet.setMu(currentMu);
+                stationaryMagnet.setMu(-1.*currentMu);
                 Vector3d cali = swingingMagnet.getPosition();
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
                 nativeObject01.setDirection(reference);
+
                  score.setText(String.valueOf(time));
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
