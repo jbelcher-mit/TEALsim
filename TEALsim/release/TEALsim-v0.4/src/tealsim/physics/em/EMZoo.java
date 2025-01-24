@@ -280,7 +280,7 @@ public class EMZoo extends SimEM implements SelectListener {
         newCharge.setColliding(true);
         newCharge.setGeneratingP(true);
         SphereCollisionController sccx = new SphereCollisionController(newCharge);
-        sccx.setRadius(0.6);
+        sccx.setRadius(.6);
         sccx.setTolerance(0.1);
         //		sccx.setElasticity(0.);
         //		sccx.setMode(SphereCollisionController.WALL_SPHERE);

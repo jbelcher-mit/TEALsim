@@ -112,7 +112,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
     
     protected FieldConvolution mDLIC = null;
     FieldLineManager fmanager = null;
-    
+    PropertyDouble MuSlider;
     double lengthPendulum=20.; 
     
     double heightSupport = 25.;
@@ -163,14 +163,14 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
         // Set magnetic dipole characteristics
-        double fixedMu = 55.;
+        double fixedMu = 785.;
         double fixedRadius =0.;
         double MagnetRadius = 1.;
         double MagnetRadius1 = 0.;
 
         CylindricalBarMagnet stationaryMagnet = new CylindricalBarMagnet();
         stationaryMagnet.setRadius(MagnetRadius);
-        stationaryMagnet.setMass(.05);
+        stationaryMagnet.setMass(2.);
         stationaryMagnet.setMu(fixedMu);
         stationaryMagnet.setID("stationaryMagnet");
         stationaryMagnet.setPickable(false);
@@ -294,10 +294,10 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         }
 //        }
         // put field lines on stationary magnet
-        maxStep = 200;
-        numberFLA = 5;
+        maxStep = 800;
+        numberFLA = 15;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(stationaryMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+            RelativeFLine fl = new RelativeFLine(stationaryMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
@@ -307,14 +307,15 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         theEngine.setBoundingArea(new BoundingSphere(new Point3d(), 12));
 
         // Building the GUI.
-        PropertyDouble MuSlider = new PropertyDouble();
+        MuSlider = new PropertyDouble();
         MuSlider.setText("Player Mu:");
-        MuSlider.setMinimum(-20000.);
+        MuSlider.setMinimum(-1500.);
         MuSlider.setMaximum(0.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
         MuSlider.addRoute(swingingMagnet, "Mu");
-        MuSlider.setValue(-4000);
+        MuSlider.setValue(-785);
+
         //addElement(MuSlider);
         MuSlider.setVisible(true);
         label = new JLabel("Current Time:");

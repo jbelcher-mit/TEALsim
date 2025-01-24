@@ -306,7 +306,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(swingingCharge, "charge");
-        chargeSlider.setValue(50);
+        chargeSlider.setValue(100);
         //addElement(chargeSlider);
         chargeSlider.setVisible(true);
         label = new JLabel("Current Time:");
@@ -437,12 +437,13 @@ public class ElectrostaticPendulumSameSign extends SimEM {
             if (theEngine != null) {
                 double time = theEngine.getTime();
                 Vector3d cali = swingingCharge.getPosition();
+                double qtest = swingingCharge.getCharge();
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
           		System.out.println("    ");
  //           	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
          	    Vector3d hetti = fixedCharge.getPosition();
-//            	TDebug.println(0, "fixedCharge   "  + " x pos " + hetti.x + " y pos " + hetti.y + " z pos "+ hetti.z);
+           	TDebug.println(0, "swingingCharge   "  + qtest);
                 nativeObject01.setDirection(reference);
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
