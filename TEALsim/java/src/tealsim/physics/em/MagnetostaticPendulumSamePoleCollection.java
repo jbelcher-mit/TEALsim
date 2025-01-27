@@ -77,7 +77,7 @@ import teal.util.TDebug;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class MagnetostaticPendulumSamePole extends SimEM {
+public class MagnetostaticPendulumSamePoleCollection extends SimEM {
 	
 	//  note I am declaring a serialVersionUID here although I have no idea what this means and it is
 	// the same id as in other applications, see the ElectrostaticPendulum  belcher 12/14/2024
@@ -122,7 +122,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
     
     double heightSupport = 25.;
 
-    public MagnetostaticPendulumSamePole() {
+    public MagnetostaticPendulumSamePoleCollection() {
 
         super();
         title = "Magnetostatic Pendulum Same Pole";
@@ -164,7 +164,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         addElement(nativeObject01);
         
         
-        double scale3DS = 3.*(1.); // this is an overall scale factor for this .3DS object
+        double scale3DS = 3.; // this is an overall scale factor for this .3DS object
         // Creating components.
         Loader3DS max = new Loader3DS();
         BranchGroup bg01 = 
@@ -185,7 +185,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
         // Set magnetic dipole characteristics
-        double fixedMu = 2000.;
+        double fixedMu = 20.;
         double fixedRadius =0.;
         double MagnetRadius = 1.;
         double MagnetRadius1 = 0.;
@@ -228,7 +228,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         swingingMagnet = new CylindricalBarMagnet();
         swingingMagnet.setRadius(MagnetRadius);
         //swingingMagnet.setPauliDistance(4.*MagnetRadius);
-        swingingMagnet.setMass(5.);
+        swingingMagnet.setMass(2.);
         swingingMagnet.setMu(0);
         swingingMagnet.setID("swingingMagnet");
         swingingMagnet.setPickable(false);
@@ -251,7 +251,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-0.005, 2000);
+        graph.setYRange(-0.005, 400);
         graph.setXLabel("Time in secs divided by sqrt(10)");
         graph.setYLabel("Energy");
  
@@ -310,8 +310,8 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on swinging magnet
-        int numberFLA = 5;
-        maxStep = 500;
+        int numberFLA = 260;
+        maxStep = 1000;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
             fl.setType(Field.B_FIELD);
@@ -349,13 +349,12 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         // Building the GUI.
         MuSlider = new PropertyDouble();
         MuSlider.setText("Dipole Moment");
-        MuSlider.setMinimum(-8000.);
+        MuSlider.setMinimum(-1500.);
         MuSlider.setMaximum(0.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
-  //      MuSlider.addRoute(dummyMagnet, "Mu");
         MuSlider.addRoute(dummyMagnet, "Mu");
-        MuSlider.setValue(-400);
+        MuSlider.setValue(25);
 
         //addElement(MuSlider);
         MuSlider.setVisible(true);
@@ -397,7 +396,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(.02);
+        theEngine.setDeltaTime(.01);
         mSEC.init();
 
         resetCamera();
@@ -494,15 +493,9 @@ public class MagnetostaticPendulumSamePole extends SimEM {
             if (theEngine != null) {
                 double time = theEngine.getTime();
                 double currentMu = dummyMagnet.getMu();
-                double currentMuS = stationaryMagnet.getMu();
-               	TDebug.println(0, " time  " + time + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
-                double newMu= currentMu/8.;
-               	TDebug.println(0, " time  " + time + " newMu " + newMu);
-                swingingMagnet.setMu(newMu);
-                double resetMu = swingingMagnet.getMu();                
-             	TDebug.println(0, " time  " + time + " resetMu " + resetMu);
-  //              stationaryMagnet.setMu(-2.*currentMu);
-    //            theEngine.requestRefresh();
+                swingingMagnet.setMu(currentMu);
+                stationaryMagnet.setMu(-2.*currentMu);
+                theEngine.requestRefresh();
                 Vector3d cali = swingingMagnet.getPosition();
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
@@ -510,10 +503,9 @@ public class MagnetostaticPendulumSamePole extends SimEM {
                 double angle=-90.;
                 angle=(180./Math.PI)*Math.atan2(cali.x,heightSupport-cali.y);
  //           	TDebug.println(0, " time  " + time + " x " + cali.x + " y " + cali.y + " z " +cali.z + " angle " + angle);
-                double scale = cali.y/100;
-                 score.setText(String.valueOf(scale));
-                score.setText(String.valueOf(scale));
-
+                 score.setText(String.valueOf(cali.y));
+                score.setText(String.valueOf(cali.y));
+               	TDebug.println(0, " time  " + time + " currentMu " + currentMu);
                 if (actionEnabled) {
                     if (testBounds.intersect(new Point3d(swingingMagnet.getPosition()))) {
                         System.out.println("congratulations");
