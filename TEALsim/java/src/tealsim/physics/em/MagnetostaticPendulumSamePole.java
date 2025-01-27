@@ -185,7 +185,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
         // Set magnetic dipole characteristics
-        double fixedMu = 2000.;
+        double fixedMu = 890.;
         double fixedRadius =0.;
         double MagnetRadius = 1.;
         double MagnetRadius1 = 0.;
@@ -211,7 +211,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         dummyMagnet = new CylindricalBarMagnet();
         dummyMagnet.setRadius(MagnetRadius);
         dummyMagnet.setMass(2.);
-        dummyMagnet.setMu(fixedMu);
+        dummyMagnet.setMu(1.);
         dummyMagnet.setID("dummyMagnet");
         dummyMagnet.setPickable(false);
         dummyMagnet.setColliding(false);
@@ -251,22 +251,22 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-0.005, 2000);
+        graph.setYRange(-0.005, .15);
         graph.setXLabel("Time in secs divided by sqrt(10)");
-        graph.setYLabel("Energy");
+        graph.setYLabel("Energy (Joules)");
  
-        JLabel label1 = new JLabel("Magnetic Energy (Joules)");
+        JLabel label1 = new JLabel("Magnetic Energy");
         label1.setForeground(Color.RED);
         //label1.setBounds(660, 20, 200, 24);
         label1.setFont(label1.getFont().deriveFont(Font.BOLD));
-        JLabel label2 = new JLabel("Kinetic Energy (Joules)");
+        JLabel label2 = new JLabel("Kinetic Energy");
         label2.setForeground(Color.BLUE);
         //label2.setBounds(625, 44, 200, 24);
         label2.setFont(label2.getFont().deriveFont(Font.BOLD));
-        JLabel label3 = new JLabel("Gravitational Potential Energy (Joules)");
+        JLabel label3 = new JLabel("Gravitational Potential Energy");
         label3.setForeground(Color.green);
         label3.setFont(label3.getFont().deriveFont(Font.BOLD));
-        JLabel label4 = new JLabel("Total Energy (Joules)");
+        JLabel label4 = new JLabel("Total Energy");
         label4.setForeground(Color.BLACK);
         label4.setFont(label3.getFont().deriveFont(Font.BOLD));
 
@@ -348,14 +348,14 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
         // Building the GUI.
         MuSlider = new PropertyDouble();
-        MuSlider.setText("Dipole Moment");
-        MuSlider.setMinimum(-8000.);
-        MuSlider.setMaximum(0.);
+        MuSlider.setText("Ratio m/M");
+        MuSlider.setMinimum(0.);
+        MuSlider.setMaximum(2.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
   //      MuSlider.addRoute(dummyMagnet, "Mu");
         MuSlider.addRoute(dummyMagnet, "Mu");
-        MuSlider.setValue(-400);
+        MuSlider.setValue(.1);
 
         //addElement(MuSlider);
         MuSlider.setVisible(true);
@@ -493,17 +493,18 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
+                Vector3d cali = swingingMagnet.getPosition();
                 double currentMu = dummyMagnet.getMu();
                 double currentMuS = stationaryMagnet.getMu();
-               	TDebug.println(0, " time  " + time + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
-                double newMu= currentMu/8.;
+               	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
+              double newMu=-(5./2.4748)*currentMu*currentMuS;
                	TDebug.println(0, " time  " + time + " newMu " + newMu);
                 swingingMagnet.setMu(newMu);
                 double resetMu = swingingMagnet.getMu();                
              	TDebug.println(0, " time  " + time + " resetMu " + resetMu);
   //              stationaryMagnet.setMu(-2.*currentMu);
     //            theEngine.requestRefresh();
-                Vector3d cali = swingingMagnet.getPosition();
+  
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
                 nativeObject01.setDirection(reference);
