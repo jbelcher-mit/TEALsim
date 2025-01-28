@@ -135,21 +135,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., -9.8,0.));
         
-        // create the sliders to control the amount of friction in the model
-        frictionSlider.setText("Friction");
-        frictionSlider.setMinimum(0.);
-        frictionSlider.setMaximum(5.);
-        frictionSlider.setPaintTicks(true);
-        frictionSlider.addPropertyChangeListener("value", this);
-        frictionSlider.setValue(0.0);
-        frictionSlider.setVisible(true);
-
-        // add the slider to a control group and add this to the scene
-
-        ControlGroup controls = new ControlGroup();
-        controls.setText("Parameters");
-        controls.add(frictionSlider);
-        addElement(controls);
+ 
 
 
         nativeObject01 = new Rendered(); 
@@ -251,8 +237,8 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-0.005, .15);
-        graph.setXLabel("Time in secs divided by sqrt(10)");
+        graph.setYRange(-0.005, .12);
+        graph.setXLabel("Time in sec times sqrt(10)");
         graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Magnetic Energy");
@@ -279,10 +265,10 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         VisualizationControl visControl;
         JTaskPaneGroup params, graphs;
         params = new JTaskPaneGroup();
-        params.setText("Parameters");
+        params.setText("Parameters2");
 //        params.add(slider);
         graphs = new JTaskPaneGroup();
-        graphs.setText("Graph");
+        graphs.setText("Graph of the Three Enegies and their Total");
         graphs.add(label1);
         graphs.add(label2);
         graphs.add(label3);
@@ -298,8 +284,8 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         visControl.setFieldLineManager(fmanager);
         visControl.setColorPerVertex(false);
         addElement(graphs);
-        addElement(params);
-        addElement(visControl);
+//        addElement(params);
+ //       addElement(visControl);
  		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
 		swingingMagnet.addConstraint(arc);
  		
@@ -348,7 +334,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
         // Building the GUI.
         MuSlider = new PropertyDouble();
-        MuSlider.setText("Ratio m/M");
+        MuSlider.setText("Ratio |m/M|");
         MuSlider.setMinimum(0.);
         MuSlider.setMaximum(2.);
         MuSlider.setBounds(40, 535, 415, 50);
@@ -372,11 +358,28 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
         //JTaskPane tp = new JTaskPane();
         ControlGroup params1 = new ControlGroup();
-        params1.setText("Parameters1");
+        params1.setText("Control Magnet Moment of Swinging Magnet Compared to Stationary Magnet");
         params1.add(MuSlider);
         params1.add(label);
         params1.add(score);
         addElement(params1);
+        
+        // create the slider to control the amount of friction in the model
+        frictionSlider.setText("Friction");
+        frictionSlider.setMinimum(0.);
+        frictionSlider.setMaximum(5.);
+        frictionSlider.setPaintTicks(true);
+        frictionSlider.addPropertyChangeListener("value", this);
+        frictionSlider.setValue(0.0);
+        frictionSlider.setVisible(true);
+
+        // add the slider to a control group and add this to the scene
+
+        ControlGroup controls = new ControlGroup();
+        controls.setText("Control Friction in the World");
+        controls.add(frictionSlider);
+        addElement(controls);
+        
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
@@ -416,7 +419,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
     void addActions() {
 
-        TealAction ta = new TealAction("EM Video Game", this);
+        TealAction ta = new TealAction("Magnetostatic Pendulum Same Pole", this);
         addAction("Help", ta);
 
         ta = new TealAction("Level Complete", "Level Complete", this);
@@ -427,9 +430,9 @@ public class MagnetostaticPendulumSamePole extends SimEM {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("EM Video Game") == 0) {
+        if (e.getActionCommand().compareToIgnoreCase("Magnetostatic Pendulum Same Pole") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/magpendulumsame.html");
         	}
         } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
         	if(mFramework instanceof TFramework) {
@@ -496,12 +499,12 @@ public class MagnetostaticPendulumSamePole extends SimEM {
                 Vector3d cali = swingingMagnet.getPosition();
                 double currentMu = dummyMagnet.getMu();
                 double currentMuS = stationaryMagnet.getMu();
-               	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
-              double newMu=-(5./2.4748)*currentMu*currentMuS;
-               	TDebug.println(0, " time  " + time + " newMu " + newMu);
+  //             	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
+              double newMu=-(.8195)*currentMu*currentMuS;
+ //              	TDebug.println(0, " time  " + time + " newMu " + newMu);
                 swingingMagnet.setMu(newMu);
                 double resetMu = swingingMagnet.getMu();                
-             	TDebug.println(0, " time  " + time + " resetMu " + resetMu);
+ //            	TDebug.println(0, " time  " + time + " resetMu " + resetMu);
   //              stationaryMagnet.setMu(-2.*currentMu);
     //            theEngine.requestRefresh();
   
