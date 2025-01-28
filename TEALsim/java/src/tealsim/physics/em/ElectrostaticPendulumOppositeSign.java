@@ -38,6 +38,7 @@ import teal.sim.control.VisualizationControl;
 import teal.sim.engine.EngineObj;
 import teal.sim.engine.TEngine;
 import teal.physics.em.SimEM;
+import teal.physics.em.CylindricalBarMagnet;
 import teal.physics.em.EMEngine;
 import teal.physics.physical.Wall;
 import teal.physics.em.PointCharge;
@@ -77,6 +78,10 @@ import teal.util.TDebug;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class ElectrostaticPendulumOppositeSign extends SimEM {
+    /** The friction slider. */
+    PropertyDouble frictionSlider = new PropertyDouble();
+    /** The friction in the world. */
+    double friction;
     Graph graph;
     ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
     
@@ -100,6 +105,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
     double minScore = 100000000.;
     PointCharge swingingCharge;
     PointCharge fixedCharge;
+    PointCharge dummyCharge;
     Rendered nativeObject01;
     Watcher watch;
     double wallscale = 2.0;
@@ -169,7 +175,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         fixedCharge.setRadius(pointChargeRadius);
         //fixedCharge.setPauliDistance(4.*pointChargeRadius);
         fixedCharge.setMass(1.0);
-        fixedCharge.setCharge(100.0);
+        fixedCharge.setCharge(-223.0);
         fixedCharge.setID("fixedCharge");
         fixedCharge.setPickable(false);
         fixedCharge.setColliding(true);
@@ -183,11 +189,27 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         fixedCharge.setCollisionController(sccx);
         addElement(fixedCharge);
 
+        dummyCharge = new PointCharge();
+        dummyCharge.setMass(2.);
+        dummyCharge.setCharge(1.);
+        dummyCharge.setID("dummyCharge");
+        dummyCharge.setPickable(false);
+        dummyCharge.setColliding(false);
+        dummyCharge.setGeneratingP(true);
+  
+        dummyCharge.setMoveable(false);
+        dummyCharge.setRotable(false);
+        SphereCollisionController sccx1 = new SphereCollisionController(dummyCharge);
+        sccx.setRadius(1.);
+        sccx.setTolerance(0.1);
+        sccx.setMode(SphereCollisionController.WALL_SPHERE);
+//        dummyCharge.setCollisionController(sccx);
+        
 
         swingingCharge = new PointCharge();
         swingingCharge.setRadius(pointChargeRadius);
         //swingingCharge.setPauliDistance(4.*pointChargeRadius);
-        swingingCharge.setMass(1.0);
+        swingingCharge.setMass(5.0);
         swingingCharge.setCharge(6);
         swingingCharge.setID("swingingCharge");
         swingingCharge.setPickable(false);
@@ -200,8 +222,8 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         sccx.setRadius(pointChargeRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        swingingCharge.addPropertyChangeListener("charge",this );
-        swingingCharge.addPropertyChangeListener("position", this);
+//        swingingCharge.addPropertyChangeListener("charge",this );
+//        swingingCharge.addPropertyChangeListener("position", this);
         addElement(swingingCharge);
         
         // ***************************************************************************
@@ -209,10 +231,10 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
-        graph.setXRange(0., 10.);
-        graph.setYRange(-500, 600);
+        graph.setXRange(0., 15.);
+        graph.setYRange(-.2, .2);
         graph.setXLabel("Time");
-        graph.setYLabel("Energy");
+        graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Electric Energy");
         label1.setForeground(Color.RED);
@@ -241,7 +263,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         params.setText("Parameters");
 //        params.add(slider);
         graphs = new JTaskPaneGroup();
-        graphs.setText("Graph");
+        graphs.setText("Graph of the Three Enegies and their Total");
         graphs.add(label1);
         graphs.add(label2);
         graphs.add(label3);
@@ -300,16 +322,16 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
 
         // Building the GUI.
         PropertyDouble chargeSlider = new PropertyDouble();
-        chargeSlider.setText("Swinging Charge:");
-        chargeSlider.setMinimum(-300.);
-        chargeSlider.setMaximum(0.);
+        chargeSlider.setText("Ratio |q/Q|");
+        chargeSlider.setMinimum(0.);
+        chargeSlider.setMaximum(2.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
-        chargeSlider.addRoute(swingingCharge, "charge");
-        chargeSlider.setValue(-50);
+        chargeSlider.addRoute(dummyCharge, "charge");
+        chargeSlider.setValue(.3);
         //addElement(chargeSlider);
         chargeSlider.setVisible(true);
-        label = new JLabel("Current Time:");
+        label = new JLabel("z value of bob:");
         score = new JLabel();
         label.setBounds(40, 595, 140, 50);
         score.setBounds(220, 595, 40, 50);
@@ -322,11 +344,29 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
 
         //JTaskPane tp = new JTaskPane();
         ControlGroup params1 = new ControlGroup();
-        params1.setText("Parameters");
+        params1.setText("Control Charge of Swinging Charge Compared to Stationary Charge");
         params1.add(chargeSlider);
         params1.add(label);
         params1.add(score);
         addElement(params1);
+        
+        
+        // create the slider to control the amount of friction in the model
+        frictionSlider.setText("Friction");
+        frictionSlider.setMinimum(0.);
+        frictionSlider.setMaximum(5.);
+        frictionSlider.setPaintTicks(true);
+        frictionSlider.addPropertyChangeListener("value", this);
+        frictionSlider.setValue(0.0);
+        frictionSlider.setVisible(true);
+
+        // add the slider to a control group and add this to the scene
+
+        ControlGroup controls = new ControlGroup();
+        controls.setText("Control Friction in the World");
+        controls.add(frictionSlider);
+        addElement(controls);
+        
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
@@ -358,7 +398,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
 
     void addActions() {
 
-        TealAction ta = new TealAction("Electrostatic Pendulum", this);
+        TealAction ta = new TealAction("Electrostatic Pendulum Opposite Sign", this);
         addAction("Help", ta);
 
         ta = new TealAction("Level Complete", "Level Complete", this);
@@ -369,21 +409,17 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("EM Video Game") == 0) {
+        if (e.getActionCommand().compareToIgnoreCase("Electrostatic Pendulum Opposite Sign") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/Ependulumopposite.html");
         	}
         } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/eEpendulumopposite.html");
         	}
         } else {
             super.actionPerformed(e);
         }
-    }
-
-    public void propertyChange(PropertyChangeEvent pce) {
-        super.propertyChange(pce);
     }
 
     public void reset(double heightSupport, double lengthPendulum) {
@@ -437,10 +473,23 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
             if (theEngine != null) {
                 double time = theEngine.getTime();
                 Vector3d cali = swingingCharge.getPosition();
+                double currentq = dummyCharge.getCharge();
+                double currentQ = fixedCharge.getCharge();
+  //             	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
+              double newQ=-currentq*currentQ;
+ //              	TDebug.println(0, " time  " + time + " newMu " + newMu);
+                swingingCharge.setCharge(newQ);
+                double resetCharge = swingingCharge.getCharge();  
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
+          		System.out.println("    ");
+ //           	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
+         	    Vector3d hetti = fixedCharge.getPosition();
+//           	TDebug.println(0, "swingingCharge   "  + qtest);
                 nativeObject01.setDirection(reference);
-                score.setText(String.valueOf(time));
+                double scale = cali.y/100;
+                score.setText(String.valueOf(scale));
+               score.setText(String.valueOf(scale));
                 if (actionEnabled) {
                     if (testBounds.intersect(new Point3d(swingingCharge.getPosition()))) {
                         System.out.println("congratulations");
@@ -458,6 +507,16 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         }
     }
 
-  
+    /** Define the action initiated by the slider (i.e., set theEngine damping). 
+     * @param pce The property change event when the friction slider is changed. */
+    public void propertyChange(PropertyChangeEvent pce) {
+        Object source = pce.getSource();
+        if (source == frictionSlider) {
+            friction = ((Double) pce.getNewValue()).doubleValue();
+            theEngine.setDamping(friction);
+        } else {
+            super.propertyChange(pce);
+        }
+    }   
 
 }

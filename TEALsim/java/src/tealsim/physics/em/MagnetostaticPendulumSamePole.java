@@ -238,7 +238,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
         graph.setYRange(-0.005, .12);
-        graph.setXLabel("Time in sec times sqrt(10)");
+        graph.setXLabel("Time");
         graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Magnetic Energy");
@@ -436,7 +436,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         	}
         } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/magpendulumsame.html");
         	}
         } else {
             super.actionPerformed(e);

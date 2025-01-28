@@ -233,7 +233,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
         graph.setYRange(-0.005, .14);
-        graph.setXLabel("Time in sec times sqrt(10)");
+        graph.setXLabel("Time");
         graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Electric Energy");
@@ -398,7 +398,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
 
     void addActions() {
 
-        TealAction ta = new TealAction("Electrostatic Pendulum", this);
+        TealAction ta = new TealAction("Electrostatic Pendulum Same Sign", this);
         addAction("Help", ta);
 
         ta = new TealAction("Level Complete", "Level Complete", this);
@@ -409,13 +409,13 @@ public class ElectrostaticPendulumSameSign extends SimEM {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("EM Video Game") == 0) {
+        if (e.getActionCommand().compareToIgnoreCase("Electrostatic Pendulum Same Sign") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/Ependulumsame.html");
         	}
         } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/eEpendulumsame.html");
         	}
         } else {
             super.actionPerformed(e);
