@@ -343,17 +343,17 @@ public class InverterMagneticConfiguration extends SimEM {
         int numberFLA = 35;
         maxStep = 200;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
+            RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.5);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-  //          fmanager.addFieldLine(fl);
+            fmanager.addFieldLine(fl);
         }
         
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(movingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.5);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+ //           fmanager.addFieldLine(fl);
         }
         
         numberFLA = 25;

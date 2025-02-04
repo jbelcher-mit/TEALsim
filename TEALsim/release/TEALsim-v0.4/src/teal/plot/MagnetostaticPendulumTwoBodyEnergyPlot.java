@@ -113,31 +113,31 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
 		Vector3d r = new Vector3d();
 		r.sub(pos1,pos2);
 		double rlength = r.length();
-        double z =r.z;
+        double z = r.z;
         double x = r.x;
         double y = r.y;
-
     	double mEnergy;
     	mEnergy = -m1*m2*(2.*y*y-x*x)/Math.pow(y*y+x*x, 5./2.);
-
     	double t = indObj.getTime();
     	//TDebug.println(0, "mEnergy: " + mEnergy );
-
     	double kEnergy;
     	double gpEnergy;
     	double totEnergy;
     	kEnergy = 0.5 * mass1 * vel1.lengthSquared() * 1.;
-
     	gpEnergy = mass1 *(9.8)*(pos1.y-5.) *1.;
-
      	kEnergy=kEnergy;
-     	mEnergy=mEnergy*.07661;
-        gpEnergy = gpEnergy;
+     	// the (4.*Math.PI) factor below comes because we have set mhu naught to 1 in 1 in teal.config.Teal
+     	mEnergy=mEnergy/(4.*Math.PI);
+
+    	double factor = 1./10000.;
+    	gpEnergy=gpEnergy*factor;
+    	kEnergy=kEnergy*factor;
+    	mEnergy=mEnergy*factor;
     	totEnergy = kEnergy + gpEnergy+mEnergy;
-    	totEnergy =mass1 *(9.8)*(20.) *1.;
+//    	totEnergy =mass1 *(9.8)*(20.) *1.;
 //    	TDebug.println(0, " mEnergy: " + mEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
  //   	TDebug.println(0,  mEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
-       	TDebug.println(0, kEnergy + ", " +gpEnergy + ", " + totEnergy);
+ //      	TDebug.println(0, kEnergy + ", " +gpEnergy + ", " + totEnergy);
 
 
 		double xrange [] = graph.getXRange();

@@ -32,7 +32,7 @@ import teal.ui.*;
  *  Each of the derived classes will deal with the complexity 
  *  of the supported data type. The goal is that collections of ProperyItems will
  *  be used in forms to provide application/simulation controls, in this case 
- *  they should be able to be managed by the layoutmanager of the inclosing form.
+ *  they should be able to be managed by the layout manager of the inclosing form.
  *  
  **/
 
@@ -52,7 +52,7 @@ public abstract class AbstractPropertyItem extends UIPanel
 		add(mLabel);
 	}
 	/**
-	 * A specialized Route for the PropertyItem automaticly 
+	 * A specialized Route for the PropertyItem automatically 
 	 * assigned to the 'value' property.
 	 * */
     public void addRoute(TElement target, String targetName)

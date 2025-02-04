@@ -76,7 +76,10 @@ import teal.util.TDebug;
 public class MagneticDisksPlanar extends SimEM {
 
     private static final long serialVersionUID = 3256443586278208051L;
-    
+    /** The friction slider. */
+    PropertyDouble frictionSlider = new PropertyDouble();
+    /** The friction in the world. */
+    double friction;
     /** An imported 3DS object (a hemisphere).  */
     Rendered importedObject01 = new Rendered();
     Node3D node01 = new Node3D();
@@ -113,6 +116,24 @@ public class MagneticDisksPlanar extends SimEM {
         // Building the world.
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., 0.,0.));
+        
+        // create the sliders to control the amount of friction in the model
+        frictionSlider.setText("Friction");
+        frictionSlider.setMinimum(0.);
+        frictionSlider.setMaximum(5.);
+        frictionSlider.setPaintTicks(true);
+        frictionSlider.addPropertyChangeListener("value", this);
+        frictionSlider.setValue(0.0);
+        frictionSlider.setVisible(true);
+        
+
+        // add the slider to a control group and add this to the scene
+
+        ControlGroup controls = new ControlGroup();
+        controls.setText("Parameters");
+        controls.add(frictionSlider);
+        addElement(controls);
+
 
         Rendered nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
@@ -224,12 +245,12 @@ public class MagneticDisksPlanar extends SimEM {
         
         // put field lines on moving magnet
         int numberFLA = 75;
- //       maxStep = 1200;
-        for (int j = 0; j <= numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+        maxStep = 2400;
+        for (int j = 0; j < numberFLA; j++) {
+            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 1.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
- //           fmanager.addFieldLine(fl);
+  //          fmanager.addFieldLine(fl);
         }
         
         for (int j = 0; j < numberFLA; j++) {
@@ -241,15 +262,15 @@ public class MagneticDisksPlanar extends SimEM {
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
-            fl.setKMax(maxStep);
+//            fl.setKMax(maxStep);
 //            fmanager.addFieldLine(fl);
         }
 //        }
         
         // put field lines on HelmholtzCoilLeft
      
-        for (int j = 0; j <= numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+        for (int j = 0; j < numberFLA; j++) {
+            RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI * 1.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
             fmanager.addFieldLine(fl);
@@ -327,7 +348,7 @@ public class MagneticDisksPlanar extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(.3);
+        theEngine.setDeltaTime(.1);
         mSEC.init();
 
         resetCamera();

@@ -56,7 +56,7 @@ import teal.visualization.dlic.DLIC;
 // from Example_01
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
+
 import java.beans.PropertyChangeEvent;
 import javax.media.j3d.*;
 import javax.vecmath.*;
@@ -83,6 +83,10 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
 	// the same id as in other applications, see the ElectrostaticPendulum  belcher 12/14/2024
 
     private static final long serialVersionUID = 3256443586278208051L;
+    /** The friction slider. */
+    PropertyDouble frictionSlider = new PropertyDouble();
+    /** The friction in the world. */
+    double friction;
     Graph graph;
     MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
     
@@ -101,6 +105,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
     JLabel score;
     double minScore = 100000000.;
     CylindricalBarMagnet swingingMagnet;
+    CylindricalBarMagnet dummyMagnet;
     CylindricalBarMagnet stationaryMagnet;
     Rendered nativeObject01;
     Watcher watch;
@@ -112,8 +117,8 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
     
     protected FieldConvolution mDLIC = null;
     FieldLineManager fmanager = null;
-    
-    double lengthPendulum=20.; 
+    PropertyDouble MuSlider;
+    double lengthPendulum=20; 
     
     double heightSupport = 25.;
 
@@ -129,6 +134,9 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         // Building the world.
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., -9.8,0.));
+        
+ 
+
 
         nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
@@ -142,7 +150,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         addElement(nativeObject01);
         
         
-        double scale3DS = 3.; // this is an overall scale factor for this .3DS object
+        double scale3DS = 3.*(1.); // this is an overall scale factor for this .3DS object
         // Creating components.
         Loader3DS max = new Loader3DS();
         BranchGroup bg01 = 
@@ -163,14 +171,14 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
         // Set magnetic dipole characteristics
-        double fixedMu = 55.;
+        double fixedMu = -890.;
         double fixedRadius =0.;
         double MagnetRadius = 1.;
         double MagnetRadius1 = 0.;
 
-        CylindricalBarMagnet stationaryMagnet = new CylindricalBarMagnet();
+        stationaryMagnet = new CylindricalBarMagnet();
         stationaryMagnet.setRadius(MagnetRadius);
-        stationaryMagnet.setMass(.05);
+        stationaryMagnet.setMass(2.);
         stationaryMagnet.setMu(fixedMu);
         stationaryMagnet.setID("stationaryMagnet");
         stationaryMagnet.setPickable(false);
@@ -186,10 +194,27 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         stationaryMagnet.setCollisionController(sccx);
         addElement(stationaryMagnet);
         
+        dummyMagnet = new CylindricalBarMagnet();
+        dummyMagnet.setRadius(MagnetRadius);
+        dummyMagnet.setMass(2.);
+        dummyMagnet.setMu(1.);
+        dummyMagnet.setID("dummyMagnet");
+        dummyMagnet.setPickable(false);
+        dummyMagnet.setColliding(false);
+        dummyMagnet.setGeneratingP(true);
+        dummyMagnet.setPosition(new Vector3d(0., MagnetRadius1,fixedRadius));
+        dummyMagnet.setMoveable(false);
+        dummyMagnet.setRotable(false);
+        SphereCollisionController sccx1 = new SphereCollisionController(dummyMagnet);
+        sccx.setRadius(MagnetRadius);
+        sccx.setTolerance(0.1);
+        sccx.setMode(SphereCollisionController.WALL_SPHERE);
+        dummyMagnet.setCollisionController(sccx);
+        
         swingingMagnet = new CylindricalBarMagnet();
         swingingMagnet.setRadius(MagnetRadius);
         //swingingMagnet.setPauliDistance(4.*MagnetRadius);
-        swingingMagnet.setMass(2.);
+        swingingMagnet.setMass(5.);
         swingingMagnet.setMu(0);
         swingingMagnet.setID("swingingMagnet");
         swingingMagnet.setPickable(false);
@@ -212,9 +237,9 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-600, 1000);
+        graph.setYRange(-.1, .2);
         graph.setXLabel("Time");
-        graph.setYLabel("Energy");
+        graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Magnetic Energy");
         label1.setForeground(Color.RED);
@@ -240,10 +265,10 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         VisualizationControl visControl;
         JTaskPaneGroup params, graphs;
         params = new JTaskPaneGroup();
-        params.setText("Parameters");
+        params.setText("Parameters2");
 //        params.add(slider);
         graphs = new JTaskPaneGroup();
-        graphs.setText("Graph");
+        graphs.setText("Graph of the Three Enegies and their Total");
         graphs.add(label1);
         graphs.add(label2);
         graphs.add(label3);
@@ -259,8 +284,8 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         visControl.setFieldLineManager(fmanager);
         visControl.setColorPerVertex(false);
         addElement(graphs);
-        addElement(params);
-        addElement(visControl);
+//        addElement(params);
+ //       addElement(visControl);
  		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
 		swingingMagnet.addConstraint(arc);
  		
@@ -272,7 +297,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         
         // put field lines on swinging magnet
         int numberFLA = 5;
-        maxStep = 200;
+        maxStep = 500;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
             fl.setType(Field.B_FIELD);
@@ -294,30 +319,33 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         }
 //        }
         // put field lines on stationary magnet
-        maxStep = 200;
-        numberFLA = 5;
+//        maxStep = 100;
+//        numberFLA = 5;
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(stationaryMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
+            RelativeFLine fl = new RelativeFLine(stationaryMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+  //
+          fmanager.addFieldLine(fl);
         }
 
         fmanager.setSymmetryCount(2);
         theEngine.setBoundingArea(new BoundingSphere(new Point3d(), 12));
 
         // Building the GUI.
-        PropertyDouble MuSlider = new PropertyDouble();
-        MuSlider.setText("Player Mu:");
+        MuSlider = new PropertyDouble();
+        MuSlider.setText("Ratio |m/M|");
         MuSlider.setMinimum(0.);
-        MuSlider.setMaximum(20000.);
+        MuSlider.setMaximum(2.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
-        MuSlider.addRoute(swingingMagnet, "Mu");
-        MuSlider.setValue(7000);
+  //      MuSlider.addRoute(dummyMagnet, "Mu");
+        MuSlider.addRoute(dummyMagnet, "Mu");
+        MuSlider.setValue(1.);
+
         //addElement(MuSlider);
         MuSlider.setVisible(true);
-        label = new JLabel("Current Time:");
+        label = new JLabel("z value of bob:");
         score = new JLabel();
         label.setBounds(40, 595, 140, 50);
         score.setBounds(220, 595, 40, 50);
@@ -329,12 +357,29 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         addElement(watch);
 
         //JTaskPane tp = new JTaskPane();
-//        ControlGroup params = new ControlGroup();
-        params.setText("Parameters");
-        params.add(MuSlider);
-        params.add(label);
-        params.add(score);
-        addElement(params);
+        ControlGroup params1 = new ControlGroup();
+        params1.setText("Control Magnet Moment of Swinging Magnet Compared to Stationary Magnet");
+        params1.add(MuSlider);
+        params1.add(label);
+        params1.add(score);
+        addElement(params1);
+        
+        // create the slider to control the amount of friction in the model
+        frictionSlider.setText("Friction");
+        frictionSlider.setMinimum(0.);
+        frictionSlider.setMaximum(5.);
+        frictionSlider.setPaintTicks(true);
+        frictionSlider.addPropertyChangeListener("value", this);
+        frictionSlider.setValue(0.0);
+        frictionSlider.setVisible(true);
+
+        // add the slider to a control group and add this to the scene
+
+        ControlGroup controls = new ControlGroup();
+        controls.setText("Control Friction in the World");
+        controls.add(frictionSlider);
+        addElement(controls);
+        
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
@@ -355,7 +400,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(.04);
+        theEngine.setDeltaTime(.02);
         mSEC.init();
 
         resetCamera();
@@ -374,7 +419,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
 
     void addActions() {
 
-        TealAction ta = new TealAction("EM Video Game", this);
+        TealAction ta = new TealAction("Magnetostatic Pendulum Opposite Pole", this);
         addAction("Help", ta);
 
         ta = new TealAction("Level Complete", "Level Complete", this);
@@ -385,28 +430,25 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("EM Video Game") == 0) {
+        if (e.getActionCommand().compareToIgnoreCase("Magnetostatic Pendulum Opposite Pole") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/magpendulumopposite.html");
         	}
         } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/magpendulumopposite.html");
         	}
         } else {
             super.actionPerformed(e);
         }
     }
 
-    public void propertyChange(PropertyChangeEvent pce) {
-        super.propertyChange(pce);
-    }
 
     public void reset(double heightSupport, double lengthPendulum) {
         mSEC.stop();
         mSEC.reset();
         resetCylindricalBarMagnet(heightSupport,lengthPendulum);
-        //theEngine.requestRefresh();
+        theEngine.requestRefresh();
         watch.setActionEnabled(true);
     }
 
@@ -418,7 +460,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
 
 
     public void resetCamera() {
-    	mViewer.setLookAt(new Point3d(0.,.8,4.), new Point3d(0,0,0), new Vector3d(0,1,0));
+    	mViewer.setLookAt(new Point3d(0.,.6,3.), new Point3d(0,0,-20), new Vector3d(0,1,0));
 
     }
 
@@ -455,11 +497,27 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
             if (theEngine != null) {
                 double time = theEngine.getTime();
                 Vector3d cali = swingingMagnet.getPosition();
+                double currentMu = dummyMagnet.getMu();
+                double currentMuS = stationaryMagnet.getMu();
+  //             	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
+              double newMu=(.8195)*currentMu*currentMuS;
+ //              	TDebug.println(0, " time  " + time + " newMu " + newMu);
+                swingingMagnet.setMu(newMu);
+                double resetMu = swingingMagnet.getMu();                
+ //            	TDebug.println(0, " time  " + time + " resetMu " + resetMu);
+  //              stationaryMagnet.setMu(-2.*currentMu);
+    //            theEngine.requestRefresh();
+  
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
                 nativeObject01.setDirection(reference);
-                 score.setText(String.valueOf(time));
-                score.setText(String.valueOf(time));
+                double angle=-90.;
+                angle=(180./Math.PI)*Math.atan2(cali.x,heightSupport-cali.y);
+ //           	TDebug.println(0, " time  " + time + " x " + cali.x + " y " + cali.y + " z " +cali.z + " angle " + angle);
+                double scale = cali.y/100;
+                 score.setText(String.valueOf(scale));
+                score.setText(String.valueOf(scale));
+
                 if (actionEnabled) {
                     if (testBounds.intersect(new Point3d(swingingMagnet.getPosition()))) {
                         System.out.println("congratulations");
@@ -477,6 +535,16 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         }
     }
 
-  
+    /** Define the action initiated by the slider (i.e., set theEngine damping). 
+     * @param pce The property change event when the friction slider is changed. */
+    public void propertyChange(PropertyChangeEvent pce) {
+        Object source = pce.getSource();
+        if (source == frictionSlider) {
+            friction = ((Double) pce.getNewValue()).doubleValue();
+            theEngine.setDamping(friction);
+        } else {
+            super.propertyChange(pce);
+        }
+    }   
 
 }

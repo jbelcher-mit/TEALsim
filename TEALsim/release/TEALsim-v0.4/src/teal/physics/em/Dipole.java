@@ -30,7 +30,7 @@ public abstract class Dipole extends EMObject
     protected boolean generatingEPotential = true;;
     protected double radius;
     protected double length;
-	protected double epsilon = 1.0;
+	protected double epsilon = 1.;
 	
   
 

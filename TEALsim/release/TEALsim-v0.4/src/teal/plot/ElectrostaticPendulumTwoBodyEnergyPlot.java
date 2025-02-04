@@ -125,12 +125,18 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	gpEnergy = m1 * (9.8)* (pos1.y-5.) *1.;
 
     	kEnergy=kEnergy*1.;
-    	gpEnergy = gpEnergy*0.002294623/0.00229456;
-    	eEnergy=eEnergy*0.000182588/0.00229456;
+    	gpEnergy = gpEnergy;
+    	// the (4.*Math.PI) factor below comes because we have set epsilon naught to 1 in 1 in teal.config.Teal
+    	eEnergy=eEnergy/(4.*Math.PI);
+    	
+    	double factor = 1./10000;
+    	gpEnergy=gpEnergy*factor;
+    	kEnergy=kEnergy*factor;
+    	eEnergy=eEnergy*factor;
 
     	totEnergy = kEnergy + gpEnergy+eEnergy;
 //    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
-    	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
+ //   	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {

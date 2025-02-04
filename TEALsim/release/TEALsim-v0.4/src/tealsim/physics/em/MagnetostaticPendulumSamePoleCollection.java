@@ -193,7 +193,7 @@ public class MagnetostaticPendulumSamePoleCollection extends SimEM {
         stationaryMagnet = new CylindricalBarMagnet();
         stationaryMagnet.setRadius(MagnetRadius);
         stationaryMagnet.setMass(2.);
-        stationaryMagnet.setMu(-fixedMu);
+        stationaryMagnet.setMu(fixedMu);
         stationaryMagnet.setID("stationaryMagnet");
         stationaryMagnet.setPickable(false);
         stationaryMagnet.setColliding(false);
@@ -229,7 +229,7 @@ public class MagnetostaticPendulumSamePoleCollection extends SimEM {
         swingingMagnet.setRadius(MagnetRadius);
         //swingingMagnet.setPauliDistance(4.*MagnetRadius);
         swingingMagnet.setMass(2.);
-        swingingMagnet.setMu(-20);
+        swingingMagnet.setMu(0);
         swingingMagnet.setID("swingingMagnet");
         swingingMagnet.setPickable(false);
         swingingMagnet.setColliding(true);
@@ -493,8 +493,8 @@ public class MagnetostaticPendulumSamePoleCollection extends SimEM {
             if (theEngine != null) {
                 double time = theEngine.getTime();
                 double currentMu = dummyMagnet.getMu();
-              swingingMagnet.setMu(-20);
-//                stationaryMagnet.setMu(-2.*currentMu);
+                swingingMagnet.setMu(currentMu);
+                stationaryMagnet.setMu(-2.*currentMu);
                 theEngine.requestRefresh();
                 Vector3d cali = swingingMagnet.getPosition();
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
