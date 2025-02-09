@@ -76,10 +76,17 @@ import teal.util.TDebug;
 public class InverterMagneticConfiguration extends SimEM {
 
     private static final long serialVersionUID = 3256443586278208051L;
-    /** The friction slider. */
-    PropertyDouble frictionSlider = new PropertyDouble();
+    /** The angle slider. */
+    PropertyDouble angleSlider = new PropertyDouble();
+    /** The angle of rotation*/
+    double rangle;  
     /** The friction in the world. */
     double friction;
+    PropertyDouble frictionSlider = new PropertyDouble();
+    /** The position of the central magnet*/
+    double position_x = 0.;  
+    PropertyDouble position_x_Slider = new PropertyDouble();
+    
     /** An imported 3DS object (a hemisphere).  */
     Rendered importedObject01 = new Rendered();
     Node3D node01 = new Node3D();
@@ -94,7 +101,10 @@ public class InverterMagneticConfiguration extends SimEM {
     JLabel label;
     JLabel score;
     double minScore = 100000000.;
+    
+    CylindricalBarMagnet centralMagnet;
     CylindricalBarMagnet movingMagnet;
+    
     Watcher watch;
     double wallscale = 2.0;
     double wheight = 3.0;
@@ -125,12 +135,32 @@ public class InverterMagneticConfiguration extends SimEM {
         frictionSlider.addPropertyChangeListener("value", this);
         frictionSlider.setValue(0.0);
         frictionSlider.setVisible(true);
+ 
 
+        position_x_Slider.setText("Position");
+        position_x_Slider.setMinimum(0.);
+        position_x_Slider.setMaximum(100.);
+        position_x_Slider.setPaintTicks(true);
+        position_x_Slider.addPropertyChangeListener("value", this);
+        position_x_Slider.setValue(0.0);
+        position_x_Slider.setVisible(true);
+
+        
+        // create the slider to control the rotation of the satellite magnets
+        angleSlider.setText("Rotation");
+        angleSlider.setMinimum(0.);
+        angleSlider.setMaximum(360.);
+        angleSlider.setPaintTicks(true);
+        angleSlider.addPropertyChangeListener("value", this);
+        angleSlider.setValue(0.0);
+        angleSlider.setVisible(true);
         // add the slider to a control group and add this to the scene
 
         ControlGroup controls = new ControlGroup();
         controls.setText("Parameters");
         controls.add(frictionSlider);
+        controls.add(angleSlider);
+        controls.add(position_x_Slider);
         addElement(controls);
 
         Rendered nativeObject01 = new Rendered(); 
@@ -172,10 +202,11 @@ public class InverterMagneticConfiguration extends SimEM {
         double fixedMuBig = 550;
         double fixedRadius =2.7;
         double MagnetRadius = 2.;
+ //       position_x = 0.;
         double MagnetRadiusSmall=MagnetRadius/4;
 
 
-        CylindricalBarMagnet centralMagnet = new CylindricalBarMagnet();
+        centralMagnet = new CylindricalBarMagnet();
         centralMagnet.setRadius(MagnetRadius);
         centralMagnet.setMass(.05);
         centralMagnet.setMu(fixedMuBig);
@@ -183,7 +214,7 @@ public class InverterMagneticConfiguration extends SimEM {
         centralMagnet.setPickable(false);
         centralMagnet.setColliding(false);
         centralMagnet.setGeneratingP(true);
-        centralMagnet.setPosition(new Vector3d(0., 0.,0.));
+        centralMagnet.setPosition(new Vector3d(position_x, 0.,0.));
         centralMagnet.setMoveable(false);
         centralMagnet.setRotable(false);
         SphereCollisionController sccx = new SphereCollisionController(centralMagnet);
@@ -479,7 +510,7 @@ for (int j = 0; j < numberFLA; j++) {
         params.add(MuSlider);
         params.add(label);
         params.add(score);
-        addElement(params);
+ //       addElement(params);
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
@@ -630,6 +661,13 @@ for (int j = 0; j < numberFLA; j++) {
         if (source == frictionSlider) {
             friction = ((Double) pce.getNewValue()).doubleValue();
             theEngine.setDamping(friction);
+            
+        }   else    if (source == position_x_Slider) {
+                position_x = ((Double) pce.getNewValue()).doubleValue();
+                Vector3d dummy = new Vector3d(position_x, 0.,0.);
+                TDebug.println(0,+position_x + "   " + dummy.x);
+ //               centralMagnet.setPosition(dummy);
+                
         } else {
             super.propertyChange(pce);
         }

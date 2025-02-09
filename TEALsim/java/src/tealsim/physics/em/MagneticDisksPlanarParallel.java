@@ -36,6 +36,7 @@ import teal.sim.engine.EngineObj;
 import teal.sim.engine.TEngine;
 import teal.physics.em.SimEM;
 import teal.physics.em.EMEngine;
+import teal.physics.physical.RectangularBox;
 import teal.physics.physical.Wall;
 import teal.physics.em.CylindricalBarMagnet;
 import teal.sim.properties.IsSpatial;
@@ -127,6 +128,15 @@ public class MagneticDisksPlanarParallel extends SimEM {
         nativeObject01.setDirection(new Vector3d(1.,0.,0.));
 //        addElement(nativeObject01);
         
+        // -> Rectangular Walls
+        RectangularBox box = new RectangularBox();
+        box.setPosition(new Vector3d(0., 0., 0.));
+        box.setOrientation(new Vector3d(1., 0., 0.));
+        box.setNormal(new Vector3d(0., 1., 0.));
+        box.setLength(50.);
+        box.setWidth(50.);
+        box.setOpen(true);
+        addElements(box.getWalls());
         
         double scale3DS = 3.; // this is an overall scale factor for this .3DS object
         // Creating components.
