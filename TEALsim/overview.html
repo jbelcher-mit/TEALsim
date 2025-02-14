@@ -1,0 +1,107 @@
+<!--
+  Overview of <i>TEALsim<i> 
+  This package contains utilities for creating 3D visualizations of electromagnetic phenomena.
+-->
+
+<html>
+  <head>
+    <title>TEALsim Overview</title>
+  </head>
+  <body>
+    <h1>Overview of <i>TEALsim</i></h1>
+    <p>This package includes classes and methods for creating simulations based on Java3D</p>
+    <h2>Description</h2>
+<p>The TEAL simulation system, <i>TEALsim</i>, is designed as a framework for authoring, presenting, and controlling simulations in a variety of 
+domains, beginning with physics.  Architecturally, TEALsim follows a <i>Model-View-Control</i> design pattern, with several major modules 
+representing the three components:  the simulation engines make up the <i>model</i>; the renderer and viewer make up the <i>view</i>; 
+and the user interface makes up the <i>control</i>   These three components are combined into a simulation.  
+Each component is largely defined by a set of interfaces that suggest the required functionality of that piece, 
+so that the actual implementation details can be customized as necessary (for example, leaving the specific 
+rendering implementation up to the developer).   All major components of the system are JavaBeans. 
+Most classes implement well defined interfaces, the most basic being TElement.  </p>
+</p>
+<p>What follows is a brief description of the basic components.  </p>
+
+
+    <h2>The Simulation (TSimulation, SimEM)</h2>
+    
+    <p>
+    Any simulation object added to a simulation must implement the TElement (java.src.teal.core.TElement) interface, 
+    which provides a standard set of functionalities for all objects in the world.  That is, any object which is specified, 
+    included or defined within the simulation must implement the TElement interface.  
+    This includes physical objects (e.g. a point charge), graphical elements, control objects and simulation viewers.  
+    In particular, the functionalities inherent in the TElement interface include support for Routes and PropertyChangeEvents.  
+    This allows any simulation elements in the world to exchange information with any other element in the world, 
+    and with User Interface (UI) components.  For example, a UI slider can be wired to a property of a simulation object 
+    (for example, the mass of an electric point charge) to directly manipulate that quantity.  Or, the simulation 
+    itself can be wired to a property of a simulation object in order to monitor that property of the object and/or take 
+    some action depending on its value. 
+    </p>
+    <p>A completely realized TSimulation class defines the properties of the simulation as a whole, such as the initial spatial 
+    configuration of simulation objects, initial conditions of any variables, and any special <i>wiring</i> between objects and/or 
+    interface components.  Essentially, it contains the entire logic specific to a particular simulation.  </p>
+    <p>A TSimulation object is then presented to the user using a SimPlayer, as discussed below.  </p>
+    
+        <h2>SimPlayer (TFramework) and SimPlayerApp</h2>
+        <p>A SimPlayer (java.src.teal.app.SimPlayer) plays a TSimulation instance—that is it takes as input a TSimulation object and 
+        presents that TSimulation to the viewer.  It implements the TFramework (java.src.teal.framework.TFramework) interface, 
+        which is the glue that holds all of the components in the TSimulation together.  SimPlayer is the application inside 
+        which all of the components of the TSimulation are running.  The TFramework interface contains methods that allow 
+        loaded simulations to customize the SimPlayer application window, including modification of the UI and menu bars.  </p>
+        <p>SimPlayerApp (java.src.teal.app.SimPlayerApp) contains the main routine of the TEALsim package.  
+        When we run SimPlayerApp, it instantiates a SimPlayer and uses the argument </p>
+        
+        <p><i>-n tealsim.physics.em.ConductingSphericalShellShielding</i></p>
+        
+        <p>to create an instance of the class ConductingSphericalShellShielding and 
+        tells the SimPlayer to play ConductingSphericalShellShielding, which is a simulation object.</p>
+      <h2>SimEngine – the Simulation Engine</h2>    
+      <p>The physics in a TEALsim simulation is contained in a SimEngine object  
+      (java.src.teal.sim.engine.SimEngine), which represents the simulation engine itself.  
+      The simulation engine is responsible for all of the computation involved in the system being simulated.  
+      This includes dynamically processing and updating TSimElement simulation objects (java.src.teal.sim.TSimElement) 
+      according to the rules of the simulation engine (including adding and removing them from the world when necessary), 
+      and performing numerical integration of simulation variables.  The exact type of processing and integration will depend 
+      on the specific type of simulation being implemented; for example, the electromagnetism extension of SimEngine, EMEngine 
+      (java.src.teal.physics.em.EMEngine), computes the total electromagnetic fields created by a set of field-generating simulation objects, 
+      each of which is an EMObject  (java.src.physics.em.EMObject), as well as the resulting dynamics of the set of electromagnetic objects 
+      (velocity, position, rotation, etc.).  It also handles related tasks, such as collision detection and resolution.</p>
+      <p>In general, the SimEngine runs a continuous loop that performs the following actions:
+<ul>
+<li>Computes values of dependent simulation variables for the current time step.</li>
+<li>Updates simulation objects to reflect new values.</li>
+<li>Informs the renderer of any visual changes to the simulation.</li>
+</ul>
+  
+<p>This loop in the SimEngine represents the main application thread for a TEALsim simulation.</p>
+
+              <h2>Viewer and Viewer3D – the Rendering Engine</h2>
+            <p>  The Viewer (java.src.teal.render.viewer.Viewer) is the window into the simulation space, 
+            representing the rendering engine and its output.  It is responsible for rendering the visual elements of a 
+            simulation to the screen in real-time 3D and managing user interaction with the rendered image.  
+            As such, it is tightly coupled to the SimEngine.  The SimEngine must inform the Viewer of (visual) changes to simulation elements, 
+            and each visual simulation element must have an associated visual representation that can be drawn by the Viewer.  
+            Conversely, the Viewer must report back to the simulation when a user manipulates the visual representation of a simulation object 
+            (for example, by clicking and dragging on an object in the Viewer).</p>
+
+<p>While the actual implementation of the Viewer can vary, the interface TViewer 
+(java.src.teal.render.viewer.TViewer) defines a set of functionality that any Viewer implementation should support.  
+This includes general rendering properties and tasks, such as camera controls, visual effects, maintaining lists of rendered objects, and 
+handling mouse-based picking and manipulation of objects in the Viewer.  In addition, it should also handle the explicit rendering of the scene. </p>
+
+<p>The current default Viewer implementation is based on Java3d 1.5.2, which is a scene-graph based renderer layered on top of OpenGL or DirectX.  
+In this case, the Viewer sets properties on the scene graph, which is then rendered implicitly through Java3d’s rendering thread.  
+A more direct (or immediate rendering implementation (such as rendering directly through OpenGL) should obviously include explicit 
+rendering instructions for all visual elements.</p>
+
+              
+              
+                            <h2>The User Interface</h2>
+                            
+                       <p>     The user interface (java.src.teal.ui) is the means by which a user interacts 
+                       with the application (in addition to user interaction through the Viewer), and through which the user receives 
+                       feedback about a simulation’s properties.  It is responsible for producing the types of controls and read-outs 
+                       necessary to manipulate a simulation.  These can include buttons, sliders, checkboxes, combo-boxes, graphs, text 
+                       fields, and numerical displays. </p>
+  </body>
+</html>
