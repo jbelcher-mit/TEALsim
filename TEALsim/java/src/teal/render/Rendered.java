@@ -118,7 +118,7 @@ public class Rendered extends AbstractElement implements TRendered {
      * the scope of the fog node defaults to the entire scene if no other nodes have been specifically added
      * using this method.
      * 
-     * @param fog
+     * @param fog if true object is receiving fog
      */
     public void setReceivingFog(boolean fog) {
         isReceivingFog = fog;
@@ -259,7 +259,8 @@ public class Rendered extends AbstractElement implements TRendered {
     /**
      Returns the rotation matrix. If null, checks the quaternion and computes
      corresponding rotation matrix. Otherwise, returns the identity matrix.
-     */
+    * @return returns rotation matrix
+    */
     public Matrix3d getRotationMatrix() {
         Matrix3d mat = new Matrix3d();
         if (orientation != null) {
@@ -416,9 +417,9 @@ public class Rendered extends AbstractElement implements TRendered {
 */
     /**
      * Convenience method, calls setPosition(Vector3d pos) with a new Vector3d based on supplied component values.
-     * @param x
-     * @param y
-     * @param z
+     * @param x  x component
+     * @param y  y component
+     * @param z  z component
      */
     public void setPosition(double x, double y, double z) {
         setPosition(new Vector3d(x, y, z));
@@ -537,6 +538,8 @@ public class Rendered extends AbstractElement implements TRendered {
     /**
      * Utility to construct a new Transform3D for any rendered object, 
      * scale is always 1.0.
+     * @param obj the rendered object
+     * @return the transform of the rendered object
      */
     public static Transform3D getTransform(Rendered obj) {
         Transform3D trans = new Transform3D();

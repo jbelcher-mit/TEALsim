@@ -24,6 +24,8 @@ import teal.core.TElement;
 
 /**
 * An interface for Elements that may be represented in 2D and/or 3D
+* @param b if true rendered
+*
 */
 
 public interface TRendered extends TAbstractRendered,
@@ -88,7 +90,7 @@ public Quat4d getRotation();
    * Sets whether this object should be allowed to rotate (if false, the object will not respond to rotation
    * behaviors).
    * 
- * @param b 
+ * @param b if false the object will not respond to rotation
  */
   public void setRotable(boolean b);
     
@@ -99,7 +101,7 @@ public Quat4d getRotation();
 	public Vector3d getDirection();
     /** Used to set the direction
      *
-     * @param direction
+     * @param direction the direction of the object
      */
      public void setDirection(Vector3d direction);
     

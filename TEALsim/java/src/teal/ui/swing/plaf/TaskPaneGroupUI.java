@@ -33,7 +33,7 @@ public class TaskPaneGroupUI extends PanelUI {
    * Called by the component when an action is added to the component through
    * the {@link teal.ui.swing.JTaskPaneGroup#add(Action)} method.
    * 
-   * @param action
+   * @param action definition
    * @return a component built from the action.
    */
   public Component createAction(Action action) {

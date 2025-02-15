@@ -50,7 +50,7 @@ public Quat4d getRotation();
    * Sets whether this object should be allowed to rotate (if false, the object will not respond to rotation
    * behaviors).
    * 
- * @param b 
+ * @param b if true object responds to rotation behaviors 
  */
   public void setRotable(boolean b);
   

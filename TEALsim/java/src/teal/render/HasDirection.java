@@ -17,14 +17,14 @@ import javax.vecmath.Vector3d;
  */
 public interface  HasDirection
 {
-        /** Used to access the direction
+        /** Used to access the direction of object
          *
-         * @return direction
+         * @return direction of object
          */
 	public Vector3d getDirection();
         /** Used to set the direction
          *
-         * @param direction
+         * @param direction of object
          */
 	public void setDirection(Vector3d direction);
 }

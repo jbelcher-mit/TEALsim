@@ -12,7 +12,7 @@
     <p>This package includes classes and methods for creating simulations based on Java3D</p>
     <h2>Description</h2>
 <p>The TEAL simulation system, <i>TEALsim</i>, is designed as a framework for authoring, presenting, and controlling simulations in a variety of 
-domains, beginning with physics.  Architecturally, TEALsim follows a <i>Model-View-Control</i> design pattern, with several major modules 
+domains, beginning with physics.  Architecturally, <i>TEALsim</i> follows a <i>Model-View-Control</i> design pattern, with several major modules 
 representing the three components:  the simulation engines make up the <i>model</i>; the renderer and viewer make up the <i>view</i>; 
 and the user interface makes up the <i>control</i>   These three components are combined into a simulation.  
 Each component is largely defined by a set of interfaces that suggest the required functionality of that piece, 
@@ -23,8 +23,13 @@ Most classes implement well defined interfaces, the most basic being TElement.  
 <p>What follows is a brief description of the basic components.  </p>
 
 
-    <h2>The Simulation (TSimulation, SimEM)</h2>
-    
+   <h2>The Simulation (TSimulation, SimEM)</h2>
+    <p> The TSimulation interface (java.src.teal.sim.simulation.TSimulation) defines the requirements for a 
+    complete interactive simulation, collecting together all of the components that make up the entire user experience.  
+    Typically this includes: a simulation engine (java.src.teal.sim.engine.TSimEngine), a Viewer (java.src.teal.render.viewer.Viewer), 
+    the UI elements, and all of the objects being simulated or otherwise displayed in the Viewer.  SimEM (java.src.teal.physics.em.SimEM) 
+    is an example of a class that implements TSimulation.  It incorporates the EMEngine (java.src.teal.physics.em.EMEngine) and a Java 3D 
+    viewer and provides the basis for all electromagnetic simulations.</p>
     <p>
     Any simulation object added to a simulation must implement the TElement (java.src.teal.core.TElement) interface, 
     which provides a standard set of functionalities for all objects in the world.  That is, any object which is specified, 
@@ -40,9 +45,10 @@ Most classes implement well defined interfaces, the most basic being TElement.  
     <p>A completely realized TSimulation class defines the properties of the simulation as a whole, such as the initial spatial 
     configuration of simulation objects, initial conditions of any variables, and any special <i>wiring</i> between objects and/or 
     interface components.  Essentially, it contains the entire logic specific to a particular simulation.  </p>
+    
     <p>A TSimulation object is then presented to the user using a SimPlayer, as discussed below.  </p>
     
-        <h2>SimPlayer (TFramework) and SimPlayerApp</h2>
+    <h2>SimPlayer (TFramework) and SimPlayerApp</h2>
         <p>A SimPlayer (java.src.teal.app.SimPlayer) plays a TSimulation instance—that is it takes as input a TSimulation object and 
         presents that TSimulation to the viewer.  It implements the TFramework (java.src.teal.framework.TFramework) interface, 
         which is the glue that holds all of the components in the TSimulation together.  SimPlayer is the application inside 
@@ -51,10 +57,11 @@ Most classes implement well defined interfaces, the most basic being TElement.  
         <p>SimPlayerApp (java.src.teal.app.SimPlayerApp) contains the main routine of the TEALsim package.  
         When we run SimPlayerApp, it instantiates a SimPlayer and uses the argument </p>
         
-        <p><i>-n tealsim.physics.em.ConductingSphericalShellShielding</i></p>
+       <center> <p><i>-n tealsim.physics.em.ConductingSphericalShellShielding</i></p></center>
         
-        <p>to create an instance of the class ConductingSphericalShellShielding and 
-        tells the SimPlayer to play ConductingSphericalShellShielding, which is a simulation object.</p>
+        <p>to create an instance of the class <i>ConductingSphericalShellShielding</i> and 
+        tells the SimPlayer to play <i>ConductingSphericalShellShielding</i>, which is a simulation object.</p>
+        
       <h2>SimEngine – the Simulation Engine</h2>    
       <p>The physics in a TEALsim simulation is contained in a SimEngine object  
       (java.src.teal.sim.engine.SimEngine), which represents the simulation engine itself.  
