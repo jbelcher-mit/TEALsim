@@ -18,14 +18,17 @@ package teal.render;
 
 public interface TDrawable
 {
-    /** Sets the isDrawn state */
+    /** 
+     @param b Sets the isDrawn state
+	*/
     public void setDrawn(boolean b);
     
-    /** if true the Object will be drawn */
+    /** 
+     * @return if true the Object will be drawn */
     public boolean isDrawn();
     
     /**
-    * The optimized commands required to update the objects vizualization, 
+    * The optimized commands required to update the objects visualization, 
     * this expects the underlying visualization objects have been created
     * and any calculations are complete. It may be restricted to methods 
     * that only operate in the rendering thread.

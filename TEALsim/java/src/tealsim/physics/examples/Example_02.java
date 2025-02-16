@@ -1,4 +1,4 @@
-/* $Id: Example_02.java,v 1.2 2008/01/06 21:40:21 jbelcher Exp $ */
+//* $Id: Example_02.java,v 1.2 2008/01/06 21:40:21 jbelcher Exp $ */
 
 package tealsim.physics.examples;
 import java.awt.event.ActionEvent;
@@ -177,7 +177,7 @@ public class Example_02 extends SimEM {
             Vector3d cali = floatingCharge.getPosition();
  //     		System.out.println("    ");
 //      		System.out.println("Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
-            System.out.println(" " + time + ", " + " " + cali.y );
+//            System.out.println(" " + time + ", " + " " + cali.y );
             }
          }
 }

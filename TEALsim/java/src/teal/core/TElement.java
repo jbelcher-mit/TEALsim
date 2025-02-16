@@ -39,12 +39,15 @@ public interface TElement extends HasID, THasPropertyChange, PropertyChangeListe
     public final Object NOT_DEFINED = "ATT_NOT_DEFINED";
 
     /**
-     * return the attribute value or teal.sim.TElement.NOT_DEFINED
+ 
+
      **/
     public Object getProperty(String attName);
 
     /**
      * set the attribute value return value is success
+     * @param attName name of property
+     * @return the attribute value or teal.sim.TElement.NOT_DEFINED
      **/
     public boolean setProperty(String attName, Object value);
 
