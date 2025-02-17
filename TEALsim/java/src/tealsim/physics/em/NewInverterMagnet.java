@@ -1,8 +1,7 @@
-/*
- * Created on Oct September 11, 2024
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+/* $Id: Example_06.java,v 1.2 2008/01/17 14:46:26 jbelcher Exp $ */
+/**
+ * @author John Belcher 
+ * Revision: 1.0 $
  */
 
 package tealsim.physics.em;
@@ -10,7 +9,6 @@ package tealsim.physics.em;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-
 import javax.media.j3d.Appearance;
 import javax.media.j3d.BoundingBox;
 import javax.media.j3d.BoundingSphere;
@@ -36,6 +34,7 @@ import teal.sim.engine.EngineObj;
 import teal.sim.engine.TEngine;
 import teal.physics.em.SimEM;
 import teal.physics.em.EMEngine;
+import teal.physics.em.PointCharge;
 import teal.physics.physical.Wall;
 import teal.physics.em.CylindricalBarMagnet;
 import teal.sim.properties.IsSpatial;
@@ -48,8 +47,7 @@ import teal.ui.control.PropertyDouble;
 import teal.ui.swing.JTaskPaneGroup;
 import teal.util.TDebug;
 import teal.visualization.dlic.DLIC;
-
-// from Example_01
+import tealsim.physics.em.InverterMagneticConfiguration.Watcher;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -67,15 +65,34 @@ import teal.physics.em.SimEM;
 import teal.ui.control.*;
 import teal.util.TDebug;
 
-/**
- * @author belcher
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
-public class InverterMagneticConfiguration extends SimEM {
+/**   
+ *  
+ * @author John Belcher
+ * @version 1.0 
+ * */
+public class NewInverterMagnet extends SimEM {
 
-    private static final long serialVersionUID = 3256443586278208051L;
+    private static final long serialVersionUID = 5257008735204554035L;
+    /** The fixed-in-space charge slider. */
+    PropertyDouble chargeSlider = new PropertyDouble();
+    /** The radius of the sphere representing the fixed-in-space charge. */
+    double fixedChargeRad = 0.2;
+    /** The radius of the sphere representing the floating charge.  */
+    double floatingChargeRadius = 100;
+    /** The friction in the world. */
+
+    /** The floating charge.  */
+    PointCharge floatingCharge;
+    /** The fixed charge.  */
+    PointCharge fixedCharge;
+    /** The initial vector position of the floating charge.  */
+    Vector3d floatingChargePos;
+    /** The mass of both the floating and the fixed charge. */
+    double chargeMass = 0.035;
+    /** The charge of the fixed charge. */
+    double chargeFixed = 0.;
+    /** The charge of the floating charge. */
+    double chargeFloat = 1.;
     /** The angle slider. */
     PropertyDouble angleSlider = new PropertyDouble();
     /** The angle of rotation*/
@@ -124,14 +141,18 @@ public class InverterMagneticConfiguration extends SimEM {
     protected FieldConvolution mDLIC = null;
     FieldLineManager fmanager = null;
 
-    public InverterMagneticConfiguration() {
-
+    public NewInverterMagnet() {
         super();
-        title = "Inverter Magnet";
-        
-       
+
         TDebug.setGlobalLevel(0);
 
+        title = "New Inverter Magnet";
+        
+		///// Set properties on the SimEngine /////
+		// Bounding area represents the characteristic size of the space.
+		// setDeltaTime() sets the time step of the simulation.
+		// setDamping() sets the damping on the system.
+       
         // Building the world.
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., 0.,0.));
@@ -144,15 +165,34 @@ public class InverterMagneticConfiguration extends SimEM {
         frictionSlider.addPropertyChangeListener("value", this);
         frictionSlider.setValue(0.0);
         frictionSlider.setVisible(true);
- 
+        
+        fixedCharge = new PointCharge();
+        fixedCharge.setCharge(chargeFixed);
+        fixedCharge.setPosition(new Vector3d(0., 5., 0.));
+        fixedCharge.setDirection(new Vector3d(0, 1, 0));
+        fixedCharge.setPickable(false);
+        fixedCharge.setRotable(false);
+        fixedCharge.setMoveable(false);
+        fixedCharge.setRadius(fixedChargeRad);
+        fixedCharge.setMass(chargeMass);
+        addElement(fixedCharge); 
 
         position_x_Slider.setText("Position");
         position_x_Slider.setMinimum(0.);
-        position_x_Slider.setMaximum(100.);
+        position_x_Slider.setMaximum(5.);
         position_x_Slider.setPaintTicks(true);
         position_x_Slider.addPropertyChangeListener("value", this);
         position_x_Slider.setValue(0.0);
         position_x_Slider.setVisible(true);
+        
+        chargeSlider.setText("Qfixed");
+        chargeSlider.setMinimum(-10);
+        chargeSlider.setMaximum(50);
+        chargeSlider.setPaintTicks(true);
+        chargeSlider.addPropertyChangeListener("value", this);
+        chargeSlider.setValue(0.);
+        chargeSlider.setVisible(true);
+
 
         
         // create the slider to control the rotation of the satellite magnets
@@ -170,6 +210,7 @@ public class InverterMagneticConfiguration extends SimEM {
         controls.add(frictionSlider);
         controls.add(angleSlider);
         controls.add(position_x_Slider);
+        controls.add(chargeSlider);
         addElement(controls);
 
         Rendered nativeObject01 = new Rendered(); 
@@ -219,18 +260,18 @@ public class InverterMagneticConfiguration extends SimEM {
         centralMagnet.setRadius(MagnetRadius);
         centralMagnet.setMass(.05);
         centralMagnet.setMu(fixedMuBig);
-        centralMagnet.setID("magnet01");
+        centralMagnet.setID("centralmagnet");
         centralMagnet.setPickable(false);
         centralMagnet.setColliding(false);
         centralMagnet.setGeneratingP(true);
         centralMagnet.setPosition(new Vector3d(position_x, 0.,0.));
         centralMagnet.setMoveable(false);
         centralMagnet.setRotable(false);
-        SphereCollisionController sccx = new SphereCollisionController(centralMagnet);
-        sccx.setRadius(MagnetRadius);
-        sccx.setTolerance(0.1);
-        sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        centralMagnet.setCollisionController(sccx);
+//        SphereCollisionController sccx = new SphereCollisionController(centralMagnet);
+//        sccx.setRadius(MagnetRadius);
+//        sccx.setTolerance(0.1);
+//        sccx.setMode(SphereCollisionController.WALL_SPHERE);
+//        centralMagnet.setCollisionController(sccx);
         addElement(centralMagnet);
         
         CylindricalBarMagnet magnet01 = new CylindricalBarMagnet();
@@ -247,11 +288,11 @@ public class InverterMagneticConfiguration extends SimEM {
         magnet01.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
         magnet01.setMoveable(false);
         magnet01.setRotable(false);
-        SphereCollisionController sccx1 = new SphereCollisionController(magnet01);
-        sccx1.setRadius(MagnetRadiusSmall);
-        sccx1.setTolerance(0.1);
-        sccx1.setMode(SphereCollisionController.WALL_SPHERE);
-        magnet01.setCollisionController(sccx1);
+ //       SphereCollisionController sccx1 = new SphereCollisionController(magnet01);
+//        sccx1.setRadius(MagnetRadiusSmall);
+//        sccx1.setTolerance(0.1);
+//        sccx1.setMode(SphereCollisionController.WALL_SPHERE);
+//        magnet01.setCollisionController(sccx1);
         addElement(magnet01);
         
 
@@ -268,11 +309,11 @@ public class InverterMagneticConfiguration extends SimEM {
         magnet02.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
         magnet02.setMoveable(false);
         magnet02.setRotable(false);
-        sccx = new SphereCollisionController(magnet02);
-        sccx.setRadius(MagnetRadiusSmall);
-        sccx.setTolerance(0.1);
-        sccx.setMode(SphereCollisionController.WALL_SPHERE);
-        magnet02.setCollisionController(sccx);
+ //       sccx = new SphereCollisionController(magnet02);
+//        sccx.setRadius(MagnetRadiusSmall);
+//        sccx.setTolerance(0.1);
+//        sccx.setMode(SphereCollisionController.WALL_SPHERE);
+//        magnet02.setCollisionController(sccx);
        addElement(magnet02);
        
        angle = delta_angle+ angle;
@@ -288,11 +329,11 @@ public class InverterMagneticConfiguration extends SimEM {
        magnet03.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
        magnet03.setMoveable(false);
        magnet03.setRotable(false);
-       sccx = new SphereCollisionController(magnet03);
-       sccx.setRadius(MagnetRadiusSmall);
-       sccx.setTolerance(0.1);
-       sccx.setMode(SphereCollisionController.WALL_SPHERE);
-       magnet03.setCollisionController(sccx);
+//       sccx = new SphereCollisionController(magnet03);
+//       sccx.setRadius(MagnetRadiusSmall);
+//       sccx.setTolerance(0.1);
+//       sccx.setMode(SphereCollisionController.WALL_SPHERE);
+//       magnet03.setCollisionController(sccx);
       addElement(magnet03);
       
       angle = angle+delta_angle;
@@ -308,11 +349,11 @@ public class InverterMagneticConfiguration extends SimEM {
       magnet04.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
       magnet04.setMoveable(false);
       magnet04.setRotable(false);
-      sccx = new SphereCollisionController(magnet04);
-      sccx.setRadius(MagnetRadiusSmall);
-      sccx.setTolerance(0.1);
-      sccx.setMode(SphereCollisionController.WALL_SPHERE);
-      magnet04.setCollisionController(sccx);
+ //     sccx = new SphereCollisionController(magnet04);
+//      sccx.setRadius(MagnetRadiusSmall);
+//      sccx.setTolerance(0.1);
+//      sccx.setMode(SphereCollisionController.WALL_SPHERE);
+//      magnet04.setCollisionController(sccx);
      addElement(magnet04);
      
      angle = angle+delta_angle;
@@ -328,11 +369,11 @@ public class InverterMagneticConfiguration extends SimEM {
      magnet05.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
      magnet05.setMoveable(false);
      magnet05.setRotable(false);
-     sccx = new SphereCollisionController(magnet05);
-     sccx.setRadius(MagnetRadiusSmall);
-     sccx.setTolerance(0.1);
-     sccx.setMode(SphereCollisionController.WALL_SPHERE);
-     magnet05.setCollisionController(sccx);
+//     sccx = new SphereCollisionController(magnet05);
+ //    sccx.setRadius(MagnetRadiusSmall);
+ //    sccx.setTolerance(0.1);
+  //   sccx.setMode(SphereCollisionController.WALL_SPHERE);
+ //    magnet05.setCollisionController(sccx);
     addElement(magnet05);
     
     angle = angle+delta_angle;
@@ -348,11 +389,11 @@ public class InverterMagneticConfiguration extends SimEM {
     magnet06.setPosition(new Vector3d(fixedRadius*Math.sin(angle),  0., fixedRadius*Math.cos(angle)));
     magnet06.setMoveable(false);
     magnet06.setRotable(false);
-    sccx = new SphereCollisionController(magnet06);
-    sccx.setRadius(MagnetRadiusSmall);
-    sccx.setTolerance(0.1);
-    sccx.setMode(SphereCollisionController.WALL_SPHERE);
-    magnet06.setCollisionController(sccx);
+ //   sccx = new SphereCollisionController(magnet06);
+ //   sccx.setRadius(MagnetRadiusSmall);
+  //  sccx.setTolerance(0.1);
+ //   sccx.setMode(SphereCollisionController.WALL_SPHERE);
+ //   magnet06.setCollisionController(sccx);
    addElement(magnet06);
    
 
@@ -371,10 +412,10 @@ public class InverterMagneticConfiguration extends SimEM {
         movingMagnet.setMoveable(true);
         movingMagnet.setRotable(false);
         movingMagnet.setConstrained(true);
-        sccx = new SphereCollisionController(movingMagnet);
-        sccx.setRadius(MagnetRadius);
-        sccx.setTolerance(0.1);
-        sccx.setMode(SphereCollisionController.WALL_SPHERE);
+//        sccx = new SphereCollisionController(movingMagnet);
+//        sccx.setRadius(MagnetRadius);
+//        sccx.setTolerance(0.1);
+//        sccx.setMode(SphereCollisionController.WALL_SPHERE);
         //movingMagnet.addPropertyChangeListener("charge",this );
         addElement(movingMagnet);
          
@@ -518,8 +559,8 @@ for (int j = 0; j < numberFLA; j++) {
         score.setVisible(true);
         //addElement(label);
         //addElement(score);
-        watch = new Watcher();
-        addElement(watch);
+//        watch = new Watcher();
+//        addElement(watch);
 
         //JTaskPane tp = new JTaskPane();
         ControlGroup params = new ControlGroup();
@@ -547,7 +588,7 @@ for (int j = 0; j < numberFLA; j++) {
 
         addActions();
 
-        watch.setActionEnabled(true);
+ //       watch.setActionEnabled(true);
         
         theEngine.setDeltaTime(1);
         mSEC.init();
@@ -556,16 +597,7 @@ for (int j = 0; j < numberFLA; j++) {
         reset();
     }
 
-    private void addWall(Vector3d pos, Vector3d length, Vector3d height) {
-        Wall myWall = new Wall(pos, length, height);
-        myWall.setElasticity(wallElasticity);
-        myWall.setColor(Color.GREEN);
-        myWall.setPickable(false);
-        WallNode myNode = (WallNode) myWall.getNode3D();
-        myNode.setFillAppearance(myAppearance);
-        addElement(myWall);
-    }
-
+    
     void addActions() {
 
         TealAction ta = new TealAction("Inverter Magnet", this);
@@ -574,41 +606,33 @@ for (int j = 0; j < numberFLA; j++) {
         TealAction tb = new TealAction("Execution & View", this);
         addAction("Help", tb);
 
-
-
-
-        
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("Inverter Magnet") == 0) {
+        TDebug.println(1, " Action comamnd: " + e.getActionCommand());
+        if (e.getActionCommand().compareToIgnoreCase("Example_05") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/invertermagnet.html");
+        		((TFramework)mFramework).openBrowser("help/example_05.html");
         	}
-        } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
-        	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
-        	}
-        	
-        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) 
+        }  else {
+            super.actionPerformed(e);
+        }
+        if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) 
         {
         	if(mFramework instanceof TFramework) {
         		((TFramework)mFramework).openBrowser("help/executionView.html");
         	}
-        } 
-        else {
+        }  else {
             super.actionPerformed(e);
         }
     }
-
-
 
     public void reset(double heightSupport, double lengthPendulum) {
         mSEC.stop();
         mSEC.reset();
         resetCylindricalBarMagnet(heightSupport,lengthPendulum);
         theEngine.requestRefresh();
-        watch.setActionEnabled(true);
+ //       watch.setActionEnabled(true);
     }
 
     private void resetCylindricalBarMagnet(double heightSupport, double lengthPendulum) {
@@ -617,84 +641,32 @@ for (int j = 0; j < numberFLA; j++) {
         movingMagnet.setDirection(new Vector3d(0,1, 0));
     }
 
-
     public void resetCamera() {
     	mViewer.setLookAt(new Point3d(0.,.8,1.5), new Point3d(0,0,0), new Vector3d(0,1,0));
-
-    }
-
-    public class Watcher extends EngineObj implements IsSpatial {
-
-        private static final long serialVersionUID = 3761692286114804280L;
-        //Bounds testBounds = new BoundingSphere(new Point3d(11.4,11.4,0.),2.);
-        Bounds testBounds = new BoundingBox(new Point3d(8., -16., -1.5), new Point3d(12., -12., 1.5));
-        TealAction theAction = null;
-        boolean actionEnabled = false;
-        boolean mNeedsSpatial = false;
-
-        public void needsSpatial() {
-            mNeedsSpatial = true;
-        }
-
-        public void setAction(TealAction ac) {
-            theAction = ac;
-        }
-
-        public void setActionEnabled(boolean state) {
-            actionEnabled = state;
-        }
-
-        public boolean getActionEnabled() {
-            return actionEnabled;
-        }
-
-        public void setBounds(Bounds b) {
-            testBounds = b;
-        }
-
- 
-        
-        public void nextSpatial() {
-            if (theEngine != null) {
-                double time = theEngine.getTime();
- //               Vector3d cali = movingMagnet.getPosition();
- //               Vector3d temp = new Vector3d(cali);
- //               Vector3d center = new Vector3d(0.,25.,0.);
-//               temp.sub(center);
- //               double distance = temp.length();
-
- 
-                 score.setText(String.valueOf(time));
-                score.setText(String.valueOf(time));
-                if (actionEnabled) {
-                    if (testBounds.intersect(new Point3d(movingMagnet.getPosition()))) {
-                        System.out.println("congratulations");
-                        // Make this a one-shot
-                        actionEnabled = false;
-                        mSEC.stop();
-                        minScore = Math.min(minScore, time);
-                        if (theAction != null) {
-                            theAction.triggerAction();
-                        }
-                    }
-                }
-
-            }
-        }
     }
 
     /** Define the action initiated by the slider (i.e., set theEngine damping). 
      * @param pce The property change event when the friction slider is changed. */
     public void propertyChange(PropertyChangeEvent pce) {
         Object source = pce.getSource();
-        if (source == frictionSlider) {
+        
+ //       Object source = pce.getSource();
+        if (source == chargeSlider) {
+            chargeFixed = ((Double) pce.getNewValue()).doubleValue();
+            fixedCharge.setCharge(chargeFixed);   
+//            magnet01.setMass(chargeFixed);
+            TDebug.println(0,+chargeFixed);
+        } else  if (source == frictionSlider) {
             friction = ((Double) pce.getNewValue()).doubleValue();
             theEngine.setDamping(friction);
             
         }   else    if (source == position_x_Slider) {
                 position_x = ((Double) pce.getNewValue()).doubleValue();
                 TDebug.println(0,+position_x );
-//               centralMagnet.setPosition(new Vector3d(position_x, 0.,0.));
+ //              centralMagnet.setPosition(new Vector3d(position_x, 0.,0.));
+                
+                fixedCharge.setPosition(position_x,.4,0.);
+
                 
         }   else    if (source == angleSlider) {
         	rangle = ((Double) pce.getNewValue()).doubleValue();
@@ -717,7 +689,9 @@ for (int j = 0; j < numberFLA; j++) {
 
 
 
-//           centralMagnet.setPosition(new Vector3d(position_x, 0.,0.));
+   //        centralMagnet.setPosition(new Vector3d(position_x, 0.,0.));
+
+        
             
                 
         } else {
@@ -726,3 +700,4 @@ for (int j = 0; j < numberFLA; j++) {
     }   
 
 }
+

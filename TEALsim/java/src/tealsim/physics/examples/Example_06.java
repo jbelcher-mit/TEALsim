@@ -171,10 +171,11 @@ public class Example_06 extends SimEM {
 
     
     void addActions() {
-        TealAction ta = new TealAction("Execution & View", this);
-        addAction("Help", ta);
+
         TealAction tb = new TealAction("Example_05", this);
         addAction("Help", tb);
+        TealAction ta = new TealAction("Execution & View", this);
+        addAction("Help", ta);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -215,6 +216,7 @@ public class Example_06 extends SimEM {
         if (source == chargeSlider) {
             chargeFixed = ((Double) pce.getNewValue()).doubleValue();
             fixedCharge.setCharge(chargeFixed);   
+            TDebug.println(0,+chargeFixed);
         } else {
             super.propertyChange(pce);
         }

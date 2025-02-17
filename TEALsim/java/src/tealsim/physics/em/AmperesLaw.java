@@ -596,6 +596,7 @@ public class AmperesLaw extends SimEM  {
             // see if point line current inside or outside of the circle and rectangle after this move
             calculateCurrentThru();
             PlaceBTVectors();
+     //       TDebug.println(0,+posX);
             
         } else if (source == posSlider_y) {
             posY = ((Double) pce.getNewValue()).doubleValue();
@@ -677,7 +678,7 @@ public class AmperesLaw extends SimEM  {
     	return inside;
     }
     
-    /** Method to determine whether a given position vector is in side the Amperean circle or not. */
+    /** Method to determine whether a given position vector is inside the Amperean circle or not. */
     public boolean insideCircle(Vector3d position){
     	boolean inside = false;
     	Vector3d relativePosition = new Vector3d();
