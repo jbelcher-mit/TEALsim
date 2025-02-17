@@ -8,6 +8,8 @@ TEAL is an active engagement model for teaching introductory physics.
 
 Documentation for both the code and the underlying math and physics is in the folder word_docs.  
 
+Date of last update of documentation:  2/17/2025
+
 John Belcher, Andrew McKinney, Philip Bailey, Michael Danziger.
 
 https://web.mit.edu/8.02t/www/TEALsim/
