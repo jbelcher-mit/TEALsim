@@ -97,24 +97,23 @@ public class TorqueOnDipoleB extends SimEM {
 
         line = new Line(new Vector3d(0, 0, 0), new Vector3d(1, 0, 0));
         line.setColor(new Color(200, 200, 200));
-        //addElement(line);
+   //     addElement(line);
 
         FieldDirectionGrid fv = new FieldDirectionGrid();
         fv.setType(teal.field.Field.B_FIELD);
-        fv.setResolution(12);
+        fv.setResolution(18);
         //fv.setGridIterator(recPlane);
-        //addElement(fv);
+        addElement(fv);
 
         PropertyDouble slider2 = new PropertyDouble();
         slider2.setPrecision(0.0005);
-        slider2.setMinimum(-.025);
-        slider2.setMaximum(.025);
+        slider2.setMinimum(-.25);
+        slider2.setMaximum(.25);
         //slider2.setBounds(45, 539, 415,50);
         slider2.addRoute("value", pc1, "mu");
         slider2.setText("Dipole Moment");
         slider2.setBorder(null);
-        //addElement(slider2);
-        slider2.setValue(0.025);
+        slider2.setValue(0.4);
 
         PropertyDouble slider3 = new PropertyDouble();
         slider3.setMinimum(-0.3);
@@ -123,7 +122,6 @@ public class TorqueOnDipoleB extends SimEM {
         slider3.addRoute("value", BField, "magnitude");
         slider3.setText("External Field Magnitude");
         slider3.setBorder(null);
-        //addElement(slider3);
         slider3.setValue(0.01);
 
         PropertyDouble slider4 = new PropertyDouble();
@@ -133,15 +131,7 @@ public class TorqueOnDipoleB extends SimEM {
         slider4.addRoute("value", (TElement) getEngine(), "damping");
         slider4.setText("Damping");
         slider4.setBorder(null);
-        //addElement(slider4);
-        slider4.setValue(0.01);
-
-        
-
-        
-        
-
-        
+        slider4.setValue(0.0);
 
         for (int i = 0; i < numlines; i++) {
             Vector3d pos = new Vector3d(0.1 * Math.sin(0.5 * Math.PI * (i / 10.) + Math.PI * 0.25), 0.1 * Math.cos(0.5
@@ -174,7 +164,7 @@ public class TorqueOnDipoleB extends SimEM {
         mSEC.rebuildPanel(EngineControl.DO_ALL);
         mSEC.setVisible(true);
         theEngine.requestRefresh();
-        theEngine.setDeltaTime(0.5);
+        theEngine.setDeltaTime(2.);
         theEngine.setDamping(0.0);
         mSEC.init();
 
@@ -191,7 +181,7 @@ public class TorqueOnDipoleB extends SimEM {
             tempfls1[i] = new FluxFieldLine(flux[i] * fluxScale, startPoint, new Vector3d(1., 0., 0.), 4.0);
 
             ((FluxFieldLine) tempfls1[i]).setKMax(60);
-            ((FluxFieldLine) tempfls1[i]).setSArc(0.05);
+            ((FluxFieldLine) tempfls1[i]).setSArc(0.1);
             ((FluxFieldLine) tempfls1[i]).setBuildDir(FieldLine.BUILD_NEGATIVE);
             ((FluxFieldLine) tempfls1[i]).setIntegrationMode(FieldLine.RUNGE_KUTTA);
             tempfls1[i].setType(Field.B_FIELD);
@@ -346,18 +336,31 @@ public class TorqueOnDipoleB extends SimEM {
     }
 
     void addActions() {
-        TealAction ta = new TealAction("Coulomb's Law", this);
+        TealAction ta = new TealAction("Torque on Magnetic Dipole", this);
         addAction("Help", ta);
+        
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
 
     }
 
     boolean showFieldLines = true;
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("Coulomb's Law") == 0) {
+        if (e.getActionCommand().compareToIgnoreCase("Torque on Magnetic Dipole") == 0) {
 
         	if(mFramework instanceof TFramework) {
-        		((TFramework)mFramework).openBrowser("www/help/pchargehelp.html");
+        		((TFramework)mFramework).openBrowser("help/torqueondipoleB.html");
+        	}
+
+        } else {
+            super.actionPerformed(e);
+        }
+        
+        if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
+
+        	if(mFramework instanceof TFramework) {
+        		((TFramework)mFramework).openBrowser("help/executionView.html");
         	}
 
         } else {

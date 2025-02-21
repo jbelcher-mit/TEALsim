@@ -141,8 +141,8 @@ public class WireAndMagnet extends SimEM {
         fmanager = new FieldLineManager();
         fmanager.setElementManager(this);
         for (int i = 0; i < numlines; i++) {
-            double frac = (double) i / numlines;
-            double angle = frac * 2 * Math.PI;
+            double frac = (double) i / (double) numlines;
+            double angle = frac * 2*Math.PI;
             double offset = 0.;
             fl = new RelativeFLine(magnet, angle + offset, magnet.getLength());
             fl.setType(Field.B_FIELD);
@@ -171,7 +171,7 @@ public class WireAndMagnet extends SimEM {
         angleslider.setSliderWidth(200);
         angleslider.setID("angleslider");
         angleslider.addPropertyChangeListener("value", this);
-        angleslider.setText("Magnet Orientation");
+        angleslider.setText("Orientation");
         angleslider.setBorder(null);
         angleslider.setValue(45.);
 
@@ -193,6 +193,8 @@ public class WireAndMagnet extends SimEM {
         viz.setColorPerVertex(false);
         addElement(viz);
         
+        addActions();
+        
         //		 Launch
         mViewer.setShowGizmos(false);
         mSEC.setVisible(true);
@@ -205,6 +207,9 @@ public class WireAndMagnet extends SimEM {
     void addActions() {
         TealAction ta = new TealAction("Wire and Compass", this);
         addAction("Help", ta);
+        
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -213,6 +218,16 @@ public class WireAndMagnet extends SimEM {
         if (e.getActionCommand().compareToIgnoreCase("Wire and Compass") == 0) {
         	if(mFramework instanceof TFramework) {
         		((TFramework)mFramework).openBrowser("help/wireandmagnet.html");
+        	}
+
+        } else {
+
+            super.actionPerformed(e);
+        }
+        
+        if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
+        	if(mFramework instanceof TFramework) {
+        		((TFramework)mFramework).openBrowser("help/executionView.html");
         	}
 
         } else {

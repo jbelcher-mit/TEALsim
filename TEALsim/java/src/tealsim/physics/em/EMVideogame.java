@@ -283,19 +283,23 @@ public class EMVideogame extends SimEM {
         ta = new TealAction("Level Complete", "Level Complete", this);
         watch.setAction(ta);
 
-        
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
 
         
     }
 
     public void actionPerformed(ActionEvent e) {
+    	
         if (e.getActionCommand().compareToIgnoreCase("EM Video Game") == 0) {
         	if(mFramework instanceof TFramework) {
         		((TFramework) mFramework).openBrowser("help/emvideogame.html");
         	}
-        } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
+        } 
+        
+        else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/executionView.html");
         	}
         } else {
             super.actionPerformed(e);

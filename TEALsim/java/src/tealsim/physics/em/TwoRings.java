@@ -95,8 +95,6 @@ public class TwoRings extends SimEM {
         roc2.setSelectable(true);
         addElement(roc2);
 
-        //TDebug.println(0,"M1 flux " + m1.getBFlux(new Vector3d(5,0,0)));
-
         FieldDirectionGrid fv = new FieldDirectionGrid();
         fv.setType(Field.B_FIELD);
         fv.setResolution(0);
@@ -166,7 +164,7 @@ public class TwoRings extends SimEM {
             new Vector3d(Teal.RingOfCurrentDefaultRadius / 10., Teal.RingOfCurrentDefaultRadius, 0.)));
         mSEC.init();
         theEngine.requestRefresh();
-        TDebug.println(1, "ROC 1 pos = " + roc1.getPosition());
+        TDebug.println(0, "ROC 1 pos = " + roc1.getPosition());
         TDebug.println(1, "ROC 1 bounds = " + roc1.getBoundingArea());
         //TDebug.println(1,"NavMode: " + mViewer.getNavigationMode());
         TDebug.println(1, "bounds = " + theEngine.getBoundingArea());
@@ -193,9 +191,9 @@ public class TwoRings extends SimEM {
         ta = new TealAction("Reset", SimPlayer.RESET, this);
         addAction("Actions", ta);
 
-        ta = new TealAction("Two Current Rings", this);
-        addAction("Help", ta);
-
+        
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -206,6 +204,15 @@ public class TwoRings extends SimEM {
         	}
         }  else {
             super.actionPerformed(e);
+            
+            if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
+
+            	if(mFramework instanceof TFramework) {
+            		((TFramework)mFramework).openBrowser("help/executionView.html");
+            	}
+            }  else {
+                super.actionPerformed(e);
+            }
         }
     }
 

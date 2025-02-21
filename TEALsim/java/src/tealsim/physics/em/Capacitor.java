@@ -231,6 +231,8 @@ public class Capacitor extends SimEM {
     void addActions() {
         TealAction ta = new TealAction("Capacitor", this);
         addAction("Help", ta);
+        
+ 
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -239,6 +241,7 @@ public class Capacitor extends SimEM {
         if (e.getActionCommand().compareToIgnoreCase("Capacitor") == 0) {
             if ((mFramework != null) && (mFramework instanceof TFramework)) {
                 ((TFramework)mFramework).openBrowser("help/capacitor.html");
+                
             } else {
                 TDebug.println("mFramework is null!");
             }
