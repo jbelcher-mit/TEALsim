@@ -2,6 +2,8 @@
 
 The TEALsim Java 3D Visualizations  
 
+Last update of documentation in word_doc folder February 2 2025
+
 This is simulation software developed by the TEAL Project at MIT.
 
 TEAL is an active engagement model for teaching introductory physics.  
