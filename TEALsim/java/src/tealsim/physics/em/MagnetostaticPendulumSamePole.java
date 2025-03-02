@@ -268,7 +268,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         params.setText("Parameters2");
 //        params.add(slider);
         graphs = new JTaskPaneGroup();
-        graphs.setText("Graph of the Three Enegies and their Total");
+        graphs.setText("Graph of the Three Energies and their Total");
         graphs.add(label1);
         graphs.add(label2);
         graphs.add(label3);

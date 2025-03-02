@@ -271,7 +271,7 @@ public class MagnetostaticPendulum extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on swinging magnet
-        int numberFLA = 5;
+        int numberFLA = 25;
         maxStep = 200;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(swingingMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
@@ -295,7 +295,7 @@ public class MagnetostaticPendulum extends SimEM {
 //        }
         // put field lines on stationary magnet
         maxStep = 200;
-        numberFLA = 5;
+        numberFLA = 25;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(stationaryMagnet, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
@@ -355,7 +355,7 @@ public class MagnetostaticPendulum extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(.04);
+        theEngine.setDeltaTime(.025);
         mSEC.init();
 
         resetCamera();
