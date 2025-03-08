@@ -426,7 +426,7 @@ public class InverterMagneticConfiguration extends SimEM {
         }
         // put field lines on stationary 01 magnet
         startFL=MagnetRadiusSmall;
-        maxStep = 20;
+        maxStep = 40;
         numberFLA =15;
         double frac = .6;
         for (int j = 0; j < numberFLA; j++) {

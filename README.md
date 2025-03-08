@@ -2,21 +2,21 @@
 
 The TEALsim Java 3D Visualizations  
 
-Last update of documentation in word_docs: folder February 2 2025
+***Preliminary*** documentation for both the code and the underlying math and physics is in the folder ***word_docs.*** 
+
+The most recent update of documentation in that folder: ***March 7 2025**
+
+Documentation is an ongoing process. I estimate that the documentation will be complete by the end of the summer 2025.
+
+Questions?  Email: ***jbelcher@mit.edu***  https://web.mit.edu/jbelcher/www/
 
 This is simulation software developed by the TEAL Project at MIT.
 
 TEAL is an active engagement model for teaching introductory physics.  
 
-Documentation for both the code and the underlying math and physics is in the folder word_docs.  
+John Belcher, Andrew McKinney, Philip Bailey, Michael Danziger, Pierre Poignant, Ying Cao, Ralph Rabat, Mesrob Ohannessian.
 
-John Belcher, Andrew McKinney, Philip Bailey, Michael Danziger.
-
-https://web.mit.edu/8.02t/www/TEALsim/
-
-Questions?  Email: jbelcher@mit.edu
-
-https://web.mit.edu/jbelcher/www/
+Deployed simulations from this package are at ***https://web.mit.edu/8.02t/www/TEALsim/***
 
 
 MIT TEALsim Software License
