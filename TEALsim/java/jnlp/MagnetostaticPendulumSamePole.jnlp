@@ -2,7 +2,7 @@
 <!-- JNLP File for TEAL Simulation Application --> 
 <jnlp spec="1.0+" codebase="@WebURL@" href="MagnetostaticPendulumSamePole.jnlp"> 
   <information> 
-    <title>Ampere's Law Simulation</title> 
+    <title>Magnetostatic Pedulum Same Pole</title> 
     <vendor>Studio Physics</vendor> 
     <homepage href="docs/help.html"/> 
     <description>Magnetostatic Pendulum Same Pole</description> 

@@ -19,7 +19,7 @@ import javax.vecmath.*;
 public interface ForceModel {
 
   /**
-   * <code>getForce</code> returns the instanteous force on a physical object.
+   * <code>getForce</code> returns the instantaneous force on a physical object.
    * and time.
    */
   public Vector3d getForce(PhysicalElement phys);
