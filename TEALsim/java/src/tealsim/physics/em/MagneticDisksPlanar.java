@@ -244,13 +244,13 @@ public class MagneticDisksPlanar extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on moving magnet
-        int numberFLA = 75;
+        int numberFLA = 50;
         maxStep = 2400;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 1.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-  //          fmanager.addFieldLine(fl);
+     //       fmanager.addFieldLine(fl);
         }
         
         for (int j = 0; j < numberFLA; j++) {

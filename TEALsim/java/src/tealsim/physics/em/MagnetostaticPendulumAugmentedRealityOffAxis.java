@@ -77,7 +77,7 @@ import teal.util.TDebug;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class MagnetostaticPendulumAugmentedReality extends SimEM {
+public class MagnetostaticPendulumAugmentedRealityOffAxis extends SimEM {
 	
 	//  note I am declaring a serialVersionUID here although I have no idea what this means and it is
 	// the same id as in other applications, see the ElectrostaticPendulum  belcher 12/14/2024
@@ -119,14 +119,14 @@ public class MagnetostaticPendulumAugmentedReality extends SimEM {
     protected FieldConvolution mDLIC = null;
     FieldLineManager fmanager = null;
     PropertyDouble MuSlider;
-    double lengthPendulum=18.; 
+    double lengthPendulum=15; 
     
     double heightSupport = 25.;
 
-    public MagnetostaticPendulumAugmentedReality() {
+    public MagnetostaticPendulumAugmentedRealityOffAxis() {
 
         super();
-        title = "Magnetostatic Pendulum Augmented Reality";
+        title = "Magnetostatic Pendulum Augmented Reality Off Axis";
         TDebug.setGlobalLevel(1);
         Graph graph;
         MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
@@ -180,7 +180,7 @@ public class MagnetostaticPendulumAugmentedReality extends SimEM {
         stationaryMagnet = new CylindricalBarMagnet();
         stationaryMagnet.setRadius(MagnetRadius);
         stationaryMagnet.setMass(2.);
-        stationaryMagnet.setMu(0);
+        stationaryMagnet.setMu(fixedMu);
         stationaryMagnet.setID("stationaryMagnet");
         stationaryMagnet.setPickable(false);
         stationaryMagnet.setColliding(false);
@@ -216,7 +216,7 @@ public class MagnetostaticPendulumAugmentedReality extends SimEM {
         swingingMagnet.setRadius(MagnetRadius);
         //swingingMagnet.setPauliDistance(4.*MagnetRadius);
         swingingMagnet.setMass(5.);
-        swingingMagnet.setMu(fixedMu);
+        swingingMagnet.setMu(0);
         swingingMagnet.setID("swingingMagnet");
         swingingMagnet.setPickable(false);
         swingingMagnet.setColliding(true);
@@ -238,7 +238,7 @@ public class MagnetostaticPendulumAugmentedReality extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-.05, .15);
+        graph.setYRange(-0.005, .12);
         graph.setXLabel("Time");
         graph.setYLabel("Energy (Joules)");
  
@@ -335,14 +335,14 @@ public class MagnetostaticPendulumAugmentedReality extends SimEM {
 
         // Building the GUI.
         MuSlider = new PropertyDouble();
-        MuSlider.setText("Ratio m/M");
-        MuSlider.setMinimum(-3);
-        MuSlider.setMaximum(3.);
+        MuSlider.setText("Ratio |m/M|");
+        MuSlider.setMinimum(0.);
+        MuSlider.setMaximum(2.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
   //      MuSlider.addRoute(dummyMagnet, "Mu");
         MuSlider.addRoute(dummyMagnet, "Mu");
-        MuSlider.setValue(0.);
+        MuSlider.setValue(.1);
 
         //addElement(MuSlider);
         MuSlider.setVisible(true);
@@ -359,14 +359,14 @@ public class MagnetostaticPendulumAugmentedReality extends SimEM {
 
         //JTaskPane tp = new JTaskPane();
         ControlGroup params1 = new ControlGroup();
-        params1.setText("Current in Stationary Electromagnet");
+        params1.setText("Control Magnet Moment of Swinging Magnet Compared to Stationary Magnet");
         params1.add(MuSlider);
         params1.add(label);
         params1.add(score);
         addElement(params1);
         
         // create the slider to control the amount of friction in the model
-        frictionSlider.setText("Friction");
+        frictionSlider.setText("Number Field Lines");
         frictionSlider.setMinimum(0.);
         frictionSlider.setMaximum(5.);
         frictionSlider.setPaintTicks(true);
@@ -376,7 +376,7 @@ public class MagnetostaticPendulumAugmentedReality extends SimEM {
         
         
         // create the slider to control the number of field lines in the model
-        numberLinesSlider.setText("Number of Field Lines");
+        numberLinesSlider.setText("Friction");
         numberLinesSlider.setMinimum(5);
         numberLinesSlider.setMaximum(25);
         numberLinesSlider.setPaintTicks(true);
@@ -511,15 +511,13 @@ public class MagnetostaticPendulumAugmentedReality extends SimEM {
                 double time = theEngine.getTime();
                 Vector3d cali = swingingMagnet.getPosition();
                 double currentMu = dummyMagnet.getMu();
-                double currentMuSt = stationaryMagnet.getMu();
-                double currentMuSw = swingingMagnet.getMu();
-                TDebug.println(0, " time  " + time + " currentMuSt " + currentMuSt +" currentMuSw " + currentMuSw );
- //             	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
-              double newMu=-(.8195)*currentMu*currentMuSw;
+                double currentMuS = stationaryMagnet.getMu();
+  //             	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
+              double newMu=-(.8195)*currentMu*currentMuS;
  //              	TDebug.println(0, " time  " + time + " newMu " + newMu);
-                stationaryMagnet.setMu(newMu);
-//                double resetMu = swingingMagnet.getMu();                
-//             	TDebug.println(0, " time  " + time + " resetMu " + resetMu);
+                swingingMagnet.setMu(newMu);
+               double resetMu = swingingMagnet.getMu();                
+             	TDebug.println(0, " time  " + time + " resetMu " + resetMu +  "newMu  "  + newMu);
   //              stationaryMagnet.setMu(-2.*currentMu);
     //            theEngine.requestRefresh();
   
