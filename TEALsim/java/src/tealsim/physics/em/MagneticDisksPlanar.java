@@ -237,15 +237,15 @@ public class MagneticDisksPlanar extends SimEM {
  		PlanarConstraint arc = new PlanarConstraint(new Vector3d(0.,1.,0.));
 		rotatingCoil.addConstraint(arc);
  		
-        int maxStep = 2400;
+        int maxStep = 5400;
 
         double startFL=2.*MagnetRadius;
         fmanager = new FieldLineManager();
         fmanager.setElementManager(this);
         
         // put field lines on moving magnet
-        int numberFLA = 50;
-        maxStep = 2400;
+        int numberFLA = 650;
+        maxStep = 90000;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 1.,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
@@ -293,7 +293,7 @@ public class MagneticDisksPlanar extends SimEM {
         }
 
 
-    numberFLA = 5;     
+//    numberFLA = 5;     
  //        maxStep=1200;   
         
         fmanager.setSymmetryCount(2);
@@ -348,7 +348,7 @@ public class MagneticDisksPlanar extends SimEM {
         addActions();
         watch.setActionEnabled(true);
         
-        theEngine.setDeltaTime(.1);
+        theEngine.setDeltaTime(.001);
         mSEC.init();
 
         resetCamera();
