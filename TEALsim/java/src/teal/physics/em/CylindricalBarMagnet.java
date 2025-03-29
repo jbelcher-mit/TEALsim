@@ -28,22 +28,16 @@ import teal.util.*;
  * TEAL Physics and Mathematics</a> documentation.  
  */
 /*
- * Here is how I generated this class in like September of 2024
- * First, I copied MagnetDipole into a new class, rename it RingOfCurrent and change the field 
- * generating code.
- * 
- * This is not what I want to do.  I would be better off using the RingOfCurrent as my model 
- * instead of MagneticDipole.  A lot more complicated than I expected.  
  * September 10, 2024 2:03 pm.  Here is what I have done:  
- * I copied the MagneticDipole class into a new RingOfCurrent class.  
+ * I copied the MagneticDipole class into a new CylindricalBarMagnet class.  
  * Then I lifted the public Vector3d getB(Vector3d pos, double t) and  public Vector3d getB(Vector3d point) 
- * methods from RingOfCurrent and replaced those methods in RingOfCurrent (formerly MagneticDipole) 
- * class.  So now RingOfCurrent generates the B field of a ring of current.  
+ * methods from RingOfCurrent and replaced those methods in CylindricalBarMagnet (formerly MagneticDipole) 
+ * class.  So now CylindricalBarMagnet generates the B field of a ring of current.  
  * I needed to add the 
  * lines:
  *   protected double CEIaccuracy = 0.0002;  // default accuracy for elliptic Integral computation
  *   protected transient double radius_d = Teal.RingOfCurrentDefaultRadius;
- *   into RingOfCurrent to get the getB method from RingOfCurrent to work, and the line 
+ *   into CylindricalBarMagnet to get the getB method from RingOfCurrent to work, and the line 
  *   public static final double RingOfCurrentDefaultRadius = 0.2;
  *   to TEAL.java.  
  */
@@ -100,7 +94,7 @@ public class CylindricalBarMagnet extends Dipole implements HasMu {
      */
     public void setMu(double ch) {
         double c = (ch);
-        TDebug.println(1, id + ": setting mu to: " + c);
+//        TDebug.println(1, id + ": setting mu to: " + c);
         Double old = new Double(mu);
         mu = c;
         if (theEngine != null) theEngine.requestSpatial();
