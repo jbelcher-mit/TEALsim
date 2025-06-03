@@ -72,7 +72,7 @@ import teal.ui.control.*;
 import teal.util.TDebug;
 
 /**
- * @author belcher
+ * @author john belcher
  *
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
