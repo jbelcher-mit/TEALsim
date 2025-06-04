@@ -1,31 +1,23 @@
 /*
- * Created on Oct 6, 2003
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+  Created on Oct 6, 2003 modified June 4 2025
  */
 
 package tealsim.physics.em;
 import teal.plot.ElectrostaticPendulumTwoBodyEnergyPlot;
 import teal.ui.swing.JTaskPaneGroup;
 import teal.plot.Graph;
-import teal.plot.TwoBodyEnergyPlot;
-
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-
 import javax.media.j3d.Appearance;
 import javax.media.j3d.BoundingBox;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.Bounds;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.TransparencyAttributes;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
-
 import teal.field.Field;
 import teal.framework.TFramework;
 import teal.framework.TealAction;
@@ -36,82 +28,45 @@ import teal.sim.collision.SphereCollisionController;
 import teal.sim.constraint.ArcConstraint;
 import teal.sim.control.VisualizationControl;
 import teal.sim.engine.EngineObj;
-import teal.sim.engine.TEngine;
 import teal.physics.em.SimEM;
-import teal.physics.em.CylindricalBarMagnet;
-import teal.physics.em.EMEngine;
-import teal.physics.physical.Wall;
 import teal.physics.em.PointCharge;
 import teal.sim.properties.IsSpatial;
-import teal.sim.simulation.SimWorld;
 import teal.sim.spatial.FieldConvolution;
 import teal.sim.spatial.FieldLineManager;
 import teal.sim.spatial.RelativeFLine;
 import teal.ui.control.ControlGroup;
 import teal.ui.control.PropertyDouble;
-import teal.ui.swing.JTaskPaneGroup;
 import teal.util.TDebug;
 import teal.visualization.dlic.DLIC;
-
-// from Example_01
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import teal.framework.TFramework;
-import teal.framework.TealAction;
-import teal.render.Rendered;
 import teal.render.geometry.Cylinder;
-import teal.render.geometry.Sphere;
 import teal.render.j3d.*;
-import teal.render.j3d.loaders.Loader3DS;
-import teal.physics.em.SimEM;
-import teal.ui.control.*;
-import teal.util.TDebug;
 
 /**
- * @author danziger
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author danziger belcher
  */
 public class ElectrostaticPendulumSameSign extends SimEM {
-    /** The friction slider. */
-    PropertyDouble frictionSlider = new PropertyDouble();
-    /** The friction in the world. */
-    double friction;
-    Graph graph;
-    ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
-    
-	//  note I am declaring a serialVersionUID here although I have no idea what this means and it is
-	// the same id as in other applications, see the MagnetostaticPendulum  belcher 12/14/2024
     private static final long serialVersionUID = 3256443586278208051L;
     
-    /** An imported 3DS object (a hemisphere).      */ 
-    Rendered importedObject01 = new Rendered();
-    Node3D node01 = new Node3D();
-    /** An imported 3DS object (a cone).  */
-    Rendered importedObject02 = new Rendered();
-    /** A 3D node for the cone. */
-    Node3D node02 = new Node3D();
-
-    JButton but = null;
-    JButton but1 = null;
-    JTaskPaneGroup vis;
-    JLabel label;
-    JLabel score;
-    double minScore = 100000000.;
+    // instantiate the electromagnetic objects
     PointCharge swingingCharge;
     PointCharge fixedCharge;
     PointCharge dummyCharge;
+    
+    // create the friction slider.
+    PropertyDouble frictionSlider = new PropertyDouble();
+    double friction;
+    
+  // create the energy graph 
+    Graph graph;
+    ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
+    
+    
+    // create a place to put the arm and base 3DS model
+    Rendered importedObject01 = new Rendered();
+    Node3D node01 = new Node3D();
     Rendered nativeObject01;
     Watcher watch;
-    double wallscale = 2.0;
-    double wheight = 3.0;
-    double wallElasticity = 1.0;
-    Vector3d wallheight = new Vector3d(0., 0., wheight);
     Appearance myAppearance;
     
     protected FieldConvolution mDLIC = null;
@@ -122,34 +77,16 @@ public class ElectrostaticPendulumSameSign extends SimEM {
     double heightSupport = 25.;
 
     public ElectrostaticPendulumSameSign() {
-
         super();
         title = "Electrostatic Pendulum Same Sign";
-        
-       
         TDebug.setGlobalLevel(1);
-
-        // Building the world.
-        theEngine.setDamping(0.0);
-        theEngine.setGravity(new Vector3d(0., -9.8,0.));
-
-        nativeObject01 = new Rendered();
-  
-        ShapeNode ShapeNodeNative01 = new ShapeNode();
-
-        ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .1, lengthPendulum));
-        nativeObject01.setNode3D(ShapeNodeNative01);
-        nativeObject01.setColor(new Color(0, 0, 100));
-        nativeObject01.setPosition(new Vector3d(0,heightSupport,0.));
-        nativeObject01.setModelOffsetPosition(new Vector3d(0,-lengthPendulum/2,0.));
-        nativeObject01.setDirection(new Vector3d(1.,0.,0.));
-        addElement(nativeObject01);
         
+        // Building the world.
+        
+        // import the arm and base for stand
         
         double scale3DS = 3.; // this is an overall scale factor for these .3DS objects
-        // Creating components.
        Loader3DS max = new Loader3DS();
-    	
         BranchGroup bg01 = 
          max.getBranchGroup("models/ArmBase.3DS",
          "models/");
@@ -159,6 +96,21 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         importedObject01.setNode3D(node01);
         importedObject01.setPosition(new Vector3d(0., 0., 0.));
         addElement(importedObject01);
+        theEngine.setDamping(0.0);
+        theEngine.setGravity(new Vector3d(0., -9.8,0.));
+        // create the pendulum itself
+        nativeObject01 = new Rendered();
+        ShapeNode ShapeNodeNative01 = new ShapeNode();
+        ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, .1, lengthPendulum));
+        nativeObject01.setNode3D(ShapeNodeNative01);
+        nativeObject01.setColor(new Color(0, 0, 100));
+        nativeObject01.setPosition(new Vector3d(0,heightSupport,0.));
+        nativeObject01.setModelOffsetPosition(new Vector3d(0,-lengthPendulum/2,0.));
+        nativeObject01.setDirection(new Vector3d(1.,0.,0.));
+        addElement(nativeObject01);
+        
+        
+
         
 // change some features of the lighting, background color, etc., from the default values, if desired
         
@@ -331,12 +283,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         chargeSlider.setValue(.3);
         //addElement(chargeSlider);
         chargeSlider.setVisible(true);
-        label = new JLabel("z value of bob:");
-        score = new JLabel();
-        label.setBounds(40, 595, 140, 50);
-        score.setBounds(220, 595, 40, 50);
-        label.setVisible(true);
-        score.setVisible(true);
+
         //addElement(label);
         //addElement(score);
         watch = new Watcher();
@@ -346,8 +293,6 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         ControlGroup params1 = new ControlGroup();
         params1.setText("Control Charge of Swinging Charge Compared to Stationary Charge");
         params1.add(chargeSlider);
-        params1.add(label);
-        params1.add(score);
         addElement(params1);
         
         
@@ -471,7 +416,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
 
         public void nextSpatial() {
             if (theEngine != null) {
-                double time = theEngine.getTime();
+
                 Vector3d cali = swingingCharge.getPosition();
                 double currentq = dummyCharge.getCharge();
                 double currentQ = fixedCharge.getCharge();
@@ -479,24 +424,22 @@ public class ElectrostaticPendulumSameSign extends SimEM {
               double newQ=currentq*currentQ;
  //              	TDebug.println(0, " time  " + time + " newMu " + newMu);
                 swingingCharge.setCharge(newQ);
-                double resetCharge = swingingCharge.getCharge();  
+
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
           		System.out.println("    ");
  //           	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
-         	    Vector3d hetti = fixedCharge.getPosition();
+
 //           	TDebug.println(0, "swingingCharge   "  + qtest);
                 nativeObject01.setDirection(reference);
-                double scale = cali.y/100;
-                score.setText(String.valueOf(scale));
-               score.setText(String.valueOf(scale));
+
+
                 if (actionEnabled) {
                     if (testBounds.intersect(new Point3d(swingingCharge.getPosition()))) {
                         System.out.println("congratulations");
                         // Make this a one-shot
                         actionEnabled = false;
                         mSEC.stop();
-                        minScore = Math.min(minScore, time);
                         if (theAction != null) {
                             theAction.triggerAction();
                         }
