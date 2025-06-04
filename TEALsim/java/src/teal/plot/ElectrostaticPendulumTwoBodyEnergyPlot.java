@@ -9,31 +9,22 @@
  * 
  */
 
-package teal.plot;
+package teal.plot; 
 
 import javax.vecmath.Vector3d;
 
 import teal.sim.engine.TSimEngine;
 import teal.physics.physical.PhysicalObject;
 import teal.physics.em.HasCharge;
-import teal.util.TDebug;
-//import teal.sim.physical.*;
 
 /**
  * @author danziger
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
  */
 public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
 	
 	PhysicalObject b1 = null;
     
-    
     PhysicalObject b2 = null;
-    
     
     TSimEngine indObj = null;
     
@@ -97,12 +88,6 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
         if(!initialized)
             initialize();
         
-//        Number q1 = (Number) b1.getProperty(b1Charge);
-//        Number q2 = (Number) b2.getProperty(b2Charge);
-//        Number m1 = (Number) b1.getProperty(b1Mass);
-//        Vector3d pos1 = (Vector3d) b1.getProperty(b1Pos);
-//        Vector3d vel1 = (Vector3d) b1.getProperty(b1Vel);
-        
 		double q1 = ((HasCharge)b1).getCharge();
 		double q2 = ((HasCharge)b2).getCharge();
 		double m1 = b1.getMass();
@@ -116,7 +101,6 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	double eEnergy;
     	eEnergy = q1 * q2 * (1/(rlength)); 
     	double t = indObj.getTime();
-    	//TDebug.println(0, "eEnergy: " + eEnergy );
 
     	double kEnergy;
     	double gpEnergy;
@@ -125,7 +109,6 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	gpEnergy = m1 * (9.8)* (pos1.y-5.) *1.;
 
     	kEnergy=kEnergy*1.;
-    	gpEnergy = gpEnergy;
     	// the (4.*Math.PI) factor below comes because we have set epsilon naught to 1 in 1 in teal.config.Teal
     	eEnergy=eEnergy/(4.*Math.PI);
     	

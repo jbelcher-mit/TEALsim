@@ -1,4 +1,5 @@
-/*
+
+ /*
  * TEALsim - MIT TEAL Project
  * Copyright (c) 2004 The Massachusetts Institute of Technology. All rights reserved.
  * Please see license.txt in top level directory for full license.
@@ -9,7 +10,7 @@
  * 
  */
 
-package teal.sim.constraint;
+package teal.sim.constraint; 
 
 import javax.vecmath.Vector3d;
 
@@ -60,23 +61,6 @@ public class ArcConstraint implements Constraint {
 		return radius;
 	}	
 
-/*	public Vector3d getReaction(Vector3d position, Vector3d velocity, Vector3d action) {
-		Vector3d bar = new Vector3d(position); bar.sub(center);
-		Vector3d tangent = new Vector3d();
-		tangent.cross(bar, normal); tangent.normalize();
-		double effective = action.dot(tangent);
-		Vector3d reaction = new Vector3d(tangent);
-		reaction.scaleAdd(-effective, action);
-		reaction.negate();
-
-		Vector3d centripetal = new Vector3d(bar);
-		centripetal.scale(-1./bar.length());
-		centripetal.scale(velocity.length()*velocity.length()/radius);
-		reaction.add(centripetal);
-
-		return reaction;
-	}
-*/
 	public Vector3d getReaction(Vector3d position, Vector3d velocity, Vector3d action) {
 		return getReaction(position, velocity, action, 0.);
 	}
@@ -89,11 +73,21 @@ public class ArcConstraint implements Constraint {
 		Vector3d tangential = new Vector3d();
 		tangential.cross(radial, normal);
 		
+		// this part of the code actually does the physics by just 
+		// making the radial component of the force zero.
+		// you take the action find its tangential component then subtract that
+		//  from the action, leaving only the radial component and then 
+		// make the reaction the negative of the radial component, and add that to the action,
+		// thus killing the radial component (whew!)
+		
 		double effective = action.dot(tangential);
 		Vector3d reaction = new Vector3d(tangential);
 		reaction.scaleAdd(-effective, action);
 		reaction.negate();
-
+		
+//  this part of the code apparently does nothing, I think because the mass is zero?
+// doesn't seem to make sense in any case
+		
 		Vector3d centripetal = new Vector3d(radial);
 		centripetal.scale(-mass*velocity.lengthSquared()/radius);
 		
