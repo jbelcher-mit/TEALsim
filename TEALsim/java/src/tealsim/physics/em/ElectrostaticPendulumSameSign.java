@@ -13,9 +13,7 @@ import javax.media.j3d.BoundingBox;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.Bounds;
 import javax.media.j3d.BranchGroup;
-import javax.media.j3d.TransparencyAttributes;
 import javax.swing.JLabel;
-import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import teal.field.Field;
@@ -47,44 +45,35 @@ import teal.render.j3d.*;
  */
 public class ElectrostaticPendulumSameSign extends SimEM {
     private static final long serialVersionUID = 3256443586278208051L;
-    
     // instantiate the electromagnetic objects
     PointCharge swingingCharge;
     PointCharge fixedCharge;
     PointCharge dummyCharge;
-    
+ //  set the length of the pendulum and the height of the support   
+    double lengthPendulum=20.; 
+    double heightSupport = 25.;
     // create the friction slider.
     PropertyDouble frictionSlider = new PropertyDouble();
     double friction;
-    
   // create the energy graph 
     Graph graph;
-    ElectrostaticPendulumTwoBodyEnergyPlot eGraph;
-    
-    
+    ElectrostaticPendulumTwoBodyEnergyPlot eGraph;   
     // create a place to put the arm and base 3DS model
     Rendered importedObject01 = new Rendered();
     Node3D node01 = new Node3D();
     Rendered nativeObject01;
     Watcher watch;
     Appearance myAppearance;
-    
+ // create the line integral convolution graph   
     protected FieldConvolution mDLIC = null;
+// create the field line manager for the charges
     FieldLineManager fmanager = null;
-    
-    double lengthPendulum=20.; 
-    
-    double heightSupport = 25.;
 
     public ElectrostaticPendulumSameSign() {
         super();
         title = "Electrostatic Pendulum Same Sign";
-        TDebug.setGlobalLevel(1);
-        
-        // Building the world.
-        
-        // import the arm and base for stand
-        
+        TDebug.setGlobalLevel(1);     
+        // import the arm/base for stand
         double scale3DS = 3.; // this is an overall scale factor for these .3DS objects
        Loader3DS max = new Loader3DS();
         BranchGroup bg01 = 
@@ -92,11 +81,12 @@ public class ElectrostaticPendulumSameSign extends SimEM {
          "models/");
         node01.setScale(scale3DS);
         node01.addContents(bg01);
-        
         importedObject01.setNode3D(node01);
         importedObject01.setPosition(new Vector3d(0., 0., 0.));
         addElement(importedObject01);
+// initially set friction to zero but changed in public void propertyChange(PropertyChangeEvent pce) {       
         theEngine.setDamping(0.0);
+// set gravity
         theEngine.setGravity(new Vector3d(0., -9.8,0.));
         // create the pendulum itself
         nativeObject01 = new Rendered();
@@ -106,26 +96,15 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         nativeObject01.setColor(new Color(0, 0, 100));
         nativeObject01.setPosition(new Vector3d(0,heightSupport,0.));
         nativeObject01.setModelOffsetPosition(new Vector3d(0,-lengthPendulum/2,0.));
+// the direction of the pendulum is set as the charge moves in public void nextSpatial() {
         nativeObject01.setDirection(new Vector3d(1.,0.,0.));
         addElement(nativeObject01);
-        
-        
-
-        
-// change some features of the lighting, background color, etc., from the default values, if desired
-        
-        mViewer.setBackgroundColor(new Color(240,240,255));
-        
-        // -> Rectangular Walls
-        myAppearance = Node3D.makeAppearance(new Color3f(Color.GRAY), 0.5f, 0.5f, false);
-        myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
-
-        // Set charges
+// change some features of the lighting, background color, etc., from the default values, if desired  
+        mViewer.setBackgroundColor(new Color(240,240,255));      
+        // Set characteristics of charges
         double pointChargeRadius = 0.9;
-
         fixedCharge = new PointCharge();
         fixedCharge.setRadius(pointChargeRadius);
-        //fixedCharge.setPauliDistance(4.*pointChargeRadius);
         fixedCharge.setMass(1.0);
         fixedCharge.setCharge(223.0);
         fixedCharge.setID("fixedCharge");
@@ -151,22 +130,20 @@ public class ElectrostaticPendulumSameSign extends SimEM {
   
         dummyCharge.setMoveable(false);
         dummyCharge.setRotable(false);
-        SphereCollisionController sccx1 = new SphereCollisionController(dummyCharge);
         sccx.setRadius(1.);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-//        dummyCharge.setCollisionController(sccx);
         
-
         swingingCharge = new PointCharge();
         swingingCharge.setRadius(pointChargeRadius);
-        //swingingCharge.setPauliDistance(4.*pointChargeRadius);
         swingingCharge.setMass(5.0);
         swingingCharge.setCharge(6);
         swingingCharge.setID("swingingCharge");
         swingingCharge.setPickable(false);
         swingingCharge.setColliding(true);
         swingingCharge.setGeneratingP(true);
+        //  the actual position of this charge is set in private void resetPointCharges(double heightSupport, double lengthPendulum) {
+        // which is called before execution begins
         swingingCharge.setPosition(new Vector3d(0.,0., 0.));
         swingingCharge.setMoveable(true);
         swingingCharge.setConstrained(true);
@@ -174,15 +151,12 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         sccx.setRadius(pointChargeRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
-//        swingingCharge.addPropertyChangeListener("charge",this );
-//        swingingCharge.addPropertyChangeListener("position", this);
         addElement(swingingCharge);
         
         // ***************************************************************************
         // Graph
         // ***************************************************************************
         graph = new Graph();
-        //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
         graph.setYRange(-0.005, .14);
         graph.setXLabel("Time");
@@ -213,9 +187,8 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         JTaskPaneGroup params, graphs;
         params = new JTaskPaneGroup();
         params.setText("Parameters");
-//        params.add(slider);
         graphs = new JTaskPaneGroup();
-        graphs.setText("Graph of the Three Enegies and their Total");
+        graphs.setText("Graph of the Three Energies and their Total");
         graphs.add(label1);
         graphs.add(label2);
         graphs.add(label3);
@@ -223,27 +196,27 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         graphs.add(graph);
         // Hack to get around not adding graph as element
         theEngine.addSimElement(graph);
+        // set up dlic controls 
         visControl = new VisualizationControl();
         visControl.setConvolutionModes(DLIC.DLIC_FLAG_E|DLIC.DLIC_FLAG_EP);
         visControl.setActionFlags(VisualizationControl.CHANGE_FL_COLORMODE);
         visControl.setFieldConvolution(mDLIC);
         visControl.setSymmetryCount(2);
+// add field line manager
         visControl.setFieldLineManager(fmanager);
         visControl.setColorPerVertex(false);
         addElement(graphs);
-//        addElement(params);
-//        addElement(visControl);
-      
+// constrain movement to an arc  
  		ArcConstraint arc = new ArcConstraint(new Vector3d(.0,heightSupport,0.), new Vector3d(0.,0.,1.), lengthPendulum);
 		swingingCharge.addConstraint(arc);
- 		
+ 	//  set maximum number of steps to take along a field line	
         int maxStep = 200;
-
+// set where to start the field line off
         double startFL=pointChargeRadius/2.;
         fmanager = new FieldLineManager();
         fmanager.setElementManager(this);
         
-        // put field lines on swinging charge
+        // put field lines on swinging charge 5 azimuth and 5 polar
         int numberFLA = 5;
         int numberFLP =5;
         for (int k = 0; k < numberFLP+2; k++) {
@@ -255,7 +228,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
             fmanager.addFieldLine(fl);
         }
         }
-        // put field lines on stationary charge
+        // put field lines on stationary charge 5 azimuth and 5 polar
         
         numberFLA =5;
         numberFLP =5;
@@ -281,22 +254,14 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(dummyCharge, "charge");
         chargeSlider.setValue(.3);
-        //addElement(chargeSlider);
         chargeSlider.setVisible(true);
-
-        //addElement(label);
-        //addElement(score);
         watch = new Watcher();
         addElement(watch);
-
-        //JTaskPane tp = new JTaskPane();
         ControlGroup params1 = new ControlGroup();
         params1.setText("Control Charge of Swinging Charge Compared to Stationary Charge");
         params1.add(chargeSlider);
         addElement(params1);
-        
-        
-        // create the slider to control the amount of friction in the model
+        // properties of the slider to control the amount of friction in the model
         frictionSlider.setText("Friction");
         frictionSlider.setMinimum(0.);
         frictionSlider.setMaximum(5.);
@@ -312,7 +277,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         controls.add(frictionSlider);
         addElement(controls);
         
-        //tp.add(params);
+        // put in the DLIC buttons 
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
         mDLIC = new FieldConvolution();
@@ -326,12 +291,10 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         vis.setColorPerVertex(false);
         
         addElement(vis);
-        //tp.add(vis);
-        //addElement(tp);
 
         addActions();
         watch.setActionEnabled(true);
-        
+//  set time step for the integration         
         theEngine.setDeltaTime(.02);
         mSEC.init();
 
@@ -339,28 +302,28 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         reset(heightSupport,lengthPendulum);
     }
 
-
-
     void addActions() {
+    	
+    	// sets up the help links
 
         TealAction ta = new TealAction("Electrostatic Pendulum Same Sign", this);
         addAction("Help", ta);
 
-        ta = new TealAction("Level Complete", "Level Complete", this);
-        watch.setAction(ta);
-
-
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
         
     }
+    
+    // continuing setting up help links
 
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().compareToIgnoreCase("Electrostatic Pendulum Same Sign") == 0) {
         	if(mFramework instanceof TFramework) {
         		((TFramework) mFramework).openBrowser("help/Ependulumsame.html");
         	}
-        } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
+        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/eEpendulumsame.html");
+        		((TFramework) mFramework).openBrowser("help/executionView.html");
         	}
         } else {
             super.actionPerformed(e);
@@ -371,12 +334,11 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         mSEC.stop();
         mSEC.reset();
         resetPointCharges(heightSupport,lengthPendulum);
-        //theEngine.requestRefresh();
         watch.setActionEnabled(true);
     }
 
     private void resetPointCharges(double heightSupport, double lengthPendulum) {
-
+    	// this is where the initial position of the swinging charge is set
         swingingCharge.setPosition(new Vector3d(-lengthPendulum, heightSupport, 0));
     }
 
@@ -427,13 +389,14 @@ public class ElectrostaticPendulumSameSign extends SimEM {
 
                 Vector3d reference = new Vector3d(0.,heightSupport,0.);
                 reference.sub(cali);
-          		System.out.println("    ");
+//         		System.out.println("    ");
  //           	TDebug.println(0, "Electrostatic Pendulum   time   " + time + " x pos " + cali.x + " y pos " + cali.y + " z pos "+ cali.z);
 
 //           	TDebug.println(0, "swingingCharge   "  + qtest);
+// this sets the position of the pendulum so that it follows the charge as it moves
                 nativeObject01.setDirection(reference);
 
-
+// the code below has not real function in this application, left in from the original code emzoo, from which this was adapted
                 if (actionEnabled) {
                     if (testBounds.intersect(new Point3d(swingingCharge.getPosition()))) {
                         System.out.println("congratulations");
