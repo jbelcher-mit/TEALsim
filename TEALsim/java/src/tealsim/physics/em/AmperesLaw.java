@@ -39,7 +39,7 @@ import teal.visualization.dlic.DLIC;
  * either into or out of the page, all of the same strength.
  *  
  * @author John Belcher   
- * @version 1.0 
+ * @version 1.0   
  * */
 
 public class AmperesLaw extends SimEM  {
