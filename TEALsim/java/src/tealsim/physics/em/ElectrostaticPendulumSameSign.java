@@ -1,5 +1,5 @@
 /*
-  Created on Oct 6, 2003 modified June 4 2025
+  Created on Oct 6, 2003 modified June 14 2025
  */
 
 package tealsim.physics.em;
