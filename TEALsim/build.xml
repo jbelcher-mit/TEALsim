@@ -234,7 +234,7 @@
 	</target>
 	<target name="build_core" depends="init,copy_core">
 		<echo>Now building TEAL-core:</echo>
-		<javac srcdir="${build.dir}/src" destdir="${build.dir}/classes" includes="teal/**" debug="on" optimize="off" target="1.8" compiler="javac1.8" source="1.8" executable="C:\Program Files\Java\jdk-1.8\bin\javac" fork="true">
+		<javac srcdir="${build.dir}/src" destdir="${build.dir}/classes" includes="teal/**" debug="on" optimize="off" target="1.8" compiler="javac1.8" source="1.8" executable="C:\Program Files\Java\jdk1.8.0_202\bin\javac" fork="true">
 			<classpath>
 				<pathelement location="java/lib/l2fprod-common-tasks.jar" />
 				<pathelement location="${j3djar.dir}/j3dcore.jar" />
@@ -248,7 +248,7 @@
 	</target>
 	<target name="build_sims" depends="init,copy_sims,build_core">
 		<echo>Now building TEALsim:</echo>
-		<javac srcdir="${build.dir}/src" destdir="${build.dir}/classes" excludes="tealsim.physics.ilab" includes="tealsim/**" debug="on" optimize="off" target="1.8" compiler="javac1.8" source="1.8" executable="C:\Program Files\Java\jdk-1.8\bin\javac" fork="true">
+		<javac srcdir="${build.dir}/src" destdir="${build.dir}/classes" excludes="tealsim.physics.ilab" includes="tealsim/**" debug="on" optimize="off" target="1.8" compiler="javac1.8" source="1.8" executable="C:\Program Files\Java\jdk1.8.0_202\bin\javac" fork="true">
 		<classpath>
 						<pathelement location="java/lib/l2fprod-common-tasks.jar" />
 						<pathelement location="${j3djar.dir}/j3dcore.jar" />
