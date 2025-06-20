@@ -304,6 +304,10 @@ public class PCharges extends SimEM {
     void addActions() {
         TealAction ta = new TealAction("Two Point Charges", this);
         addAction("Help", ta);
+        
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
+        
 
     }
     // This method is called when an ActionEvent is received.  Here we tell the application to launch the Help file when
@@ -313,10 +317,13 @@ public class PCharges extends SimEM {
         	if(mFramework instanceof TFramework) {
         		((TFramework)mFramework).openBrowser("help/twopointcharge.html");
         	}
-        }
-        else {
+        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
+        	if(mFramework instanceof TFramework) {
+        		((TFramework) mFramework).openBrowser("help/executionView.html");
+        	}
+        } else {
             super.actionPerformed(e);
         }
     }
-
+    
 }

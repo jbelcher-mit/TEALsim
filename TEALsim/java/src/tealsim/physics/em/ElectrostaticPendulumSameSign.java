@@ -315,7 +315,8 @@ public class ElectrostaticPendulumSameSign extends SimEM {
     }
     
     // continuing setting up help links
-
+    // This method is called when an ActionEvent is received.  Here we tell the application to launch the Help file when
+    // the Help ActionEvent defined above is received.
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().compareToIgnoreCase("Electrostatic Pendulum Same Sign") == 0) {
         	if(mFramework instanceof TFramework) {
