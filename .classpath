@@ -9,9 +9,9 @@
 	<classpathentry kind="src" path="TEALsim/release/TEALsim-v0.4/java/src"/>
 	<classpathentry kind="src" path="TEALsim/release/TEALsim-v0.4/src"/>
 	<classpathentry kind="src" path="TEALsim/tools/ydoc/doc"/>
+	<classpathentry kind="lib" path="TEALsim/resources"/>
 	<classpathentry kind="lib" path="TEALsim/java/lib/j3d/1.5.2/j3dcore.jar"/>
 	<classpathentry kind="lib" path="TEALsim/java/lib/j3d/1.5.2/j3dutils.jar"/>
 	<classpathentry kind="lib" path="TEALsim/java/lib/j3d/1.5.2/vecmath.jar"/>
-	<classpathentry kind="lib" path="TEALsim/resources"/>
 	<classpathentry kind="output" path="TEALsim/bin"/>
 </classpath>

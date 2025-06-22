@@ -514,8 +514,8 @@ for (int j = 0; j < numberFLA; j++) {
         TealAction ta = new TealAction("EM Video Game", this);
         addAction("Help", ta);
 
-        ta = new TealAction("Level Complete", "Level Complete", this);
-        watch.setAction(ta);
+//        ta = new TealAction("Level Complete", "Level Complete", this);
+//        watch.setAction(ta);
 
 
         
