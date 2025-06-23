@@ -206,16 +206,17 @@ public class PointCharge extends EMObject implements HasCharge, GeneratesE, Gene
 
 		// k = Pauli power.	
 		double k = 12.0;
-		// r0 = Pauli distance.	
+		// if pauliDisntance is less than zero, r0 is 2 times radius, otherwise it is PauliDistance
 		double r0 = (pauliDistance < 0.)?(2.*radius):pauliDistance;
 
 		R.normalize();
 
 		// A scale of 1 exactly counterbalances the electric field.
 		// Ad-hoc scale.
-//		double scale = (r>r0)?0.:(10.*(r0-r)/r0+1.);
 		// Pauli scale.
 		double scale = Math.pow(r0/r, (k-2.));
+		// the absolute value below means this force will always be repulsive.  It will
+		// vary as 1/r^(k-2), or 1/r^10 for k = 12, compared to 1/r^2 for the electric force
 		R.scale( Math.abs(this.charge_d) * scale / (Teal.fourPiPermVacuum * r_2));
 
 		return R;
@@ -338,6 +339,7 @@ public class PointCharge extends EMObject implements HasCharge, GeneratesE, Gene
 		if (isMoveable()) {
 			temp.scale(charge_d, ((EMEngine)theEngine).getEField().get(position_d, this)); // F=qE
 			externalForces.add(temp);  // force from EField
+			// the abs value below means this force will always be repulsive
 			temp.scale(Math.abs(charge_d), ((EMEngine)theEngine).getPField().get(position_d, this));
 			externalForces.add(temp); // Pauli repulsion
 			temp.cross(velocity_d,((EMEngine)theEngine).getBField().get(position_d,this));
