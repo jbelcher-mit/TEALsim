@@ -14,6 +14,7 @@ package teal.plot;
 import javax.vecmath.Vector3d;
 
 import teal.sim.engine.TSimEngine;
+import teal.util.TDebug;
 import teal.physics.physical.PhysicalObject;
 import teal.physics.em.HasCharge;
 
@@ -118,8 +119,8 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	eEnergy=eEnergy*factor;
 
     	totEnergy = kEnergy + gpEnergy+eEnergy;
-//    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
- //   	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
+    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
+    	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {
