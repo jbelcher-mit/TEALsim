@@ -4,7 +4,7 @@ The TEALsim Java 3D Visualizations
 
 ***Preliminary*** documentation for both the code and the underlying math and physics is in the folder ***word_docs.*** 
 
-The most recent update of documentation in that folder: ***March 7 2025***
+The most recent update of documentation in that folder: ***June 2025***
 
 The documentation is an ongoing process. I estimate that the documentation will be complete by the first of September 2025.
 

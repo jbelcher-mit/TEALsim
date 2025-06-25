@@ -117,7 +117,7 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	gpEnergy=gpEnergy*factor;
     	kEnergy=kEnergy*factor;
     	eEnergy=eEnergy*factor;
-
+ //   	TDebug.println(0, " q1: " + q1 + " q2: " + q2 + " m1:  "+ m1 );
     	totEnergy = kEnergy + gpEnergy+eEnergy;
     	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
     	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
