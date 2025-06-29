@@ -11,6 +11,7 @@
 
 package teal.math;
 
+import teal.util.TDebug;
 
 /**
  * Fourth order Runge-Kutta integration implementation.  An Integratable (in most cases, the SimEngine itself) is passed
@@ -32,6 +33,7 @@ public class RungeKutta4 {
     public static double[] integrate(Integratable rk, double s_start, double stepsize) {
 		//		System.out.println( " Start ____________________________" );
 		int n = rk.getNumberDependentValues();
+//    	TDebug.println(0, " NumberDependentValues: " + n);
 		double[] X_at_s = new double[n];
 		double[] dXds_at_s = new double[n];
 		double[] X_at_sph = new double[n];
@@ -44,10 +46,14 @@ public class RungeKutta4 {
 		double s_p_h_2 = s_start + h_2;
 
 		rk.getDependentValues(X_at_s, 0);
+
 		rk.getDependentDerivatives(dXds_at_s, 0, s_start);
+
+		TDebug.println(2,  X_at_s[0] +", " + X_at_s[1] + ", " + dXds_at_s[0] + ", " + dXds_at_s[1] );
+		
 		for (int i = 0; i < n; i++) {
 			Xt[i] = X_at_s[i] + h_2 * dXds_at_s[i];
-		}
+		} 
 
 		rk.setDependentValues(Xt, 0);
 		rk.getDependentDerivatives(dXt, 0, s_p_h_2);
@@ -70,6 +76,7 @@ public class RungeKutta4 {
 		}
 
 		//		System.out.println( " End ----------------------------" );
+
 		return X_at_sph;
 	}
     

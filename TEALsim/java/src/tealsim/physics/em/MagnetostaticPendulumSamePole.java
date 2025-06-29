@@ -126,7 +126,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
         super();
         title = "Magnetostatic Pendulum Same Pole";
-        TDebug.setGlobalLevel(1);
+        TDebug.setGlobalLevel(0);
         Graph graph;
         MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
        
@@ -237,7 +237,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-0.005, .12);
+        graph.setYRange(-0.005, .012);
         graph.setXLabel("Time");
         graph.setYLabel("Energy (Joules)");
  

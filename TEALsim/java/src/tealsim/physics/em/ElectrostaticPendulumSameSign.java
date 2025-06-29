@@ -106,7 +106,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         fixedCharge = new PointCharge();
         fixedCharge.setRadius(pointChargeRadius);
         fixedCharge.setMass(1.0);
-        fixedCharge.setCharge(223.0);
+        fixedCharge.setCharge(223);  // WAS 223
         fixedCharge.setID("fixedCharge");
         fixedCharge.setPickable(false);
         fixedCharge.setColliding(true);
@@ -158,7 +158,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         graph.setXRange(0., 15.);
-        graph.setYRange(-0.005, .14);
+        graph.setYRange(-0.005,1400 );  //  WAS .014
         graph.setXLabel("Time");
         graph.setYLabel("Energy (Joules)");
  

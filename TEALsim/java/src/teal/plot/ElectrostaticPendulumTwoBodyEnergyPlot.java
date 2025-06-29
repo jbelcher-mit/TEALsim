@@ -106,21 +106,23 @@ public class ElectrostaticPendulumTwoBodyEnergyPlot implements PlotItem {
     	double kEnergy;
     	double gpEnergy;
     	double totEnergy;
+    	double speed;
+    	speed= vel1.length();
     	kEnergy = 0.5 * m1 * vel1.lengthSquared() * 1.;
     	gpEnergy = m1 * (9.8)* (pos1.y-5.) *1.;
 
     	kEnergy=kEnergy*1.;
-    	// the (4.*Math.PI) factor below comes because we have set epsilon naught to 1 in 1 in teal.config.Teal
-    	eEnergy=eEnergy/(4.*Math.PI);
+    	// the (4.*Math.PI) factor below comes because we have set epsilon naught to 1 in teal.config.Teal
+    	 eEnergy=eEnergy/(4.*Math.PI);
     	
-    	double factor = 1./10000;
+    	double factor = 1.;
     	gpEnergy=gpEnergy*factor;
     	kEnergy=kEnergy*factor;
     	eEnergy=eEnergy*factor;
- //   	TDebug.println(0, " q1: " + q1 + " q2: " + q2 + " m1:  "+ m1 );
+    	TDebug.println(2, " q1: " + q1 + " q2: " + q2 + " m1:  "+ m1 + " speed: "+ speed + "  y: " + pos1.y);
     	totEnergy = kEnergy + gpEnergy+eEnergy;
-    	TDebug.println(0, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
-    	TDebug.println(0,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
+    	TDebug.println(2, "eEnergy: " + eEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
+    	TDebug.println(2,  eEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy + ", " + rlength + ", " + speed + ", " + m1 + " ," + pos1.y + ", " + q1 + " ," + q2);
 
 		double xrange [] = graph.getXRange();
 		if( t > xrange[1] ) {

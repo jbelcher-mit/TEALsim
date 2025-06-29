@@ -125,7 +125,7 @@ public class PointCharge extends EMObject implements HasCharge, GeneratesE, Gene
 		double ro= r.lengthSquared();
 		r.normalize();
 		r.scale(this.charge_d / (Teal.fourPiPermVacuum * ro));
-		//TDebug.println(-1,"get E: "+ pos + " = " + r);
+		TDebug.println(2," charge " + this.charge_d +" get E: "+ pos + " = " + r);
 		return r;
 	}
 	

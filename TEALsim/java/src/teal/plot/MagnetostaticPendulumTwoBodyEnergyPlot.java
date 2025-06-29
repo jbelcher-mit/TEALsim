@@ -129,15 +129,15 @@ public class MagnetostaticPendulumTwoBodyEnergyPlot implements PlotItem {
      	// the (4.*Math.PI) factor below comes because we have set mhu naught to 1 in teal.config.Teal
      	mEnergy=mEnergy/(4.*Math.PI);
 
-    	double factor = 1./10000.;
+    	double factor = 1./100000.;
     	gpEnergy=gpEnergy*factor;
     	kEnergy=kEnergy*factor;
     	mEnergy=mEnergy*factor;
     	totEnergy = kEnergy + gpEnergy+mEnergy;
- //   	TDebug.println(0, " m1: " + m1 + " m2: " + m2 + " mass1:  "+ mass1 );
-    	TDebug.println(0, " mEnergy: " + mEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
-    	TDebug.println(0,  mEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
-      	TDebug.println(0, kEnergy + ", " +gpEnergy + ", " + totEnergy);
+    	TDebug.println(1, " m1: " + m1 + " m2: " + m2 + " mass1:  "+ mass1 );
+    	TDebug.println(2, " mEnergy: " + mEnergy + " kEnergy: " + kEnergy + " gpEnergy " +gpEnergy + " totEnergy: " + totEnergy);
+    	TDebug.println(2,  mEnergy + ", " + kEnergy + ", " +gpEnergy + ", " + totEnergy);
+      	TDebug.println(2, kEnergy + ", " +gpEnergy + ", " + totEnergy);
 
 
 		double xrange [] = graph.getXRange();
