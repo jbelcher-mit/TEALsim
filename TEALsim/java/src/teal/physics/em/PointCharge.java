@@ -125,7 +125,7 @@ public class PointCharge extends EMObject implements HasCharge, GeneratesE, Gene
 		double ro= r.lengthSquared();
 		r.normalize();
 		r.scale(this.charge_d / (Teal.fourPiPermVacuum * ro));
-		TDebug.println(2," charge " + this.charge_d +" get E: "+ pos + " = " + r);
+//		TDebug.println(1," getE: charge " + this.charge_d +" get E: "+ pos + " = " + r);
 		return r;
 	}
 	
@@ -338,6 +338,7 @@ public class PointCharge extends EMObject implements HasCharge, GeneratesE, Gene
 		Vector3d temp= new Vector3d();
 		if (isMoveable()) {
 			temp.scale(charge_d, ((EMEngine)theEngine).getEField().get(position_d, this)); // F=qE
+            TDebug.println(2,"getExternalForces: qE :" + temp + " charge_d " + charge_d);
 			externalForces.add(temp);  // force from EField
 			// the abs value below means this force will always be repulsive
 			temp.scale(Math.abs(charge_d), ((EMEngine)theEngine).getPField().get(position_d, this));

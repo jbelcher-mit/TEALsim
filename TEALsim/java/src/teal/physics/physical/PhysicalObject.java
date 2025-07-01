@@ -29,6 +29,7 @@ import teal.sim.constraint.Constraint;
 import teal.sim.constraint.SpringConstraint;
 import teal.sim.engine.*;
 import teal.sim.properties.*;
+import teal.util.TDebug;
 
 /**
  * PhysicalObject is the base class for all objects with physical properties that can be integrated.
@@ -235,6 +236,7 @@ public class PhysicalObject extends EngineRendered implements PhysicalElement, H
 
         Vector3d weight = new Vector3d(((EMEngine)theEngine).getGravity());
         weight.scale(mass_d);
+        TDebug.println(2,"                 " );
         Vector3d damping = new Vector3d(velocity_d);
         damping.scale(-((EMEngine)theEngine).getDamping());
         Vector3d other = ((EMEngine)theEngine).getForces(this);
@@ -242,6 +244,7 @@ public class PhysicalObject extends EngineRendered implements PhysicalElement, H
         action.add(weight);
         action.add(damping);
         action.add(other);
+        TDebug.println(2,"getExternalForces Prime:  action :" + action);
 
         return action;
 
@@ -453,6 +456,9 @@ public class PhysicalObject extends EngineRendered implements PhysicalElement, H
         	Iterator i = constraints.iterator();
         	while (i.hasNext()) {
         		Vector3d reaction = ((Constraint)i.next()).getReaction(position_d, velocity_d, total, mass_d);
+              TDebug.println(2,"getReaction One:  position_d :" + position_d  + "   velocity_d  " + velocity_d + "   mass   " + mass_d);
+              TDebug.println(2,"getReaction Two:  total :" + total  + "   reaction  " + reaction );
+              TDebug.println(2,"getReaction Three:  total :" + total );
         		total.add(reaction);
         	}
         }
@@ -472,6 +478,7 @@ public class PhysicalObject extends EngineRendered implements PhysicalElement, H
             depDerivatives[idx++] = force.x / mass_d;
             depDerivatives[idx++] = force.y / mass_d;
             depDerivatives[idx++] = force.z / mass_d;
+            TDebug.println(2,"getDependentDerivatives time:" + time + "   force " + force);
         }
         if (isRotable()) {
             Vector3d T = getTorque();
@@ -723,6 +730,7 @@ public class PhysicalObject extends EngineRendered implements PhysicalElement, H
             // The below is incorrect. The correct way to do this is to implement the
             // position correction  methods within the constraints themselves.
             Vector3d ineffective = constraint.getReaction(position_d, new Vector3d(), correction, mass_d);
+
             correction.add(ineffective);
         }
         position_d.add(correction);

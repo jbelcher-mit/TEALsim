@@ -14,6 +14,8 @@ package teal.sim.constraint;
 
 import javax.vecmath.Vector3d;
 
+import teal.util.TDebug;
+
 /**
  * @author mesrob
  *
@@ -84,6 +86,8 @@ public class ArcConstraint implements Constraint {
 		Vector3d reaction = new Vector3d(tangential);
 		reaction.scaleAdd(-effective, action);
 		reaction.negate();
+        TDebug.println(2,"ArcConstraint One:  position :" + position +  "  velocity  " + velocity );
+        TDebug.println(2,"ArcConstraint Two:  action :"  + action +  " reaction  " + reaction );
 		
 //  this part of the code apparently does nothing, I think because the mass is zero?
 // doesn't seem to make sense in any case

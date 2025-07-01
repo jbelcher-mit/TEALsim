@@ -127,7 +127,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         title = "Electrostatic Pendulum Opposite Sign";
         
        
-        TDebug.setGlobalLevel(1);
+        TDebug.setGlobalLevel(0);
 
         // Building the world.
         theEngine.setDamping(0.0);
