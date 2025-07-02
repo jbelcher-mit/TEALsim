@@ -175,7 +175,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         fixedCharge.setRadius(pointChargeRadius);
         //fixedCharge.setPauliDistance(4.*pointChargeRadius);
         fixedCharge.setMass(1.0);
-        fixedCharge.setCharge(-223.0);
+        fixedCharge.setCharge(-405.2167026);
         fixedCharge.setID("fixedCharge");
         fixedCharge.setPickable(false);
         fixedCharge.setColliding(true);
