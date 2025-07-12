@@ -2,6 +2,8 @@
 
 The TEALsim Java 3D Visualizations  
 
+***https://icampus.mit.edu/projects/teal/index.html*** 
+
 ***Preliminary*** documentation for both the code and the underlying math and physics is in the folder ***word_docs.*** 
 
 The most recent update of documentation in that folder: ***June 2025***
