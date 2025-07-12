@@ -6,7 +6,7 @@ The TEALsim Java 3D Visualizations
 
 The most recent update of documentation in that folder: ***June 2025***
 
-The documentation is an ongoing process. I estimate that the documentation will be complete by the first of September 2025.
+The documentation is an ongoing process. I estimate that the documentation will be complete by January of 2026.
 
 Questions?  Email: ***jbelcher@mit.edu***    Webpage: https://web.mit.edu/jbelcher/www/
 
