@@ -71,8 +71,8 @@ public class ElectrostaticPendulumSameSign extends SimEM {
 
     public ElectrostaticPendulumSameSign() {
         super();
-        title = "Electrostatic Pendulum Same Sign";
-        TDebug.setGlobalLevel(1);     
+        title = "Electrostatic Pendulum Same Sign Charge";
+        TDebug.setGlobalLevel(0);     
         // import the arm/base for stand
         double scale3DS = 3.; // this is an overall scale factor for these .3DS objects
        Loader3DS max = new Loader3DS();
@@ -106,7 +106,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         fixedCharge = new PointCharge();
         fixedCharge.setRadius(pointChargeRadius);
         fixedCharge.setMass(1.0);
-        fixedCharge.setCharge(223);  // WAS 223
+        fixedCharge.setCharge(224.33);  // WAS 223
         fixedCharge.setID("fixedCharge");
         fixedCharge.setPickable(false);
         fixedCharge.setColliding(true);
@@ -158,8 +158,8 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         // ***************************************************************************
         graph = new Graph();
         graph.setXRange(0., 15.);
-        graph.setYRange(-0.005,1400 );  //  WAS .014
-        graph.setXLabel("Time");
+        graph.setYRange(-0.005/100000.,1400./100000. );  //  WAS .014
+        graph.setXLabel("Time x10 in seconds");
         graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Electric Energy");
@@ -249,7 +249,7 @@ public class ElectrostaticPendulumSameSign extends SimEM {
         PropertyDouble chargeSlider = new PropertyDouble();
         chargeSlider.setText("Ratio |q/Q|");
         chargeSlider.setMinimum(0.);
-        chargeSlider.setMaximum(2.);
+        chargeSlider.setMaximum(3.);
         chargeSlider.setBounds(40, 535, 415, 50);
         chargeSlider.setPaintTicks(true);
         chargeSlider.addRoute(dummyCharge, "charge");

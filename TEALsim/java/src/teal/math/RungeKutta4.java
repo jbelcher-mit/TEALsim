@@ -49,7 +49,7 @@ public class RungeKutta4 {
 
 		rk.getDependentDerivatives(dXds_at_s, 0, s_start);
 
-		TDebug.println(2,  X_at_s[0] +", " + X_at_s[1] + ", " + dXds_at_s[0] + ", " + dXds_at_s[1] );
+		TDebug.println(2, s_start + ", " + X_at_s[0] +", " + X_at_s[1] + ", " + dXds_at_s[0] + ", " + dXds_at_s[1] );
 		
 		for (int i = 0; i < n; i++) {
 			Xt[i] = X_at_s[i] + h_2 * dXds_at_s[i];

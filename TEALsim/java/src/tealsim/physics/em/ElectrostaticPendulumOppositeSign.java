@@ -124,7 +124,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
     public ElectrostaticPendulumOppositeSign() {
 
         super();
-        title = "Electrostatic Pendulum Opposite Sign";
+        title = "Electrostatic Pendulum Opposite Sign Charge";
         
        
         TDebug.setGlobalLevel(0);
@@ -175,7 +175,7 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         fixedCharge.setRadius(pointChargeRadius);
         //fixedCharge.setPauliDistance(4.*pointChargeRadius);
         fixedCharge.setMass(1.0);
-        fixedCharge.setCharge(-405.2167026);
+        fixedCharge.setCharge(-224.33);
         fixedCharge.setID("fixedCharge");
         fixedCharge.setPickable(false);
         fixedCharge.setColliding(true);
@@ -232,8 +232,8 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-.2, .2);
-        graph.setXLabel("Time");
+        graph.setYRange(-1500./100000.,2000./100000. );
+        graph.setXLabel("Time*10 seconds");
         graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Electric Energy");
@@ -405,6 +405,8 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         watch.setAction(ta);
 
 
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
         
     }
 
@@ -416,6 +418,10 @@ public class ElectrostaticPendulumOppositeSign extends SimEM {
         } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
         	if(mFramework instanceof TFramework) {
         		((TFramework) mFramework).openBrowser("help/eEpendulumopposite.html");
+        	}
+        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
+        	if(mFramework instanceof TFramework) {
+        		((TFramework) mFramework).openBrowser("help/executionView.html");
         	}
         } else {
             super.actionPerformed(e);
