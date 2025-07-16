@@ -130,13 +130,9 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         Graph graph;
         MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
        
-
         // Building the world.
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., -9.8,0.));
-        
- 
-
 
         nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
@@ -237,8 +233,8 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         graph = new Graph();
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
-        graph.setYRange(-.1, .2);
-        graph.setXLabel("Time");
+        graph.setYRange(-0.01, .02);
+        graph.setXLabel("Time * 10 seconds");
         graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Magnetic Energy");
@@ -341,7 +337,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         MuSlider.setPaintTicks(true);
   //      MuSlider.addRoute(dummyMagnet, "Mu");
         MuSlider.addRoute(dummyMagnet, "Mu");
-        MuSlider.setValue(1.);
+        MuSlider.setValue(.3);
 
         //addElement(MuSlider);
         MuSlider.setVisible(true);
@@ -422,9 +418,8 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         TealAction ta = new TealAction("Magnetostatic Pendulum Opposite Pole", this);
         addAction("Help", ta);
 
-        ta = new TealAction("Level Complete", "Level Complete", this);
-        watch.setAction(ta);
-
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
 
         
     }
@@ -434,9 +429,9 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         	if(mFramework instanceof TFramework) {
         		((TFramework) mFramework).openBrowser("help/magpendulumopposite.html");
         	}
-        } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
+        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/magpendulumopposite.html");
+        		((TFramework) mFramework).openBrowser("help/executionView.html");
         	}
         } else {
             super.actionPerformed(e);

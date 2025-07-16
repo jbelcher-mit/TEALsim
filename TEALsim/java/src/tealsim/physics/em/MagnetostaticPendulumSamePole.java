@@ -126,7 +126,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
         super();
         title = "Magnetostatic Pendulum Same Pole";
-        TDebug.setGlobalLevel(0);
+        TDebug.setGlobalLevel(1);
         Graph graph;
         MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
        
@@ -134,9 +134,6 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         // Building the world.
         theEngine.setDamping(0.0);
         theEngine.setGravity(new Vector3d(0., -9.8,0.));
-        
- 
-
 
         nativeObject01 = new Rendered(); 
         ShapeNode ShapeNodeNative01 = new ShapeNode();
@@ -148,7 +145,6 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         nativeObject01.setModelOffsetPosition(new Vector3d(0,-lengthPendulum/2,0.));
         nativeObject01.setDirection(new Vector3d(1.,0.,0.));
         addElement(nativeObject01);
-        
         
         double scale3DS = 3.*(1.); // this is an overall scale factor for this .3DS object
         // Creating components.
@@ -238,7 +234,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         //graph.setBounds(500, 68, 400, 360);
         graph.setXRange(0., 15.);
         graph.setYRange(-0.005, .012);
-        graph.setXLabel("Time");
+        graph.setXLabel("Time * 10 seconds");
         graph.setYLabel("Energy (Joules)");
  
         JLabel label1 = new JLabel("Magnetic Energy");
@@ -341,7 +337,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         MuSlider.setPaintTicks(true);
   //      MuSlider.addRoute(dummyMagnet, "Mu");
         MuSlider.addRoute(dummyMagnet, "Mu");
-        MuSlider.setValue(.1);
+        MuSlider.setValue(.3);
 
         //addElement(MuSlider);
         MuSlider.setVisible(true);
@@ -422,10 +418,10 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         TealAction ta = new TealAction("Magnetostatic Pendulum Same Pole", this);
         addAction("Help", ta);
 
-        ta = new TealAction("Level Complete", "Level Complete", this);
-        watch.setAction(ta);
 
 
+        TealAction tc = new TealAction("Execution & View", this);
+        addAction("Help", tc);
         
     }
 
@@ -434,9 +430,9 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         	if(mFramework instanceof TFramework) {
         		((TFramework) mFramework).openBrowser("help/magpendulumsame.html");
         	}
-        } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
+        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/magpendulumsame.html");
+        		((TFramework) mFramework).openBrowser("help/executionView.html");
         	}
         } else {
             super.actionPerformed(e);

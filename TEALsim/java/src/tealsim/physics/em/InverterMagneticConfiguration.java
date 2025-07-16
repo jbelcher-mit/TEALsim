@@ -168,8 +168,8 @@ public class InverterMagneticConfiguration extends SimEM {
         ControlGroup controls = new ControlGroup();
         controls.setText("Parameters");
         controls.add(frictionSlider);
-        controls.add(angleSlider);
-        controls.add(position_x_Slider);
+ //       controls.add(angleSlider);
+//        controls.add(position_x_Slider);
         addElement(controls);
 
         Rendered nativeObject01 = new Rendered(); 
@@ -256,7 +256,7 @@ public class InverterMagneticConfiguration extends SimEM {
         
 
         angle = delta_angle+ angle;
-        TDebug.println(0," angle and rangle  " +angle +"   "  +rangle );
+        TDebug.println(1," angle and rangle  " +angle +"   "  +rangle );
         CylindricalBarMagnet magnet02 = new CylindricalBarMagnet();
         magnet02.setRadius(MagnetRadiusSmall);
         magnet02.setMass(1.0);
@@ -426,7 +426,7 @@ public class InverterMagneticConfiguration extends SimEM {
         }
         // put field lines on stationary 01 magnet
         startFL=MagnetRadiusSmall;
-        maxStep = 20;
+        maxStep = 30;
         numberFLA =15;
         double frac = .6;
         for (int j = 0; j < numberFLA; j++) {
