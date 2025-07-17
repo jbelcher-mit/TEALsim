@@ -234,7 +234,7 @@ public class MagneticDisksPlanarParallel extends SimEM {
         
         // put field lines on HelmholtzCoilRight
         int numberFLA = 8;
-        maxStep = 500;
+        maxStep = 800;
         for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j) / (numberFLA*1.)) *2.* Math.PI ,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
@@ -258,7 +258,7 @@ public class MagneticDisksPlanarParallel extends SimEM {
         
         // put field lines on HelmholtzCoilLeft
 //        numberFLA=16;
-        maxStep = 500;
+        maxStep = 800;
         for (int j = 0; j <= numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI ,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
@@ -317,7 +317,7 @@ public class MagneticDisksPlanarParallel extends SimEM {
         params.add(MuSlider);
         params.add(label);
         params.add(score);
-        addElement(params);
+ //       addElement(params);
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
@@ -357,24 +357,26 @@ public class MagneticDisksPlanarParallel extends SimEM {
 
     void addActions() {
 
-        TealAction ta = new TealAction("EM Video Game", this);
+        TealAction ta = new TealAction("Magnetic Disks Planar Parallel", this);
         addAction("Help", ta);
+        
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
 
-        ta = new TealAction("Level Complete", "Level Complete", this);
-        watch.setAction(ta);
 
 
         
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("EM Video Game") == 0) {
+        if (e.getActionCommand().compareToIgnoreCase("Magnetic Disks Planar Parallel") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/magneticdisksplanarparallel.html");
         	}
-        } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
+        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) 
+        {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework)mFramework).openBrowser("help/executionView.html");
         	}
         } else {
             super.actionPerformed(e);

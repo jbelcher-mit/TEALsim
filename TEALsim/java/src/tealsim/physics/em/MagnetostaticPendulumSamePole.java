@@ -496,7 +496,8 @@ public class MagnetostaticPendulumSamePole extends SimEM {
                 double currentMu = dummyMagnet.getMu();
                 double currentMuS = stationaryMagnet.getMu();
   //             	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
-              double newMu=-(.8195)*currentMu*currentMuS;
+ //             double newMu=-(.8195)*currentMu*currentMuS;
+              double newMu=-currentMu*currentMuS;
  //              	TDebug.println(0, " time  " + time + " newMu " + newMu);
                 swingingMagnet.setMu(newMu);
                 double resetMu = swingingMagnet.getMu();                

@@ -318,7 +318,7 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
         params.add(MuSlider);
         params.add(label);
         params.add(score);
-        addElement(params);
+ //       addElement(params);
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
@@ -358,24 +358,26 @@ public class MagneticDisksPlanarAntiParallel extends SimEM {
 
     void addActions() {
 
-        TealAction ta = new TealAction("EM Video Game", this);
+        TealAction ta = new TealAction("Magnetic Disks Planar AntiParallel", this);
         addAction("Help", ta);
+        
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
 
-        ta = new TealAction("Level Complete", "Level Complete", this);
-        watch.setAction(ta);
 
 
         
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("EM Video Game") == 0) {
+        if (e.getActionCommand().compareToIgnoreCase("Magnetic Disks Planar AntiParallel") == 0) {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework) mFramework).openBrowser("help/magneticdisksplanarantiparallel.html");
         	}
-        } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
+        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) 
+        {
         	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
+        		((TFramework)mFramework).openBrowser("help/executionView.html");
         	}
         } else {
             super.actionPerformed(e);

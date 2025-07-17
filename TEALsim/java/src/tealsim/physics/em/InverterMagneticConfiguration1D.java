@@ -468,10 +468,10 @@ for (int j = 0; j < numberFLA; j++) {
         //JTaskPane tp = new JTaskPane();
         ControlGroup params = new ControlGroup();
         params.setText("Parameters");
-        params.add(MuSlider);
-        params.add(label);
+ //       params.add(MuSlider);
+//        params.add(label);
         params.add(score);
-        addElement(params);
+ //       addElement(params);
         //tp.add(params);
         VisualizationControl vis = new VisualizationControl();
         vis.setText("Field Visualization");
@@ -511,25 +511,25 @@ for (int j = 0; j < numberFLA; j++) {
 
     void addActions() {
 
-        TealAction ta = new TealAction("EM Video Game", this);
+        TealAction ta = new TealAction("Inverter Magnet 1D", this);
         addAction("Help", ta);
-
-//        ta = new TealAction("Level Complete", "Level Complete", this);
-//        watch.setAction(ta);
-
+        
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
 
         
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().compareToIgnoreCase("EM Video Game") == 0) {
-        	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
-        	}
-        } else if (e.getActionCommand().compareToIgnoreCase("Level complete") == 0) {
-        	if(mFramework instanceof TFramework) {
-        		((TFramework) mFramework).openBrowser("help/emvideogame.html");
-        	}
+    	   if (e.getActionCommand().compareToIgnoreCase("Inverter Magnet 1D") == 0) {
+           	if(mFramework instanceof TFramework) {
+           		((TFramework) mFramework).openBrowser("help/invertermagnet1d.html");
+           	}
+    	   } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) 
+           {
+           	if(mFramework instanceof TFramework) {
+           		((TFramework)mFramework).openBrowser("help/executionView.html");
+           	}
         } else {
             super.actionPerformed(e);
         }
