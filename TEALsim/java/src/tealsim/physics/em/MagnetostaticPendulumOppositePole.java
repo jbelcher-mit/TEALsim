@@ -126,7 +126,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
 
         super();
         title = "Magnetostatic Pendulum Opposite Pole";
-        TDebug.setGlobalLevel(1);
+        TDebug.setGlobalLevel(0);
         Graph graph;
         MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
        
@@ -167,7 +167,7 @@ public class MagnetostaticPendulumOppositePole extends SimEM {
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
         // Set magnetic dipole characteristics
-        double fixedMu = -880.;
+        double fixedMu = -793.29;
         double fixedRadius =0.;
         double MagnetRadius = 1.;
         double MagnetRadius1 = 0.;

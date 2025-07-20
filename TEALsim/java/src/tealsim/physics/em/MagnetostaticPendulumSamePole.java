@@ -126,7 +126,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
 
         super();
         title = "Magnetostatic Pendulum Same Pole";
-        TDebug.setGlobalLevel(1);
+        TDebug.setGlobalLevel(0);
         Graph graph;
         MagnetostaticPendulumTwoBodyEnergyPlot eGraph;
        
@@ -167,7 +167,7 @@ public class MagnetostaticPendulumSamePole extends SimEM {
         myAppearance.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.5f));
 
         // Set magnetic dipole characteristics
-        double fixedMu = 890.;
+        double fixedMu = 793.29;
         double fixedRadius =0.;
         double MagnetRadius = 1.;
         double MagnetRadius1 = 0.;
@@ -495,10 +495,10 @@ public class MagnetostaticPendulumSamePole extends SimEM {
                 Vector3d cali = swingingMagnet.getPosition();
                 double currentMu = dummyMagnet.getMu();
                 double currentMuS = stationaryMagnet.getMu();
-  //             	TDebug.println(0, " y  " + cali.y + " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
+             	TDebug.println(1, " currentMu " + currentMu + "  cunnenntMs " + currentMuS );  
  //             double newMu=-(.8195)*currentMu*currentMuS;
               double newMu=-currentMu*currentMuS;
- //              	TDebug.println(0, " time  " + time + " newMu " + newMu);
+               	TDebug.println(1, " time  " + time + " newMu " + newMu);
                 swingingMagnet.setMu(newMu);
                 double resetMu = swingingMagnet.getMu();                
  //            	TDebug.println(0, " time  " + time + " resetMu " + resetMu);
