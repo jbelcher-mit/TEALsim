@@ -73,7 +73,7 @@ public class VisualizationControl extends ControlGroup implements HasFramework, 
     private boolean showVectorField = true;
     private boolean showFieldLines = true;
     private int actionFlags = CHANGE_FL_COLORMODE | CHANGE_FL_SYMMETRY;
-    private boolean perVertexColor = true;
+    private boolean perVertexColor = false;
 
     /**
      * 
@@ -85,9 +85,9 @@ public class VisualizationControl extends ControlGroup implements HasFramework, 
         showFVisCB.addActionListener(this);
         fvSlider = new PropertyInteger();
         fvSlider.setMinimum(0);
-        fvSlider.setMaximum(25);
+        fvSlider.setMaximum(50);
         fvSlider.setPaintTicks(true);
-        fvSlider.setValue(20);
+        fvSlider.setValue(30);
         fvSlider.setText("Resolution");
 
         showLinesCB = new JCheckBox("Field Lines", showFieldLines);
