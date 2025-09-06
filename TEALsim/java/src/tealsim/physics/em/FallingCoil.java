@@ -456,6 +456,9 @@ public class FallingCoil extends SimEM {
 		// actionPerformed() method below.
 		TealAction ta = new TealAction("Falling Coil", this);
 		addAction("Help", ta);
+		
+        TealAction tb = new TealAction("Execution & View", this);
+        addAction("Help", tb);
 	}
 	// This method is an event handler called whenever an actionEvent is received (assuming an event listener has been
 	// added, which is done a TealAction is created).  This method should contain the code you want to run when each
@@ -466,6 +469,9 @@ public class FallingCoil extends SimEM {
         	if(mFramework instanceof TFramework) {
         		((TFramework) mFramework).openBrowser("help/fallingcoil.html");
         	}
+        } else if (e.getActionCommand().compareToIgnoreCase("Execution & View") == 0) {
+        	if(mFramework instanceof TFramework) {
+        		((TFramework) mFramework).openBrowser("help/executionView.html");
 		} else {
 			super.actionPerformed(e);
 		}
