@@ -200,7 +200,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         sccx1.setTolerance(0.1);
         sccx1.setMode(SphereCollisionController.WALL_SPHERE);
         HelmholtzCoilRight.setCollisionController(sccx1);
-        HelmholtzCoilRight.setDirection(new Vector3d(1,0,0.));
+        HelmholtzCoilRight.setDirection(new Vector3d(1,0,0));
         addElement(HelmholtzCoilRight);
 
         rotatingCoil = new CylindricalBarMagnet();
@@ -214,7 +214,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         rotatingCoil.setGeneratingP(true);
         rotatingCoil.setPosition(new Vector3d(0.,100., 0.));
         rotatingCoil.setMoveable(false);
-        rotatingCoil.setRotable(true);
+        rotatingCoil.setRotable(false);
 //        rotatingCoil.setConstrained(true);
         sccx = new SphereCollisionController(rotatingCoil);
         rotatingCoil.setDirection(new Vector3d(1.,0.,0.));
@@ -241,13 +241,13 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         fmanager.setElementManager(this);
         
         // put field lines on HelmholtzCoilRight
-        int numberFLA = 45;
+        int numberFLA = 5;
         maxStep = 500;
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.2);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+ //           fmanager.addFieldLine(fl);
         }
         
         
@@ -255,7 +255,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,0.,startFL*.6);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-            fmanager.addFieldLine(fl);
+  //          fmanager.addFieldLine(fl);
         }
         for (int j = 0; j < numberFLA; j++) {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,0.,startFL*.8);
@@ -272,24 +272,18 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
             RelativeFLine fl = new RelativeFLine(HelmholtzCoilLeft, ((j ) / (numberFLA*1.)) *2.* Math.PI ,.5 * Math.PI ,startFL*.4);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-       fmanager.addFieldLine(fl);
+//       fmanager.addFieldLine(fl);
         }
-        // put field lines on stationary 01 magnet
+        // put field lines on rotatingCoil
 
     
         for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
+            RelativeFLine fl = new RelativeFLine(rotatingCoil, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.6);
             fl.setType(Field.B_FIELD);
             fl.setKMax(maxStep);
-//          fmanager.addFieldLine(fl);
+          fmanager.addFieldLine(fl);
         }
 
-        for (int j = 0; j < numberFLA; j++) {
-            RelativeFLine fl = new RelativeFLine(HelmholtzCoilRight, ((j ) / (numberFLA*1.)) *2.* Math.PI * 2.,.5 * Math.PI ,startFL*.8);
-            fl.setType(Field.B_FIELD);
-            fl.setKMax(maxStep);
- //         fmanager.addFieldLine(fl);
-        }
 
  
     numberFLA = 5;
@@ -300,13 +294,13 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
 
         // Building the GUI.
         PropertyDouble MuSlider = new PropertyDouble();
-        MuSlider.setText("Player Mu:");
-        MuSlider.setMinimum(-500.);
-        MuSlider.setMaximum(500.);
+        MuSlider.setText("Height");
+        MuSlider.setMinimum(-10.);
+        MuSlider.setMaximum(10.);
         MuSlider.setBounds(40, 535, 415, 50);
         MuSlider.setPaintTicks(true);
         MuSlider.addRoute(rotatingCoil, "Mu");
-        MuSlider.setValue(-40);
+        MuSlider.setValue(-4);
         //addElement(MuSlider);
         MuSlider.setVisible(true);
         label = new JLabel("Current Time:");
@@ -405,7 +399,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
     private void resetCylindricalBarMagnet(double heightSupport, double lengthPendulum) {
 
         rotatingCoil.setPosition(new Vector3d(0., 10., 0.));
-        rotatingCoil.setDirection(new Vector3d(0,1, 0));
+        rotatingCoil.setDirection(new Vector3d(1,0, 0));
     }
 
 
@@ -446,13 +440,17 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         public void nextSpatial() {
             if (theEngine != null) {
                 double time = theEngine.getTime();
- //               Vector3d cali = rotatingCoil.getPosition();
+                Vector3d cali = rotatingCoil.getPosition();
  //               Vector3d temp = new Vector3d(cali);
  //               Vector3d center = new Vector3d(0.,25.,0.);
 //               temp.sub(center);
  //               double distance = temp.length();
 
- 
+             	TDebug.println(0, " time  " + time + " cali " + cali);
+             	double zcomp = 10.;
+             	zcomp = zcomp -time/5.;
+             	if(zcomp <= 0.) zcomp = 0.;
+             	rotatingCoil.setPosition(0., zcomp, 0.);
                  score.setText(String.valueOf(time));
                 score.setText(String.valueOf(time));
                 if (actionEnabled) {
