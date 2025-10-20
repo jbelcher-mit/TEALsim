@@ -207,6 +207,8 @@ public class RelativeFLine extends FieldLine implements HasReference {
         sp.x += (r * Math.cos(radiansA)*Math.sin(radiansP));
         sp.z += (r * Math.sin(radiansA)*Math.sin(radiansP));
         sp.y+= (r * Math.cos(radiansP));
+        
+        System.out.println("sp" +sp);
 
         if (mElement != null) {
             Quat4d q = new Quat4d(((EngineRendered) mElement).getRotation());

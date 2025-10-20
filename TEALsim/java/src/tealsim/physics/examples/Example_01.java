@@ -21,8 +21,8 @@ import teal.physics.em.SimEM;
 import teal.ui.control.*;
 import teal.util.TDebug;
 
-/** Create two native 3D objects and import two.  The native objects are a green sphere and a flat red cylinder (a disk) and
- * the imported two are .3DS objects (a tapered cone and an orange hemisphere).  
+/** Create two native 3D objects and import two.  The two native objects are a green sphere and a flat red cylinder (a disk) and
+ * the two imported are .3DS objects (a tapered cone and an orange hemisphere).  
  * The vertical position of the red disk is controlled by a slider, as is the orientation of the cone.  
  *  
  * @author John Belcher
@@ -66,7 +66,7 @@ public class Example_01 extends SimEM {
         
         ShapeNodeNative01.setGeometry(Cylinder.makeGeometry(32, 2., 0.05));
         nativeObject01.setNode3D(ShapeNodeNative01);
-        nativeObject01.setColor(new Color(0, 0, 0));
+        nativeObject01.setColor(new Color(255, 0, 0));
         nativeObject01.setPosition(new Vector3d(0,0.,0.));
         nativeObject01.setDirection(new Vector3d(0.,1.,0.));
         addElement(nativeObject01);
@@ -183,8 +183,8 @@ public class Example_01 extends SimEM {
 // veiw and execution controls
   
     void addActions() {
-    //    TealAction ta = new TealAction("Execution & View", this);
-    //    addAction("Help", ta);
+       TealAction ta = new TealAction("Execution & View", this);
+        addAction("Help", ta);
         TealAction tb = new TealAction("Example_01", this);
         addAction("Help", tb);
     }

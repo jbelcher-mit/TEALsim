@@ -112,7 +112,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         TDebug.setGlobalLevel(0);
 
         // Building the world.
-        theEngine.setDamping(.1);
+        theEngine.setDamping(.9);
         theEngine.setGravity(new Vector3d(0., 0.,0.));
 
         Rendered nativeObject01 = new Rendered(); 
@@ -163,7 +163,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         double fixedMu = -55.;
         double fixedRadius =2.7;
         double MagnetRadius = 1.;
-        double CoilSeperation = 6.;
+        double CoilSeperation =1.;
         double MagnetRadius1 = 0.;
         CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
         HelmholtzCoilLeft.setRadius(MagnetRadius);
@@ -173,10 +173,10 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         HelmholtzCoilLeft.setPickable(false);
         HelmholtzCoilLeft.setColliding(false);
         HelmholtzCoilLeft.setGeneratingP(true);
-        HelmholtzCoilLeft.setPosition(new Vector3d(-2.*CoilSeperation,0,-2.*CoilSeperation));
+        HelmholtzCoilLeft.setPosition(new Vector3d(-2.*CoilSeperation,0,0.));
         HelmholtzCoilLeft.setMoveable(false);
         HelmholtzCoilLeft.setRotable(false);
-        HelmholtzCoilLeft.setDirection(new Vector3d(1.,0.,0.));
+        HelmholtzCoilLeft.setDirection(new Vector3d(0.05,0,.95));
         SphereCollisionController sccx = new SphereCollisionController(HelmholtzCoilLeft);
         sccx.setRadius(MagnetRadius);
         sccx.setTolerance(0.1);
@@ -200,7 +200,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         sccx1.setTolerance(0.1);
         sccx1.setMode(SphereCollisionController.WALL_SPHERE);
         HelmholtzCoilRight.setCollisionController(sccx1);
-        HelmholtzCoilRight.setDirection(new Vector3d(1,0,0));
+        HelmholtzCoilRight.setDirection(new Vector3d(0,0,-1));
         addElement(HelmholtzCoilRight);
 
         rotatingCoil = new CylindricalBarMagnet();
@@ -217,7 +217,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         rotatingCoil.setRotable(false);
 //        rotatingCoil.setConstrained(true);
         sccx = new SphereCollisionController(rotatingCoil);
-        rotatingCoil.setDirection(new Vector3d(1.,0.,0.));
+        rotatingCoil.setDirection(new Vector3d(0.,1.,1.));
         sccx.setRadius(MagnetRadius);
         sccx.setTolerance(0.1);
         sccx.setMode(SphereCollisionController.WALL_SPHERE);
@@ -398,7 +398,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
 
     private void resetCylindricalBarMagnet(double heightSupport, double lengthPendulum) {
 
-        rotatingCoil.setPosition(new Vector3d(0., 10., 0.));
+        rotatingCoil.setPosition(new Vector3d(0., 15., 0.));
         rotatingCoil.setDirection(new Vector3d(1,0, 0));
     }
 
@@ -447,9 +447,9 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
  //               double distance = temp.length();
 
              	TDebug.println(0, " time  " + time + " cali " + cali);
-             	double zcomp = 10.;
-             	zcomp = zcomp -time/5.;
-             	if(zcomp <= 0.) zcomp = 0.;
+             	double zcomp = 15.;
+             	if(time >= 20.) zcomp = 15.*Math.abs(Math.cos(2.*Math.PI*(time/20.)));
+ //            	if(zcomp <= 0.) zcomp = 0.;
              	rotatingCoil.setPosition(0., zcomp, 0.);
                  score.setText(String.valueOf(time));
                 score.setText(String.valueOf(time));
