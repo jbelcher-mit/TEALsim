@@ -5,6 +5,7 @@
  */
 
 package tealsim.physics.examples;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.media.j3d.*;
@@ -42,7 +43,7 @@ public class Example_05 extends SimEM {
     /** The radius of the sphere representing the floating charge.  */
     double floatingChargeRadius = 0.2;
     /** The friction in the world. */
-    double friction = 1.;
+    double friction = 0.;
     /** The floating charge.  */
     PointCharge floatingCharge;
     /** The fixed charge.  */
@@ -150,7 +151,11 @@ public class Example_05 extends SimEM {
         visControl.setFieldVisGrid(fv);
         addElement(visControl);
 
-        // set paramters for mouseScale 
+// change some features of the lighting, background color, etc., from the default values, if desired
+        
+        mViewer.setBackgroundColor(new Color(0,0,0));
+        
+        // set parameters for mouseScale 
         
         Vector3d mouseScale = mViewer.getVpTranslateScale();
         mouseScale.x *= 0.05;
@@ -160,7 +165,7 @@ public class Example_05 extends SimEM {
 
         mSEC.init(); 
         resetCamera();
-        // addAction for pulldown menus on TEALsim windows     
+        // addAction for pull down menus on TEALsim windows     
         addActions();
         reset();
         

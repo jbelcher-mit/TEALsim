@@ -71,7 +71,7 @@ public class Example_01 extends SimEM {
         nativeObject01.setDirection(new Vector3d(0.,1.,0.));
         addElement(nativeObject01);
         
-        ShapeNodeNative02.setGeometry(Sphere.makeGeometry(16,.5));
+        ShapeNodeNative02.setGeometry(Sphere.makeGeometry(16,0.5));
         nativeObject02.setNode3D(ShapeNodeNative02);
         nativeObject02.setColor(new Color(0, 255, 0));  // makes the sphere green
         nativeObject02.setPosition(new Vector3d(0, 2, 0));
@@ -125,8 +125,8 @@ public class Example_01 extends SimEM {
 // create the two sliders for the cone 
         
         angSlider01.setText("Cone Rotation Angle");
-        angSlider01.setMinimum(-180.);
-        angSlider01.setMaximum(180.0);
+        angSlider01.setMinimum(-90.);
+        angSlider01.setMaximum(90.0);
         angSlider01.setPaintTicks(true);
         angSlider01.addPropertyChangeListener("value", this);
         angSlider01.setValue(0.);
@@ -174,7 +174,7 @@ public class Example_01 extends SimEM {
         mSEC.rebuildPanel(0);
         reset();
         resetCamera();
-        // addAction for pulldown menus on TEALsim windows     
+        // addAction for pull-down menus on TEALsim windows     
         addActions();
 
     }

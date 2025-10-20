@@ -5,6 +5,7 @@
  */
 
 package tealsim.physics.examples;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.media.j3d.*;
@@ -114,7 +115,7 @@ public class Example_04 extends SimEM {
         
         // create the sliders to control the amount of charge
         
-        chargeSlider.setText("Qfixed");
+        chargeSlider.setText("Q Fixed");
         chargeSlider.setMinimum(-10);
         chargeSlider.setMaximum(50);
         chargeSlider.setPaintTicks(true);
@@ -128,6 +129,11 @@ public class Example_04 extends SimEM {
         controls.setText("Parameters");
         controls.add(chargeSlider);
         addElement(controls);
+        
+// change some features of the lighting, background color, etc., from the default values, if desired
+        
+        mViewer.setBackgroundColor(new Color(240,240,255));
+
 		
         // set paramters for mouseScale 
         

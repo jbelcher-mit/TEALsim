@@ -6,6 +6,7 @@
 
 package tealsim.physics.examples;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.media.j3d.*;
 import javax.vecmath.*;
@@ -154,6 +155,11 @@ public class Example_03 extends SimEM {
 		graphPanel.setText("Graphs");
 		graphPanel.addElement(position_graph);
 		addElement(graphPanel);
+		
+// change some features of the lighting, background color, etc., from the default values, if desired
+        
+        mViewer.setBackgroundColor(new Color(240,240,255));
+
 		
         // set paramters for mouseScale 
         

@@ -240,7 +240,7 @@ public class Example_12 extends SimEM {
         Rendered importedObject01 = new Rendered();
         importedObject01.setNode3D(node01);
         importedObject01.setPosition(new Vector3d(0., 0., 0.));
-        addElement(importedObject01);
+   //     addElement(importedObject01);
         
         // set paramters for mouseScale    
         Vector3d mouseScale = mViewer.getVpTranslateScale();

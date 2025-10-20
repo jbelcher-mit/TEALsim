@@ -1,6 +1,7 @@
 //* $Id: Example_02.java,v 1.2 2008/01/06 21:40:21 jbelcher Exp $ */
 
 package tealsim.physics.examples;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.media.j3d.*;
 import javax.vecmath.*;
@@ -97,6 +98,10 @@ public class Example_02 extends SimEM {
         		new Vector3d(2., 0., 0.), new Vector3d(0., 0., 2.));
         wall.setElasticity(1.);
         addElement(wall);
+        
+// change some features of the lighting, background color, etc., from the default values, if desired
+        
+        mViewer.setBackgroundColor(new Color(240,240,255));
 
         // set paramters for mouseScale 
         
