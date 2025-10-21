@@ -932,7 +932,7 @@ public class RingOfCurrent extends EMObject implements HasRadius, HasCurrent, Ha
          */
         double[][] I = new double[maxit + 2][maxit + 2];
 
-        // The routine starts here, it's an adaptation of the pseudocde.
+        // The routine starts here, it's an adaptation of the pseudocode.
         iter = 0;
         n = 1;
         h = (b - a);
@@ -988,8 +988,8 @@ public class RingOfCurrent extends EMObject implements HasRadius, HasCurrent, Ha
 
         /*
          * I[][] is used to contain integration results at various iteration
-         * stages. Note also that the algorithm pseudocode uses indices starting
-         * from 1. To avoid errors, I used the pseudocode as is, and that means
+         * stages. Note also that the algorithm pseudo code uses indices starting
+         * from 1. To avoid errors, I used the pseudo code as is, and that means
          * that zero-indices are simply not used. This can be fixed later by
          * offsetting everything.
          */

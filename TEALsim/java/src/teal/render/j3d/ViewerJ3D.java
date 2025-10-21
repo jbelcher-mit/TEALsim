@@ -34,7 +34,7 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 
 
 /**
- * A Java3D implementation of the AbstractViewer3D/TViewer interface.  Manages all aspects of the Java3D scenegraph, including the Canvas3D
+ * A Java3D implementation of the AbstractViewer3D/TViewer interface.  Manages all aspects of the Java3D scene graph, including the Canvas3D
  * on which it is displayed.  
  * 
  */
@@ -117,7 +117,7 @@ public class ViewerJ3D extends teal.render.viewer.AbstractViewer3D {
         sceneRoot.setCapability(Group.ALLOW_CHILDREN_WRITE);
         sceneRoot.setCapability(Node.ALLOW_BOUNDS_READ);
 
-        // Create a Transformgroup to scale all objects so they
+        // Create a TransformGroup to scale all objects so they
         // appear in the scene.
         sceneScale = new TransformGroup();
         sceneScale.setCapability(Group.ALLOW_CHILDREN_EXTEND);

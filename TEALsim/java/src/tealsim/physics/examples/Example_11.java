@@ -95,6 +95,7 @@ public class Example_11 extends SimEM {
         floatingCoil.setInducing(false);
         floatingCoil.setInductance(0.1);
         floatingCoil.setCurrent(current);
+        floatingCoil.
 		// Here we add a collisionController to the RingOfCurrent 
         //so that it will be registered as a colliding object, and
 		// react appropriately when it touches the Wall.  

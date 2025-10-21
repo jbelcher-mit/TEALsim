@@ -39,6 +39,7 @@ import teal.physics.em.EMEngine;
 import teal.physics.physical.RectangularBox;
 import teal.physics.physical.Wall;
 import teal.physics.em.CylindricalBarMagnet;
+import teal.physics.em.MagneticDipole;
 import teal.sim.properties.IsSpatial;
 import teal.sim.simulation.SimWorld;
 import teal.sim.spatial.FieldConvolution;
@@ -92,7 +93,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
     JLabel label;
     JLabel score;
     double minScore = 100000000.;
-    CylindricalBarMagnet rotatingCoil;
+    MagneticDipole rotatingCoil;
     Watcher watch;
     double wallscale = 2.0;
     double wheight = 3.0;
@@ -165,7 +166,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         double MagnetRadius = 1.;
         double CoilSeperation =1.;
         double MagnetRadius1 = 0.;
-        CylindricalBarMagnet HelmholtzCoilLeft = new CylindricalBarMagnet();
+        MagneticDipole HelmholtzCoilLeft = new MagneticDipole();
         HelmholtzCoilLeft.setRadius(MagnetRadius);
         HelmholtzCoilLeft.setMass(.05);
         HelmholtzCoilLeft.setMu(fixedMu);
@@ -184,7 +185,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         HelmholtzCoilLeft.setCollisionController(sccx);
         addElement(HelmholtzCoilLeft);
         
-        CylindricalBarMagnet HelmholtzCoilRight = new CylindricalBarMagnet();
+        MagneticDipole HelmholtzCoilRight = new MagneticDipole();
         HelmholtzCoilRight.setRadius(MagnetRadius);
         HelmholtzCoilRight.setMass(.05);
         HelmholtzCoilRight.setMu(-fixedMu);
@@ -203,7 +204,7 @@ public class AugmentedRealityMagnetsRosi extends SimEM {
         HelmholtzCoilRight.setDirection(new Vector3d(0,0,-1));
         addElement(HelmholtzCoilRight);
 
-        rotatingCoil = new CylindricalBarMagnet();
+        rotatingCoil = new MagneticDipole();
         rotatingCoil.setRadius(MagnetRadius);
         //rotatingCoil.setPauliDistance(4.*MagnetRadius);
         rotatingCoil.setMass(2.);

@@ -87,10 +87,10 @@ public class Example_03 extends SimEM {
         floatingCharge.setRadius(chargeRad);
         floatingCharge.setMass(chargeMass);
         
-		// Here we add a collisionController to coil so that it will be
+		// Here we add a collisionController to the charge so that it will be
         // registered as a colliding object when it touches the "wall".  
-        // We represent the coil as a sphere for the purposes of collision
-		// detection, since we're only concerned with stopping the coil from 
+        // We represent the charge as a sphere for the purposes of collision
+		// detection, since we're only concerned with stopping the charge from 
         // "falling through the floor"
 		// SphereCollisionController constructor.
         
@@ -102,7 +102,7 @@ public class Example_03 extends SimEM {
         floatingCharge.setCollisionController(sccx); 
         addElement(floatingCharge);
       
-        // We create a "wall" that the floating coil will interact with
+        // We create a "wall" that the floating charge will interact with
         
 		// Wall constructor.  		
         Wall wall = new Wall(new Vector3d(0., -.1, 0.), 

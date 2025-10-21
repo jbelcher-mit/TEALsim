@@ -39,13 +39,13 @@ public class Example_09 extends SimEM {
     double torR = 0.08;
     double ringMass = 3.5;
     double current = -50.;
-    double magLen = 0.24;
+    double magLen = 0.54;
     double magR = 0.09;
     double searchRad = magR;
     double fLen = 0.033;
     double minD = 0.03;
     int kMax = 300; //300
-    double friction = 10.;
+    double friction = 0.;
 	private FieldLineManager fmanager;
     private FieldLine fl = null;
     int fMode = FieldLine.RUNGE_KUTTA;
